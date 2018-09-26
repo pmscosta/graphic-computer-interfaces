@@ -1,4 +1,57 @@
-<SCENE>
+<yas>
+
+<scene root="root" axis_length="5"/>
+
+<views default="c1">
+    <perspective id="c1" near="0.1" far="500" angle="0">
+        <from x="0" y="0" z="0"/>
+        <to x="10" y="10" z="10"/>
+    </perspective>
+</views>
+
+<ambient>
+    <ambient r="1" g="1" b="1" a="0"/>
+    <background r="0" g="0" b="0" a="0" />
+</ambient>
+
+<lights>
+    <omni id="g_light" enabled="1">
+        <location x="0" y="0" z="0" w="0" />
+        <ambient r="1" g="1" b="1" a="0"/>
+        <diffuse r="0" g="0" b="0" a="0"/>
+        <specular r="0" g="0" b="0" a="0"/>
+    </omni>
+
+    <spot id="s_light" enabled="1" angle="30" exponent="1">
+        <location x="0" y="0" z="0" w="0" />
+        <target x="5" y="5" z="5" />
+        <ambient r="1" g="1" b="1" a="0"/>
+        <diffuse r="0" g="0" b="0" a="0"/>
+        <specular r="0" g="0" b="0" a="0"/>
+    </spot>
+</lights>
+
+<textures>
+<!-- TODO -->
+</textures>
+
+<materials>
+    <material id="m1" shininess="0.5">
+        <emission r="0" g="0" b="0" a="0"/>
+        <ambient r="0.3" g="0.3" b="0.5" a="0"/>
+        <diffuse r="0.5" g="0.5" b="0.5" a="0"/>
+        <specular r="0.1" g="0.1" b="0.1" a="0"/>
+    </material>
+</materials>
+
+
+<transformations >
+    <transformation id="t1">
+        <translate x="0" y="0" z="0"/>
+        <rotate axis="x" angle="90" />
+        <scale x="0" y="0" z="0"/>
+    </transformation>
+</transformations>
 
 <!-- Initial values -->
 <INITIALS>
@@ -56,18 +109,18 @@
 </LIGHTS>
 
 <!-- Textures -->
-<TEXTURES>
+<textures>
 	<!-- Tree trunk -->
-    <TEXTURE id="trunk">
+    <texture id="trunk">
         <file path="images/trunk-image.jpg" />               
         <amplif_factor s="2" t="2" />                           
-    </TEXTURE>
+    </texture>
 
      <!-- Tree leaves -->
-    <TEXTURE id="folhas">
+    <texture id="folhas">
         <file path="images/leaves.jpg" />                
         <amplif_factor s="3" t="4" />                           
-    </TEXTURE>
+    </texture>
 
     <!-- Rocks -->
     <TEXTURE id="rocks">
@@ -614,4 +667,4 @@
 
 </NODES>
 
-</SCENE>
+</yas>

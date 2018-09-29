@@ -1,12 +1,17 @@
 var DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
-var INITIALS_INDEX = 0;
-var ILLUMINATION_INDEX = 1;
-var LIGHTS_INDEX = 2;
-var TEXTURES_INDEX = 3;
-var MATERIALS_INDEX = 4;
-var NODES_INDEX = 5;
+var SCENE_INDEX = 0;
+var VIEWS_INDEX = 1;
+var AMBIENT_INDEX = 2;
+var LIGHTS_INDEX = 3;
+var TEXTURES_INDEX = 4;
+var MATERIALS_INDEX = 5;
+var TRANSFORMATIONS_INDEX = 6;
+var PRIMITIVES_INDEX = 7;
+var COMPONENTS_INDEX = 8; 
+
+var ROOT_NODENAME = "YAS";
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -70,8 +75,8 @@ class MySceneGraph {
      * @param {XML root element} rootElement
      */
     parseXMLFile(rootElement) {
-        if (rootElement.nodeName != "SCENE")
-            return "root tag <SCENE> missing";
+        if (rootElement.nodeName != ROOT_NODENAME)
+            return "root tag <YAS> missing";
 
         var nodes = rootElement.children;
 
@@ -87,6 +92,7 @@ class MySceneGraph {
         // Processes each node, verifying errors.
 
         // <INITIALS>
+
         var index;
         if ((index = nodeNames.indexOf("INITIALS")) == -1)
             return "tag <INITIALS> missing";

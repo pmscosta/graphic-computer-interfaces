@@ -9,7 +9,7 @@ var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8; 
+var COMPONENTS_INDEX = 8;
 
 var ROOT_NODENAME = "YAS";
 
@@ -29,7 +29,7 @@ class MySceneGraph {
 
         this.nodes = [];
 
-        this.idRoot = null;                    // The id of the root element.
+        this.idRoot = null; // The id of the root element.
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -91,21 +91,74 @@ class MySceneGraph {
 
         // Processes each node, verifying errors.
 
-        // <INITIALS>
+        //Scene
+        if (nodeNames[SCENE_INDEX] != "scene")
+            return "tag <scene> missing or out of order";
+        //Parse scene block
+        else if ((error = this.parseInitials(nodes[SCENE_INDEX])) != null)
+            return error;
 
-        var index;
-        if ((index = nodeNames.indexOf("INITIALS")) == -1)
-            return "tag <INITIALS> missing";
-        else {
-            if (index != INITIALS_INDEX)
-                this.onXMLMinorError("tag <INITIALS> out of order");
+        //View
+        if (nodeNames[VIEWS_INDEX] != "VIEW")
+            return "tag <VIEW> missing or out of order";
+        //Parse view block
+        else if ((error = this.parseInitials(nodes[VIEWS_INDEX])) != null)
+            return error;
 
-            //Parse INITIAL block
-            if ((error = this.parseInitials(nodes[index])) != null)
-                return error;
-        }
+        //Ambient
+        if (nodeNames[AMBIENT_INDEX] != "AMBIENT")
+            return "tag <AMBIENT> missing or out of order";
+        //Parse ambient block
+        else if ((error = this.parseInitials(nodes[AMBIENT_INDEX])) != null)
+            return error;
 
-        // <ILLUMINATION>
+        //Lights
+        if (nodeNames[LIGHTS_INDEX] != "LIGHTS")
+            return "tag <LIGHTS> missing or out of order";
+        //Parse lights block
+        else if ((error = this.parseInitials(nodes[LIGHTS_INDEX])) != null)
+            return error;
+
+        //Textures
+        if (nodeNames[TEXTURES_INDEX] != "textures")
+            return "tag <textures> missing or out of order";
+        //Parse textures block
+        else if ((error = this.parseInitials(nodes[TEXTURES_INDEX])) != null)
+            return error;
+
+        //Materials
+        if (nodeNames[MATERIALS_INDEX] != "materials")
+            return "tag <materials> missing or out of order";
+        //Parse materials block
+        else if ((error = this.parseInitials(nodes[MATERIALS_INDEX])) != null)
+            return error;
+        
+        //Transformations
+        if (nodeNames[TRANSFORMATIONS_INDEX] != "transformations")
+            return "tag <transformations> missing or out of order";
+        //Parse transformations block
+        else if ((error = this.parseInitials(nodes[TRANSFORMATIONS_INDEX])) != null)
+            return error;
+
+        //Primitives
+        if (nodeNames[PRIMITIVES_INDEX] != "primitives")
+            return "tag <primitives> missing or out of order";
+        //Parse primitives block
+        else if ((error = this.parseInitials(nodes[PRIMITIVES_INDEX])) != null)
+            return error;
+
+        //Components
+        if (nodeNames[COMPONENTS_INDEX] != "components")
+            return "tag <components> missing or out of order";
+        //Parse components block
+        else if ((error = this.parseInitials(nodes[COMPONENTS_INDEX])) != null)
+            return error;
+
+       /* 
+       
+       //TO-DO add xmlminorerror
+
+       // <ILLUMINATION>
         if ((index = nodeNames.indexOf("ILLUMINATION")) == -1)
             return "tag <ILLUMINATION> missing";
         else {
@@ -115,55 +168,9 @@ class MySceneGraph {
             //Parse ILLUMINATION block
             if ((error = this.parseIllumination(nodes[index])) != null)
                 return error;
-        }
+        } */
 
-        // <LIGHTS>
-        if ((index = nodeNames.indexOf("LIGHTS")) == -1)
-            return "tag <LIGHTS> missing";
-        else {
-            if (index != LIGHTS_INDEX)
-                this.onXMLMinorError("tag <LIGHTS> out of order");
-
-            //Parse LIGHTS block
-            if ((error = this.parseLights(nodes[index])) != null)
-                return error;
-        }
-
-        // <TEXTURES>
-        if ((index = nodeNames.indexOf("TEXTURES")) == -1)
-            return "tag <TEXTURES> missing";
-        else {
-            if (index != TEXTURES_INDEX)
-                this.onXMLMinorError("tag <TEXTURES> out of order");
-
-            //Parse TEXTURES block
-            if ((error = this.parseTextures(nodes[index])) != null)
-                return error;
-        }
-
-        // <MATERIALS>
-        if ((index = nodeNames.indexOf("MATERIALS")) == -1)
-            return "tag <MATERIALS> missing";
-        else {
-            if (index != MATERIALS_INDEX)
-                this.onXMLMinorError("tag <MATERIALS> out of order");
-
-            //Parse MATERIALS block
-            if ((error = this.parseMaterials(nodes[index])) != null)
-                return error;
-        }
-
-        // <NODES>
-        if ((index = nodeNames.indexOf("NODES")) == -1)
-            return "tag <NODES> missing";
-        else {
-            if (index != NODES_INDEX)
-                this.onXMLMinorError("tag <NODES> out of order");
-
-            //Parse NODES block
-            if ((error = this.parseNodes(nodes[index])) != null)
-                return error;
-        }
+        
     }
 
     /**
@@ -185,16 +192,14 @@ class MySceneGraph {
         var indexFrustum = nodeNames.indexOf("frustum");
         if (indexFrustum == -1) {
             this.onXMLMinorError("frustum planes missing; assuming 'near = 0.1' and 'far = 500'");
-        }
-        else {
+        } else {
             this.near = this.reader.getFloat(children[indexFrustum], 'near');
             this.far = this.reader.getFloat(children[indexFrustum], 'far');
 
             if (!(this.near != null && !isNaN(this.near))) {
                 this.near = 0.1;
                 this.onXMLMinorError("unable to parse value for near plane; assuming 'near = 0.1'");
-            }
-            else if (!(this.far != null && !isNaN(this.far))) {
+            } else if (!(this.far != null && !isNaN(this.far))) {
                 this.far = 500;
                 this.onXMLMinorError("unable to parse value for far plane; assuming 'far = 500'");
             }
@@ -321,8 +326,7 @@ class MySceneGraph {
             var enableLight = true;
             if (enableIndex == -1) {
                 this.onXMLMinorError("enable value missing for ID = " + lightId + "; assuming 'value = 1'");
-            }
-            else {
+            } else {
                 var aux = this.reader.getFloat(grandChildren[enableIndex], 'value');
                 if (!(aux != null && !isNaN(aux) && (aux == 0 || aux == 1)))
                     this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
@@ -360,8 +364,7 @@ class MySceneGraph {
                     return "unable to parse x-coordinate of the light position for ID = " + lightId;
                 else
                     positionLight.push(w);
-            }
-            else
+            } else
                 return "light position undefined for ID = " + lightId;
 
             // Retrieves the ambient component.
@@ -394,8 +397,7 @@ class MySceneGraph {
                     return "unable to parse A component of the ambient illumination for ID = " + lightId;
                 else
                     ambientIllumination.push(a);
-            }
-            else
+            } else
                 return "ambient component undefined for ID = " + lightId;
 
             // TODO: Retrieve the diffuse component

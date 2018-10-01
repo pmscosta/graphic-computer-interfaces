@@ -1,6 +1,5 @@
 <yas>
     <scene root="root" axis_length="5"/>
-
     <views default="c1">
         <perspective id="c1" near="0.1" far="500" angle="0">
             <from x="0" y="0" z="0"/>
@@ -64,7 +63,7 @@
         </primitive>
 
         <primitive id="sphere">
-            <sphere radius="1" slices="10" stacks="10">
+            <sphere radius="1" slices="10" stacks="10"/>
         </primitive>
     </primitives>
 
@@ -85,4 +84,6 @@
             </children>
         </component>
     </components>
+
+    
 </yas>

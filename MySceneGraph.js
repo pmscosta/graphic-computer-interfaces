@@ -1,15 +1,20 @@
 var DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
-var SCENE_INDEX = 0;
-var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
-var LIGHTS_INDEX = 3;
-var TEXTURES_INDEX = 4;
-var MATERIALS_INDEX = 5;
-var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+
+var indexes = {
+  SCENE_INDEX: 0,
+  VIEWS_INDEX: 1,
+  AMBIENT_INDEX: 2,
+  LIGHTS_INDEX: 3,
+  TEXTURES_INDEX: 4,
+  MATERIALS_INDEX: 5,
+  TRANSFORMATIONS_INDEX: 6,
+  PRIMITIVES_INDEX: 7,
+  COMPONENTS_INDEX: 8
+};
+
+var tags = ["scene", "views", "ambient", "lights", "textures", "materials", "transformations", "primitives", "components"];
 
 var ROOT_NODENAME = 'YAS';
 
@@ -29,7 +34,7 @@ class MySceneGraph {
 
     this.nodes = [];
 
-    this.idRoot = null;  // The id of the root element.
+    this.idRoot = null; // The id of the root element.
 
     this.axisCoords = [];
     this.axisCoords['x'] = [1, 0, 0];
@@ -94,87 +99,12 @@ class MySceneGraph {
 
     // Processes each node, verifying errors.
 
-    // Scene
-    if (nodeNames[SCENE_INDEX] != 'scene')
-      return 'tag <scene> missing or out of order';
-    // Parse scene block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[SCENE_INDEX], nodes[SCENE_INDEX])) != null)
-      return error;
-
-    // View
-    if (nodeNames[VIEWS_INDEX] != 'views')
-      return 'tag <VIEW> missing or out of order';
-    // Parse view block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[VIEWS_INDEX], nodes[VIEWS_INDEX])) != null)
-      return error;
-
-    // Ambient
-    if (nodeNames[AMBIENT_INDEX] != 'ambient')
-      return 'tag <AMBIENT> missing or out of order';
-    // Parse ambient block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[AMBIENT_INDEX], nodes[AMBIENT_INDEX])) != null)
-      return error;
-
-    // Lights
-    if (nodeNames[LIGHTS_INDEX] != 'lights')
-      return 'tag <LIGHTS> missing or out of order';
-    // Parse lights block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[LIGHTS_INDEX], nodes[LIGHTS_INDEX])) != null)
-      return error;
-
-    // Textures
-    if (nodeNames[TEXTURES_INDEX] != 'textures')
-      return 'tag <textures> missing or out of order';
-    // Parse textures block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[TEXTURES_INDEX], nodes[TEXTURES_INDEX])) != null)
-      return error;
-
-    // Materials
-    if (nodeNames[MATERIALS_INDEX] != 'materials')
-      return 'tag <materials> missing or out of order';
-    // Parse materials block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[MATERIALS_INDEX], nodes[MATERIALS_INDEX])) != null)
-      return error;
-
-    // Transformations
-    if (nodeNames[TRANSFORMATIONS_INDEX] != 'transformations')
-      return 'tag <transformations> missing or out of order';
-    // Parse transformations block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[TRANSFORMATIONS_INDEX], nodes[TRANSFORMATIONS_INDEX])) !=
-        null)
-      return error;
-
-    // Primitives
-    if (nodeNames[PRIMITIVES_INDEX] != 'primitives')
-      return 'tag <primitives> missing or out of order';
-    // Parse primitives block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[PRIMITIVES_INDEX], nodes[PRIMITIVES_INDEX])) != null)
-      return error;
-
-    // Components
-    if (nodeNames[COMPONENTS_INDEX] != 'components')
-      return 'tag <components> missing or out of order';
-    // Parse components block
-    else if (
-        (error = this.parseDispatcher(
-             nodeNames[COMPONENTS_INDEX], nodes[COMPONENTS_INDEX])) != null)
-      return error;
+    for (var key in Object.keys(indexes)) {
+      if (nodeNames[key] != tags[key])
+        return 'tag <'+ tags[key] +'> missing';
+      else if ((error = this.parseDispatcher(nodeNames[key], nodes[key])) != null)
+        return error;
+    }
 
     /*
 
@@ -225,7 +155,7 @@ class MySceneGraph {
 
     if (this.axis_length == null || this.axis_length < 0) {
       this.onXMLMinorError(
-          'axis_length not specified or invalid; assuming \'axis_length = 5\'');
+        'axis_length not specified or invalid; assuming \'axis_length = 5\'');
       this.axis_length = 5;
     }
   }
@@ -249,7 +179,7 @@ class MySceneGraph {
     var indexFrustum = nodeNames.indexOf('frustum');
     if (indexFrustum == -1) {
       this.onXMLMinorError(
-          'frustum planes missing; assuming \'near = 0.1\' and \'far = 500\'');
+        'frustum planes missing; assuming \'near = 0.1\' and \'far = 500\'');
     } else {
       this.near = this.reader.getFloat(children[indexFrustum], 'near');
       this.far = this.reader.getFloat(children[indexFrustum], 'far');
@@ -257,11 +187,11 @@ class MySceneGraph {
       if (!(this.near != null && !isNaN(this.near))) {
         this.near = 0.1;
         this.onXMLMinorError(
-            'unable to parse value for near plane; assuming \'near = 0.1\'');
+          'unable to parse value for near plane; assuming \'near = 0.1\'');
       } else if (!(this.far != null && !isNaN(this.far))) {
         this.far = 500;
         this.onXMLMinorError(
-            'unable to parse value for far plane; assuming \'far = 500\'');
+          'unable to parse value for far plane; assuming \'far = 500\'');
       }
 
       if (this.near >= this.far) return '\'near\' must be smaller than \'far\'';
@@ -287,7 +217,7 @@ class MySceneGraph {
     var translationIndex = nodeNames.indexOf('translation');
     var thirdRotationIndex = nodeNames.indexOf('rotation');
     var secondRotationIndex =
-        nodeNames.indexOf('rotation', thirdRotationIndex + 1);
+      nodeNames.indexOf('rotation', thirdRotationIndex + 1);
     var firstRotationIndex = nodeNames.lastIndexOf('rotation');
     var scalingIndex = nodeNames.indexOf('scale');
 
@@ -298,7 +228,7 @@ class MySceneGraph {
 
     if (translationIndex == -1)
       this.onXMLMinorError(
-          'initial translation undefined; assuming T = (0, 0, 0)');
+        'initial translation undefined; assuming T = (0, 0, 0)');
     else {
       var tx = this.reader.getFloat(children[translationIndex], 'x');
       var ty = this.reader.getFloat(children[translationIndex], 'y');
@@ -309,7 +239,7 @@ class MySceneGraph {
         ty = 0;
         tz = 0;
         this.onXMLMinorError(
-            'failed to parse coordinates of initial translation; assuming zero');
+          'failed to parse coordinates of initial translation; assuming zero');
       }
 
       // TODO: Save translation data
@@ -344,7 +274,7 @@ class MySceneGraph {
 
     if (this.defaultPerspectiveId == null) {
       this.onXMLMinorError(
-          'no default perspective specified; assuming first one');
+        'no default perspective specified; assuming first one');
     }
 
     this.perspectives = [];
@@ -364,7 +294,7 @@ class MySceneGraph {
 
       if (this.perspectives[perspectiveId] != null) {
         return 'ID must be unique for each perspective (conflict: ID = ' +
-            perspectiveId + ')';
+          perspectiveId + ')';
       }
 
 
@@ -408,7 +338,7 @@ class MySceneGraph {
       // Checks for repeated IDs.
       if (this.lights[lightId] != null)
         return 'ID must be unique for each light (conflict: ID = ' + lightId +
-            ')';
+          ')';
 
       grandChildren = children[i].children;
       // Specifications for the current light.
@@ -429,14 +359,14 @@ class MySceneGraph {
       var enableLight = true;
       if (enableIndex == -1) {
         this.onXMLMinorError(
-            'enable value missing for ID = ' + lightId +
-            '; assuming \'value = 1\'');
+          'enable value missing for ID = ' + lightId +
+          '; assuming \'value = 1\'');
       } else {
         var aux = this.reader.getFloat(grandChildren[enableIndex], 'value');
         if (!(aux != null && !isNaN(aux) && (aux == 0 || aux == 1)))
           this.onXMLMinorError(
-              'unable to parse value component of the \'enable light\' field for ID = ' +
-              lightId + '; assuming \'value = 1\'');
+            'unable to parse value component of the \'enable light\' field for ID = ' +
+            lightId + '; assuming \'value = 1\'');
         else
           enableLight = aux == 0 ? false : true;
       }
@@ -448,7 +378,7 @@ class MySceneGraph {
         var x = this.reader.getFloat(grandChildren[positionIndex], 'x');
         if (!(x != null && !isNaN(x)))
           return 'unable to parse x-coordinate of the light position for ID = ' +
-              lightId;
+            lightId;
         else
           positionLight.push(x);
 
@@ -456,7 +386,7 @@ class MySceneGraph {
         var y = this.reader.getFloat(grandChildren[positionIndex], 'y');
         if (!(y != null && !isNaN(y)))
           return 'unable to parse y-coordinate of the light position for ID = ' +
-              lightId;
+            lightId;
         else
           positionLight.push(y);
 
@@ -464,7 +394,7 @@ class MySceneGraph {
         var z = this.reader.getFloat(grandChildren[positionIndex], 'z');
         if (!(z != null && !isNaN(z)))
           return 'unable to parse z-coordinate of the light position for ID = ' +
-              lightId;
+            lightId;
         else
           positionLight.push(z);
 
@@ -472,7 +402,7 @@ class MySceneGraph {
         var w = this.reader.getFloat(grandChildren[positionIndex], 'w');
         if (!(w != null && !isNaN(w) && w >= 0 && w <= 1))
           return 'unable to parse x-coordinate of the light position for ID = ' +
-              lightId;
+            lightId;
         else
           positionLight.push(w);
       } else
@@ -485,7 +415,7 @@ class MySceneGraph {
         var r = this.reader.getFloat(grandChildren[ambientIndex], 'r');
         if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
           return 'unable to parse R component of the ambient illumination for ID = ' +
-              lightId;
+            lightId;
         else
           ambientIllumination.push(r);
 
@@ -493,7 +423,7 @@ class MySceneGraph {
         var g = this.reader.getFloat(grandChildren[ambientIndex], 'g');
         if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
           return 'unable to parse G component of the ambient illumination for ID = ' +
-              lightId;
+            lightId;
         else
           ambientIllumination.push(g);
 
@@ -501,7 +431,7 @@ class MySceneGraph {
         var b = this.reader.getFloat(grandChildren[ambientIndex], 'b');
         if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
           return 'unable to parse B component of the ambient illumination for ID = ' +
-              lightId;
+            lightId;
         else
           ambientIllumination.push(b);
 
@@ -509,7 +439,7 @@ class MySceneGraph {
         var a = this.reader.getFloat(grandChildren[ambientIndex], 'a');
         if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
           return 'unable to parse A component of the ambient illumination for ID = ' +
-              lightId;
+            lightId;
         else
           ambientIllumination.push(a);
       } else
@@ -528,7 +458,7 @@ class MySceneGraph {
       return 'at least one light must be defined';
     else if (numLights > 8)
       this.onXMLMinorError(
-          'too many lights defined; WebGL imposes a limit of 8 lights');
+        'too many lights defined; WebGL imposes a limit of 8 lights');
 
     this.log('Parsed lights');
 

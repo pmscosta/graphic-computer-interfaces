@@ -108,8 +108,10 @@ class MySceneGraph {
       if (nodeNames[key] != tags[key])
         return 'tag <' + tags[key] + '> missing';
       else if (
-          (error = this.parseDispatcher(nodeNames[key], nodes[key])) != null)
+          (error = this.parseDispatcher(nodeNames[key], nodes[key])) != null) {
+        onXMLError(error);
         return error;
+      }
     }
   }
 
@@ -172,15 +174,15 @@ class MySceneGraph {
     var ambientValues = [];
     if (ambientIndex != -1) {
       getRGBComponents(
-          this.reader, 'ambient', ambientValues, ambientIndex, children);
+          this.reader, 'ambient', ambientValues, children[ambientIndex]);
     } else
       return 'ambient components not defined';
 
     var backgroundValues = [];
     if (backgroundIndex != -1) {
       getRGBComponents(
-          this.reader, 'background', backgroundValues, backgroundIndex,
-          children);
+          this.reader, 'background', backgroundValues,
+          children[backgroundIndex]);
     } else
       return 'undefined backgrounds components';
 
@@ -254,9 +256,9 @@ class MySceneGraph {
       var curr_transformation = new Transformation(this.scene);
 
       for (var j = 0; j < grandChildren.length; j++) {
-
-        parseTransformation(this.reader, grandChildren, j,  curr_transformation, transformationID);
-
+        parseTransformation(
+            this.reader, grandChildren, j, curr_transformation,
+            transformationID);
       }
 
       this.transformations[transformationID] = curr_transformation;
@@ -335,11 +337,11 @@ class MySceneGraph {
       var to_values = [];
 
       getSpaceComponents(
-          this.reader, xyz_comp, 'perspective', from_values, fromIndex,
-          grandChildren);
+          this.reader, xyz_comp, 'perspective', from_values,
+          grandChildren[fromIndex]);
       getSpaceComponents(
-          this.reader, xyz_comp, 'perspective', to_values, toIndex,
-          grandChildren);
+          this.reader, xyz_comp, 'perspective', to_values,
+          grandChildren[toIndex]);
 
       if (this.defaultPerspectiveId == null)
         this.defaultPerspectiveId = perspectiveId;
@@ -357,6 +359,9 @@ class MySceneGraph {
     if (counter == 0) {
       return 'at least one perspective must be defined';
     }
+
+    this.near = this.perspectives[this.defaultPerspectiveId].near;
+    this.far = this.perspectives[this.defaultPerspectiveId].far;
 
     this.log('Parsed perspectives');
 
@@ -416,7 +421,7 @@ class MySceneGraph {
       if (emissionIndex != -1) {
         getSpaceComponents(
             this.reader, rgb_comp, 'material ID= ' + materialID, emissions,
-            emissionIndex, grandChildren);
+            grandChildren[emissionIndex]);
       } else
         return 'emission component undefined for ID = ' + materialID;
 
@@ -425,7 +430,7 @@ class MySceneGraph {
       if (ambientIndex != -1) {
         getRGBComponents(
             this.reader, 'material ID= ' + materialID, ambientComponent,
-            ambientIndex, grandChildren);
+            grandChildren[ambientIndex]);
       } else
         return 'ambient component undefined for ID = ' + materialID;
 
@@ -434,16 +439,16 @@ class MySceneGraph {
       if (diffuseIndex != -1) {
         getRGBComponents(
             this.reader, 'material ID= ' + materialID, diffuseComponent,
-            diffuseIndex, grandChildren);
+            grandChildren[diffuseIndex]);
       } else
         return 'diffuse component undefined for ID = ' + materialID;
 
       // Retrieve the specular component
       var specularComponent = [];
-      if (diffuseIndex != -1) {
+      if (specularIndex != -1) {
         getRGBComponents(
             this.reader, 'material ID= ' + materialID, specularComponent,
-            specularIndex, grandChildren);
+            grandChildren[specularIndex]);
       } else
         return 'specular component undefined for ID = ' + materialID;
 
@@ -468,132 +473,25 @@ class MySceneGraph {
   parseLights(lightsNode) {
     var children = lightsNode.children;
 
-    this.omnis = [];
-    this.spots = [];
-    this.lights = [];
     var numLights = 0;
 
-    var grandChildren = [];
-    var nodeNames = [];
 
     // Any number of lights.
     for (var i = 0; i < children.length; i++) {
-      if (children[i].nodeName != 'omni' && children[i].nodeName != 'spot') {
-        this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
-        continue;
-      }
-
-      // Get id of the current
-      var lightID = this.reader.getString(children[i], 'id');
-      if (lightID == null) return 'no ID defined for light';
-
-
-      if (this.omnis[lightID] != null || this.spots[lightID] != null) {
-        return 'ID must be unique for each material (conflict: ID = ' +
-            lightID + ')';
-      }
-
-      // Get enabled status
-      var enabled = this.reader.getFloat(children[i], 'enabled');
-      if (enabled == null) {
-        this.onXMLMinorError(
-            'Enabled wasn\'t correctly specified, assuming light enabled');
-        enabled = 1;
-      }
-
-
-      grandChildren = children[i].children;
-      // Specifications for the current light.
-      nodeNames = [];
-      for (var j = 0; j < grandChildren.length; j++) {
-        nodeNames.push(grandChildren[j].nodeName);
-      }
-
-      // Gets indices of each element.
-      var locationIndex = nodeNames.indexOf('location');
-      var ambientIndex = nodeNames.indexOf('ambient');
-      var diffuseIndex = nodeNames.indexOf('diffuse');
-      var specularIndex = nodeNames.indexOf('specular');
-
-
-      // Retrieves the light location.
-      var locations = [];
-      if (locationIndex != -1) {
-        getSpaceComponents(
-            this.reader, xyzw_comp, 'light ID= ' + lightID, locations,
-            locationIndex, grandChildren);
-      } else
-        return 'light position undefined for ID = ' + lightId;
-
-      // Retrieves the ambient component.
-      var ambientIllumination = [];
-      if (ambientIndex != -1) {
-        getRGBComponents(
-            this.reader, 'lights', ambientIllumination, ambientIndex,
-            grandChildren);
-      } else
-        return 'ambient component undefined for ID = ' + lightID;
-
-      // Retrieve the diffuse component
-      var diffuseIllumination = [];
-      if (diffuseIndex != -1) {
-        getRGBComponents(
-            this.reader, 'lights', diffuseIllumination, diffuseIndex,
-            grandChildren);
-      } else
-        return 'ambient component undefined for ID = ' + lightID;
-
-      // Retrieve the specular component
-      var specularIllumination = [];
-      if (diffuseIndex != -1) {
-        getRGBComponents(
-            this.reader, 'lights', specularIllumination, specularIndex,
-            grandChildren);
-      } else
-        return 'specular component undefined for ID = ' + lightID;
-
-
-      if (children[i].nodeName == 'spot') {
-        var angle = this.reader.getString(children[i], 'angle');
-        var exponent = this.reader.getString(children[i], 'exponent');
-
-        var target = [];
-        var targetIndex = nodeNames.indexOf('target');
-
-        if (targetIndex != -1) {
-          getSpaceComponents(
-              this.reader, xyz_comp, 'lights ID= ' + lightID, target,
-              targetIndex, grandChildren);
-        } else
-          return 'target component undefined for spot light ID = ' + lightID;
-
-
-        this.spots[lightID] = [];
-        this.spots[lightID]['enabled'] = enabled;
-        this.spots[lightID]['angle'] = angle;
-        this.spots[lightID]['exponent'] = exponent;
-        this.spots[lightID]['location'] = location;
-        this.spots[lightID]['target'] = target;
-        this.spots[lightID]['ambient'] = ambientIllumination;
-        this.spots[lightID]['diffuse'] = diffuseIllumination;
-        this.spots[lightID]['specular'] = specularIllumination;
-
-      } else {
-        this.omnis[lightID] = [];
-        this.omnis[lightID]['enabled'] = enabled;
-        this.omnis[lightID]['location'] = location;
-        this.omnis[lightID]['ambient'] = ambientIllumination;
-        this.omnis[lightID]['diffuse'] = diffuseIllumination;
-        this.omnis[lightID]['specular'] = specularIllumination;
+      switch (children[i].nodeName) {
+        case 'omni':
+          createOmniLight(this.scene, children[i], this.reader);
+          break;
+        case 'spot':
+          createSpotLight(this.scene, children[i], this.reader);
+          break;
+        default:
+          this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
+          continue;
       }
 
       numLights++;
     }
-
-
-    this.lights['omnis'] = this.omnis;
-    this.lights['spots'] = this.spots;
-
 
     if (numLights == 0)
       return 'at least one light must be defined';
@@ -606,17 +504,19 @@ class MySceneGraph {
     return null;
   }
 
+  /**
+   * Parses the <PRIMITIVE> node.
+   * @param {primitives block element} primitivesNode
+   */
+  parsePrimitives(primitivesNode) {}
 
 
   /**
-   * Parses the <NODES> block.
-   * @param {nodes block element} nodesNode
+   * Parses the <COMPONENTS> node.
+   * @param {components block element} componentsNode
    */
-  parseNodes(nodesNode) {
-    // TODO: Parse block
-    this.log('Parsed nodes');
-    return null;
-  }
+  parseComponents(componentsNode) {}
+
 
   /*
    * Callback to be executed on any read error, showing an error on the

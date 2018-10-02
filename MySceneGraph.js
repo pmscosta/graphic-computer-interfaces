@@ -367,6 +367,104 @@ class MySceneGraph {
     }
   }
 
+  /**
+   * Parses the <MATERIALS> node.
+   * @param {materials block element} materialsNode
+   */
+  parseMaterials(materialsNode) {
+    var children = materialsNode.children;
+    this.materials = [];
+    var grandChildren = [];
+    var nodeNames = [];
+
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].nodeName != 'material') {
+        this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
+        continue;
+      }
+
+      // Get id of the current
+      var materialID = this.reader.getString(children[i], 'id');
+      if (materialID == null) return 'no ID defined for material';
+
+      if (this.materials[materialID] != null) {
+        return 'ID must be unique for each material (conflict: ID = ' +
+            materialID + ')';
+      }
+
+
+      // Get shininess status
+      var shininess = this.reader.getFloat(children[i], 'shininess');
+      if (shininess == null) {
+        this.onXMLMinorError(
+            'shininess wasn\'t correctly specified, assuming shininess 0');
+        shininess = 0;
+      }
+
+      grandChildren = children[i].children;
+      // Specifications for the current material.
+      nodeNames = [];
+      for (var j = 0; j < grandChildren.length; j++) {
+        nodeNames.push(grandChildren[j].nodeName);
+      }
+
+      // Gets indices of each element.
+      var emissionIndex = nodeNames.indexOf('emission');
+      var ambientIndex = nodeNames.indexOf('ambient');
+      var diffuseIndex = nodeNames.indexOf('diffuse');
+      var specularIndex = nodeNames.indexOf('specular');
+
+
+      // Retrives the material emission
+      var emissions = [];
+      if (emissionIndex != -1) {
+        this.getSpaceComponents(
+            rgb_comp, 'material ID= ' + materialID, emissions, locationIndex,
+            grandChildren);
+      } else
+        return 'emission component undefined for ID = ' + materialID;
+
+      // Retrieves the ambient component.
+      var ambientComponent = [];
+      if (ambientIndex != -1) {
+        this.getRGBComponents(
+            'material ID= ' + materialID, ambientComponent, ambientIndex,
+            grandChildren);
+      } else
+        return 'ambient component undefined for ID = ' + materialID;
+
+      // Retrieve the diffuse component
+      var diffuseComponent = [];
+      if (diffuseIndex != -1) {
+        this.getRGBComponents(
+            'material ID= ' + materialID, diffuseComponent, diffuseIndex,
+            grandChildren);
+      } else
+        return 'diffuse component undefined for ID = ' + materialID;
+
+      // Retrieve the specular component
+      var specularComponent = [];
+      if (diffuseIndex != -1) {
+        this.getRGBComponents(
+            'material ID= ' + materialID, specularComponent, specularIndex,
+            grandChildren);
+      } else
+        return 'specular component undefined for ID = ' + materialID;
+
+      this.materials[materialID] = [];
+      this.materials[materialID]['shininess'] = shininess;
+      this.materials[materialID]['emission'] = emissions;
+      this.materials[materialID]['ambient'] = ambientComponent;
+      this.materials[materialID]['diffuse'] = diffuseComponent;
+      this.materials[materialID]['specular'] = specularComponent;
+    }
+
+
+    this.log('Parsed materials');
+    return null;
+  }
+
+
 
   /**
    * Parses the <LIGHTS> node.
@@ -394,15 +492,23 @@ class MySceneGraph {
       var lightID = this.reader.getString(children[i], 'id');
       if (lightID == null) return 'no ID defined for light';
 
+
+      if (this.omnis[lightID] != null || this.spots[lightID] != null) {
+        return 'ID must be unique for each material (conflict: ID = ' +
+            lightID + ')';
+      }
+
       // Get enabled status
-      var enabled = this.reader.getString(children[i], 'enabled');
-      if (enabled == null)
-        return 'Enabled wasn\'t correctly specified, assuming light enabled';
+      var enabled = this.reader.getFloat(children[i], 'enabled');
+      if (enabled == null) {
+        this.onXMLMinorError(
+            'Enabled wasn\'t correctly specified, assuming light enabled');
+        enabled = 1;
+      }
 
 
       grandChildren = children[i].children;
       // Specifications for the current light.
-
       nodeNames = [];
       for (var j = 0; j < grandChildren.length; j++) {
         nodeNames.push(grandChildren[j].nodeName);
@@ -482,11 +588,12 @@ class MySceneGraph {
         this.omnis[lightID]['diffuse'] = diffuseIllumination;
         this.omnis[lightID]['specular'] = specularIllumination;
       }
+
+      numLights++;
     }
 
 
     this.lights = [this.omnis, this.spots];
-    numLights++;
 
 
     if (numLights == 0)
@@ -514,15 +621,6 @@ class MySceneGraph {
     return null;
   }
 
-  /**
-   * Parses the <MATERIALS> node.
-   * @param {materials block element} materialsNode
-   */
-  parseMaterials(materialsNode) {
-    // TODO: Parse block
-    this.log('Parsed materials');
-    return null;
-  }
 
   /**
    * Parses the <NODES> block.

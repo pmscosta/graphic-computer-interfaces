@@ -19,11 +19,7 @@ var tags = [
   'transformations', 'primitives', 'components'
 ];
 
-var rgb_comp = ['r', 'g', 'b', 'a'];
 
-var xyz_comp = ['x', 'y', 'z'];
-
-var xyzw_comp = ['x', 'y', 'z', 'w'];
 
 var ROOT_NODENAME = 'yas';
 
@@ -154,28 +150,6 @@ class MySceneGraph {
     }
   }
 
-  getSpaceComponents(components, phase, values, index, children) {
-    for (var i = 0; i < components.length; i++) {
-      var temp = this.reader.getFloat(children[index], components[i]);
-
-      if (!(temp != null && !isNaN(temp)))
-        return 'unable to parse ' + xyz_comp[i] + ' component of the ' + phase;
-      else
-        values.push(temp);
-    }
-  }
-
-  getRGBComponents(phase, values, index, children) {
-    for (var i = 0; i < 4; i++) {
-      var temp = this.reader.getFloat(children[index], rgb_comp[i]);
-
-      if (!(temp != null && !isNaN(temp)) ||
-          ((i == 3 && temp >= 0 && temp <= 1)))
-        return 'unable to parse ' + rgb_comp[i] + ' component of the ' + phase;
-      else
-        values.push(temp);
-    }
-  }
 
 
   /**
@@ -197,14 +171,16 @@ class MySceneGraph {
 
     var ambientValues = [];
     if (ambientIndex != -1) {
-      this.getRGBComponents('ambient', ambientValues, ambientIndex, children);
+      getRGBComponents(
+          this.reader, 'ambient', ambientValues, ambientIndex, children);
     } else
       return 'ambient components not defined';
 
     var backgroundValues = [];
     if (backgroundIndex != -1) {
-      this.getRGBComponents(
-          'background', backgroundValues, backgroundIndex, children);
+      getRGBComponents(
+          this.reader, 'background', backgroundValues, backgroundIndex,
+          children);
     } else
       return 'undefined backgrounds components';
 
@@ -242,19 +218,9 @@ class MySceneGraph {
       this.textures[textureId]['path'] = texturePath;
     }
 
+    console.log(this.textures);
+
     this.log('parsed textures');
-
-    return null;
-  }
-
-  /**
-   * Parses the <ILLUMINATION> block.
-   * @param {illumination block element} illuminationNode
-   */
-  parseIllumination(illuminationNode) {
-    // TODO: Parse Illumination node
-
-    this.log('Parsed illumination');
 
     return null;
   }
@@ -330,10 +296,12 @@ class MySceneGraph {
       var from_values = [];
       var to_values = [];
 
-      this.getSpaceComponents(
-          xyz_comp, 'perspective', from_values, fromIndex, grandChildren);
-      this.getSpaceComponents(
-          xyz_comp, 'perspective', to_values, toIndex, grandChildren);
+      getSpaceComponents(
+          this.reader, xyz_comp, 'perspective', from_values, fromIndex,
+          grandChildren);
+      getSpaceComponents(
+          this.reader, xyz_comp, 'perspective', to_values, toIndex,
+          grandChildren);
 
       if (this.defaultPerspectiveId == null)
         this.defaultPerspectiveId = perspectiveId;
@@ -355,16 +323,6 @@ class MySceneGraph {
     this.log('Parsed perspectives');
 
     return null;
-    for (var i = 0; i < 3; i++) {
-      var temp;
-      temp = this.reader.getFloat(grandChildren[toIndex], coords[i]);
-
-      if (!(temp != null && !isNaN(temp)))
-        return 'unable to parse ' + coords[i] +
-            '-coordinate of the perspective for ID = ' + perspectiveId;
-      else
-        to_values[i] = temp;
-    }
   }
 
   /**
@@ -418,36 +376,36 @@ class MySceneGraph {
       // Retrives the material emission
       var emissions = [];
       if (emissionIndex != -1) {
-        this.getSpaceComponents(
-            rgb_comp, 'material ID= ' + materialID, emissions, locationIndex,
-            grandChildren);
+        getSpaceComponents(
+            this.reader, rgb_comp, 'material ID= ' + materialID, emissions,
+            emissionIndex, grandChildren);
       } else
         return 'emission component undefined for ID = ' + materialID;
 
       // Retrieves the ambient component.
       var ambientComponent = [];
       if (ambientIndex != -1) {
-        this.getRGBComponents(
-            'material ID= ' + materialID, ambientComponent, ambientIndex,
-            grandChildren);
+        getRGBComponents(
+            this.reader, 'material ID= ' + materialID, ambientComponent,
+            ambientIndex, grandChildren);
       } else
         return 'ambient component undefined for ID = ' + materialID;
 
       // Retrieve the diffuse component
       var diffuseComponent = [];
       if (diffuseIndex != -1) {
-        this.getRGBComponents(
-            'material ID= ' + materialID, diffuseComponent, diffuseIndex,
-            grandChildren);
+        getRGBComponents(
+            this.reader, 'material ID= ' + materialID, diffuseComponent,
+            diffuseIndex, grandChildren);
       } else
         return 'diffuse component undefined for ID = ' + materialID;
 
       // Retrieve the specular component
       var specularComponent = [];
       if (diffuseIndex != -1) {
-        this.getRGBComponents(
-            'material ID= ' + materialID, specularComponent, specularIndex,
-            grandChildren);
+        getRGBComponents(
+            this.reader, 'material ID= ' + materialID, specularComponent,
+            specularIndex, grandChildren);
       } else
         return 'specular component undefined for ID = ' + materialID;
 
@@ -458,7 +416,6 @@ class MySceneGraph {
       this.materials[materialID]['diffuse'] = diffuseComponent;
       this.materials[materialID]['specular'] = specularComponent;
     }
-
 
     this.log('Parsed materials');
     return null;
@@ -524,33 +481,36 @@ class MySceneGraph {
       // Retrieves the light location.
       var locations = [];
       if (locationIndex != -1) {
-        this.getSpaceComponents(
-            xyzw_comp, 'light ID= ' + lightID, locations, locationIndex,
-            grandChildren);
+        getSpaceComponents(
+            this.reader, xyzw_comp, 'light ID= ' + lightID, locations,
+            locationIndex, grandChildren);
       } else
         return 'light position undefined for ID = ' + lightId;
 
       // Retrieves the ambient component.
       var ambientIllumination = [];
       if (ambientIndex != -1) {
-        this.getRGBComponents(
-            'lights', ambientIllumination, ambientIndex, grandChildren);
+        getRGBComponents(
+            this.reader, 'lights', ambientIllumination, ambientIndex,
+            grandChildren);
       } else
         return 'ambient component undefined for ID = ' + lightID;
 
       // Retrieve the diffuse component
       var diffuseIllumination = [];
       if (diffuseIndex != -1) {
-        this.getRGBComponents(
-            'lights', diffuseIllumination, diffuseIndex, grandChildren);
+        getRGBComponents(
+            this.reader, 'lights', diffuseIllumination, diffuseIndex,
+            grandChildren);
       } else
         return 'ambient component undefined for ID = ' + lightID;
 
       // Retrieve the specular component
       var specularIllumination = [];
       if (diffuseIndex != -1) {
-        this.getRGBComponents(
-            'lights', specularIllumination, specularIndex, grandChildren);
+        getRGBComponents(
+            this.reader, 'lights', specularIllumination, specularIndex,
+            grandChildren);
       } else
         return 'specular component undefined for ID = ' + lightID;
 
@@ -563,9 +523,9 @@ class MySceneGraph {
         var targetIndex = nodeNames.indexOf('target');
 
         if (targetIndex != -1) {
-          this.getSpaceComponents(
-              xyz_comp, 'lights ID= ' + lightID, target, targetIndex,
-              grandChildren);
+          getSpaceComponents(
+              this.reader, xyz_comp, 'lights ID= ' + lightID, target,
+              targetIndex, grandChildren);
         } else
           return 'target component undefined for spot light ID = ' + lightID;
 
@@ -607,19 +567,6 @@ class MySceneGraph {
     return null;
   }
 
-
-
-  /**
-   * Parses the <TEXTURES> block.
-   * @param {textures block element} texturesNode
-   */
-  parseTextures(texturesNode) {
-    // TODO: Parse block
-
-    console.log('Parsed textures');
-
-    return null;
-  }
 
 
   /**

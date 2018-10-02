@@ -393,74 +393,12 @@ class MySceneGraph {
             materialID + ')';
       }
 
-
-      // Get shininess status
-      var shininess = this.reader.getFloat(children[i], 'shininess');
-      if (shininess == null) {
-        this.onXMLMinorError(
-            'shininess wasn\'t correctly specified, assuming shininess 0');
-        shininess = 0;
-      }
-
-      grandChildren = children[i].children;
-      // Specifications for the current material.
-      nodeNames = [];
-      for (var j = 0; j < grandChildren.length; j++) {
-        nodeNames.push(grandChildren[j].nodeName);
-      }
-
-      // Gets indices of each element.
-      var emissionIndex = nodeNames.indexOf('emission');
-      var ambientIndex = nodeNames.indexOf('ambient');
-      var diffuseIndex = nodeNames.indexOf('diffuse');
-      var specularIndex = nodeNames.indexOf('specular');
-
-
-      // Retrives the material emission
-      var emissions = [];
-      if (emissionIndex != -1) {
-        getSpaceComponents(
-            this.reader, rgb_comp, 'material ID= ' + materialID, emissions,
-            grandChildren[emissionIndex]);
-      } else
-        return 'emission component undefined for ID = ' + materialID;
-
-      // Retrieves the ambient component.
-      var ambientComponent = [];
-      if (ambientIndex != -1) {
-        getRGBComponents(
-            this.reader, 'material ID= ' + materialID, ambientComponent,
-            grandChildren[ambientIndex]);
-      } else
-        return 'ambient component undefined for ID = ' + materialID;
-
-      // Retrieve the diffuse component
-      var diffuseComponent = [];
-      if (diffuseIndex != -1) {
-        getRGBComponents(
-            this.reader, 'material ID= ' + materialID, diffuseComponent,
-            grandChildren[diffuseIndex]);
-      } else
-        return 'diffuse component undefined for ID = ' + materialID;
-
-      // Retrieve the specular component
-      var specularComponent = [];
-      if (specularIndex != -1) {
-        getRGBComponents(
-            this.reader, 'material ID= ' + materialID, specularComponent,
-            grandChildren[specularIndex]);
-      } else
-        return 'specular component undefined for ID = ' + materialID;
-
-      this.materials[materialID] = [];
-      this.materials[materialID]['shininess'] = shininess;
-      this.materials[materialID]['emission'] = emissions;
-      this.materials[materialID]['ambient'] = ambientComponent;
-      this.materials[materialID]['diffuse'] = diffuseComponent;
-      this.materials[materialID]['specular'] = specularComponent;
+      this.materials[materialID] = createMaterial(this.scene, children[i], this.reader, materialID);
     }
 
     this.log('Parsed materials');
+
+    console.log(this.materials);
     return null;
   }
 

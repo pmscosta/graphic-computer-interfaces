@@ -19,7 +19,7 @@ function getRGBComponents(reader, phase, values, element) {
   for (var i = 0; i < 4; i++) {
     var temp = reader.getFloat(element, rgb_comp[i]);
 
-    if (!(temp != null && !isNaN(temp)) || ((i == 3 && temp >= 0 && temp <= 1)))
+    if (!(temp != null && !isNaN(temp)) || ((i == 3 && temp < 0 && temp > 1)))
       return 'unable to parse ' + rgb_comp[i] + ' component of the ' + phase;
     else
       values.push(temp);
@@ -72,7 +72,7 @@ function createOmniLight(scene, light_element, reader) {
   if (lightID == null) return 'no ID defined for light';
 
 
-  if(scene.lightsID.indexOf(lightID) != -1){
+  if (scene.lightsID.indexOf(lightID) != -1) {
     return 'ID must be unique for each material (conflict: ID = ' + lightID +
         ')';
   }
@@ -80,9 +80,10 @@ function createOmniLight(scene, light_element, reader) {
   // Get enabled status
   var enabled = reader.getBoolean(light_element, 'enabled');
   if (enabled == null) {
-    this.onXMLMinorError(
+    onXMLMinorError(
         'Enabled wasn\'t correctly specified, assuming light enabled');
-    enabled = true;;
+    enabled = true;
+    ;
   }
 
   grandChildren = light_element.children;
@@ -112,8 +113,7 @@ function createOmniLight(scene, light_element, reader) {
   var ambientIllumination = [];
   if (ambientIndex != -1) {
     getRGBComponents(
-        reader, 'lights', ambientIllumination,
-        grandChildren[ambientIndex]);
+        reader, 'lights', ambientIllumination, grandChildren[ambientIndex]);
   } else
     return 'ambient component undefined for ID = ' + lightID;
 
@@ -121,8 +121,7 @@ function createOmniLight(scene, light_element, reader) {
   var diffuseIllumination = [];
   if (diffuseIndex != -1) {
     getRGBComponents(
-        reader, 'lights', diffuseIllumination,
-        grandChildren[diffuseIndex]);
+        reader, 'lights', diffuseIllumination, grandChildren[diffuseIndex]);
   } else
     return 'ambient component undefined for ID = ' + lightID;
 
@@ -130,8 +129,7 @@ function createOmniLight(scene, light_element, reader) {
   var specularIllumination = [];
   if (specularIndex != -1) {
     getRGBComponents(
-        reader, 'lights', specularIllumination,
-        grandChildren[specularIndex]);
+        reader, 'lights', specularIllumination, grandChildren[specularIndex]);
   } else
     return 'specular component undefined for ID = ' + lightID;
 
@@ -145,14 +143,97 @@ function createOmniLight(scene, light_element, reader) {
 
   new_light.setVisible(true);
   new_light.setPosition(location[0], location[1], location[2], location[3]);
-  new_light.setAmbient(ambientIllumination[0], ambientIllumination[1], ambientIllumination[2], ambientIllumination[3]);
-  new_light.setDiffuse(diffuseIllumination[0], diffuseIllumination[1], diffuseIllumination[2], diffuseIllumination[3]);
-  new_light.setSpecular(specularIllumination[0], specularIllumination[1], specularIllumination[2], specularIllumination[3]);
- 
+  new_light.setAmbient(
+      ambientIllumination[0], ambientIllumination[1], ambientIllumination[2],
+      ambientIllumination[3]);
+  new_light.setDiffuse(
+      diffuseIllumination[0], diffuseIllumination[1], diffuseIllumination[2],
+      diffuseIllumination[3]);
+  new_light.setSpecular(
+      specularIllumination[0], specularIllumination[1], specularIllumination[2],
+      specularIllumination[3]);
+
   new_light.update();
   scene.lights.push(new_light);
   scene.lightsID.push(lightID);
-  
+}
+
+function createMaterial(scene, material_element, reader, materialID) {
+  // Get shininess status
+  var shininess = reader.getFloat(material_element, 'shininess');
+  if (shininess == null) {
+    onXMLMinorError(
+        'shininess wasn\'t correctly specified, assuming shininess 0');
+    shininess = 0;
+  }
+
+  grandChildren = material_element.children;
+  // Specifications for the current material.
+  nodeNames = [];
+  for (var j = 0; j < grandChildren.length; j++) {
+    nodeNames.push(grandChildren[j].nodeName);
+  }
+
+  // Gets indices of each element.
+  var emissionIndex = nodeNames.indexOf('emission');
+  var ambientIndex = nodeNames.indexOf('ambient');
+  var diffuseIndex = nodeNames.indexOf('diffuse');
+  var specularIndex = nodeNames.indexOf('specular');
+
+
+  // Retrives the material emission
+  var emissions = [];
+  if (emissionIndex != -1) {
+    getSpaceComponents(
+        reader, rgb_comp, 'material ID= ' + materialID, emissions,
+        grandChildren[emissionIndex]);
+  } else
+    return 'emission component undefined for ID = ' + materialID;
+
+  // Retrieves the ambient component.
+  var ambientComponent = [];
+  if (ambientIndex != -1) {
+    getRGBComponents(
+        reader, 'material ID= ' + materialID, ambientComponent,
+        grandChildren[ambientIndex]);
+  } else
+    return 'ambient component undefined for ID = ' + materialID;
+
+  // Retrieve the diffuse component
+  var diffuseComponent = [];
+  if (diffuseIndex != -1) {
+    getRGBComponents(
+        reader, 'material ID= ' + materialID, diffuseComponent,
+        grandChildren[diffuseIndex]);
+  } else
+    return 'diffuse component undefined for ID = ' + materialID;
+
+  // Retrieve the specular component
+  var specularComponent = [];
+  if (specularIndex != -1) {
+    getRGBComponents(
+        reader, 'material ID= ' + materialID, specularComponent,
+        grandChildren[specularIndex]);
+  } else
+    return 'specular component undefined for ID = ' + materialID;
+
+  var new_material = new CGFappearance(scene);
+
+  new_material.setAmbient(
+    ambientComponent[0], ambientComponent[1], ambientComponent[2],
+      ambientComponent[3]);
+  new_material.setDiffuse(
+    diffuseComponent[0], diffuseComponent[1], diffuseComponent[2],
+    diffuseComponent[3]);
+  new_material.setSpecular(
+    specularComponent[0], specularComponent[1], specularComponent[2],
+    specularComponent[3]);
+  new_material.setEmission(
+      emissions[0], emissions[1], emissions[2], emissions[3]);
+
+  new_material.setShininess(shininess);
+
+  return new_material;
 }
 
 
@@ -161,7 +242,7 @@ function createSpotLight(scene, light_element, reader) {
   var lightID = reader.getString(light_element, 'id');
   if (lightID == null) return 'no ID defined for light';
 
-  if(scene.lightsID.indexOf(lightID) != -1){
+  if (scene.lightsID.indexOf(lightID) != -1) {
     return 'ID must be unique for each material (conflict: ID = ' + lightID +
         ')';
   }
@@ -201,8 +282,7 @@ function createSpotLight(scene, light_element, reader) {
   var ambientIllumination = [];
   if (ambientIndex != -1) {
     getRGBComponents(
-        reader, 'lights', ambientIllumination,
-        grandChildren[ambientIndex]);
+        reader, 'lights', ambientIllumination, grandChildren[ambientIndex]);
   } else
     return 'ambient component undefined for ID = ' + lightID;
 
@@ -210,8 +290,7 @@ function createSpotLight(scene, light_element, reader) {
   var diffuseIllumination = [];
   if (diffuseIndex != -1) {
     getRGBComponents(
-        reader, 'lights', diffuseIllumination,
-        grandChildren[diffuseIndex]);
+        reader, 'lights', diffuseIllumination, grandChildren[diffuseIndex]);
   } else
     return 'ambient component undefined for ID = ' + lightID;
 
@@ -219,8 +298,7 @@ function createSpotLight(scene, light_element, reader) {
   var specularIllumination = [];
   if (specularIndex != -1) {
     getRGBComponents(
-        reader, 'lights', specularIllumination,
-        grandChildren[specularIndex]);
+        reader, 'lights', specularIllumination, grandChildren[specularIndex]);
   } else
     return 'specular component undefined for ID = ' + lightID;
 
@@ -249,13 +327,17 @@ function createSpotLight(scene, light_element, reader) {
   new_light.setSpotExponent(exponent);
   new_light.setPosition(location[0], location[1], location[2], location[3]);
   new_light.setSpotDirection(target[0], target[1], target[2]);
-  new_light.setAmbient(ambientIllumination[0], ambientIllumination[1], ambientIllumination[2], ambientIllumination[3]);
-  new_light.setDiffuse(diffuseIllumination[0], diffuseIllumination[1], diffuseIllumination[2], diffuseIllumination[3]);
-  new_light.setSpecular(specularIllumination[0], specularIllumination[1], specularIllumination[2], specularIllumination[3]);
-  
+  new_light.setAmbient(
+      ambientIllumination[0], ambientIllumination[1], ambientIllumination[2],
+      ambientIllumination[3]);
+  new_light.setDiffuse(
+      diffuseIllumination[0], diffuseIllumination[1], diffuseIllumination[2],
+      diffuseIllumination[3]);
+  new_light.setSpecular(
+      specularIllumination[0], specularIllumination[1], specularIllumination[2],
+      specularIllumination[3]);
+
   new_light.update();
   scene.lights.push(new_light);
   scene.lightsID.push(lightID);
-  
-
 }

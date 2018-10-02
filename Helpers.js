@@ -236,6 +236,18 @@ function createMaterial(scene, material_element, reader, materialID) {
   return new_material;
 }
 
+function createTexture(scene, texture_element, reader, textureID){
+  var texturePath = reader.getString(texture_element, 'file');
+  if (texturePath == null) return 'no path defined for texture ID = ' + textureID;
+
+  console.log(texturePath);
+
+  var new_texture = new CGFappearance(scene);
+  new_texture.loadTexture(texturePath);
+
+  return new_texture;
+}
+
 
 function createSpotLight(scene, light_element, reader) {
   // Get id of the current

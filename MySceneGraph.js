@@ -213,11 +213,8 @@ class MySceneGraph {
             textureId + ')';
       }
 
-      var texturePath = this.reader.getString(children[i], 'file');
-      if (texturePath == null) return 'no path defined for texture';
-
-      this.textures[textureId] = [];
-      this.textures[textureId]['path'] = texturePath;
+      this.textures[textureId] = createTexture(this.scene, children[i], this.reader, textureId);
+      
     }
 
     this.log('parsed textures');

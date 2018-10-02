@@ -591,7 +591,8 @@ class MySceneGraph {
     }
 
 
-    this.lights = [this.omnis, this.spots];
+    this.lights['omnis'] = this.omnis;
+    this.lights['spots'] = this.spots;
 
 
     if (numLights == 0)

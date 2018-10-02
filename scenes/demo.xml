@@ -65,6 +65,22 @@
         <primitive id="sphere">
             <sphere radius="1" slices="10" stacks="10"/>
         </primitive>
+
+        <primitive id="circle">
+            <circle radius="1" slices="10"/>
+        </primitive>
+
+        <primitive id="cylinder">
+            <cylinder slices="10" stacks="10"/>
+        </primitive>
+
+        <primitive id="prism">
+            <prism slices="10" stacks="10"/>
+        </primitive>
+
+        <primitive id="plane">
+            <plane nrDivs="20"/>
+        </primitive>
     </primitives>
 
     <components>

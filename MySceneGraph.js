@@ -218,11 +218,49 @@ class MySceneGraph {
       this.textures[textureId]['path'] = texturePath;
     }
 
-    console.log(this.textures);
-
     this.log('parsed textures');
 
     return null;
+  }
+
+  /**
+   * Parses the <TRANSFORMATIONS> block
+   * @param {transformations block element} transformationsNode
+   */
+  parseTransformations(transformationsNode) {
+    this.transformations = [];
+    var children = transformationsNode.children;
+    var nodeNames = [];
+    var grandChildren = [];
+    var counter = 0;
+
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].nodeName != 'transformation') {
+        this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
+        continue;
+      }
+
+      var transformationID = this.reader.getString(children[i], 'id');
+      if (transformationID == null) return 'no ID defined for perspective';
+
+      if (this.transformations[transformationID] != null)
+        return 'ID must be unique for each perspective (conflict: ID = ' +
+            transformationID + ')';
+
+
+      grandChildren = children[i].children;
+
+
+      var curr_transformation = new Transformation(this.scene);
+
+      for (var j = 0; j < grandChildren.length; j++) {
+
+        parseTransformation(this.reader, grandChildren, j,  curr_transformation, transformationID);
+
+      }
+
+      this.transformations[transformationID] = curr_transformation;
+    }
   }
 
   parseViews(viewsNode) {

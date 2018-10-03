@@ -36,6 +36,7 @@ class XMLscene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.lights = [];
+    this.cameras = [];
 
     this.axis = new CGFaxis(this);
   }
@@ -46,6 +47,25 @@ class XMLscene extends CGFscene {
   initCameras() {
     this.camera = new CGFcamera(
         0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+  }
+
+  /**
+   * Gets all the views from the parser and creates the appropriate cameras.
+   */
+  getViews() {
+    for (var key in this.graph.views) {
+      var new_camera = new CGFcamera(
+          this.graph.views[key].angle, this.graph.views[key].near,
+          this.graph.views[key].far, this.graph.views[key].from_values,
+          this.graph.views[key].to_values);
+      this.cameras[key] = new_camera;
+    }
+
+    console.log(this.camera);
+
+    this.camera = this.cameras[this.graph.defaultPerspectiveId];
+    this.interface.setActiveCamera(this.camera);
+    console.log(this.camera);
   }
 
   /* Handler called when the graph is finally loaded.
@@ -66,9 +86,9 @@ class XMLscene extends CGFscene {
         this.graph.ambient.background[0], this.graph.ambient.background[1],
         this.graph.ambient.background[2], this.graph.ambient.background[3]);
 
-
-
     this.initLights();
+
+    this.getViews();
 
     // Adds lights group.
     this.interface.addLightsGroup();

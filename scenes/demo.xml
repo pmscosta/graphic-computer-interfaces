@@ -1,9 +1,9 @@
 <yas>
-    <scene root="root" axis_length="5"/>
+    <scene root="cube" axis_length="5"/>
     <views default="c1">
-        <perspective id="c1" near="0.1" far="500" angle="0">
-            <from x="0" y="0" z="0"/>
-            <to x="10" y="10" z="10"/>
+        <perspective id="c1" near="0.1" far="500" angle="0.4">
+            <from x="15" y="15" z="15"/>
+            <to x="0" y="0" z="0"/>
         </perspective>
     </views>
 
@@ -31,7 +31,7 @@
     </lights>
 
     <textures>
-        <texture id="trunk" file="images/trunk-image.jpg"/>                      
+        <texture id="trunk" file="/scenes/images/trunk-image.jpg"/>                      
     </textures>
 
     <materials>
@@ -68,7 +68,7 @@
         </primitive>
 
         <primitive id="cylinder">
-            <cylinder base="1" top="1" height="5" slices="20" stacks="10"/>
+            <cylinder base="1" top="1" height="5" slices="250" stacks="250"/>
         </primitive>
 
         <primitive id="torus">

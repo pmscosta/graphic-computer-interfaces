@@ -152,6 +152,8 @@ class MySceneGraph {
           'axis_length not specified or invalid; assuming \'axis_length = 5\'');
       this.axis_length = 5;
     }
+
+    console.log(this.rootNode);
   }
 
 
@@ -276,7 +278,7 @@ class MySceneGraph {
           'no default perspective specified; assuming first one');
     }
 
-    this.perspectives = [];
+    this.views = [];
     var children = viewsNode.children;
     var nodeNames = [];
     var grandChildren = [];
@@ -291,7 +293,7 @@ class MySceneGraph {
       var perspectiveId = this.reader.getString(children[i], 'id');
       if (perspectiveId == null) return 'no ID defined for perspective';
 
-      if (this.perspectives[perspectiveId] != null) {
+      if (this.views[perspectiveId] != null) {
         return 'ID must be unique for each perspective (conflict: ID = ' +
             perspectiveId + ')';
       }
@@ -349,12 +351,12 @@ class MySceneGraph {
       if (this.defaultPerspectiveId == null)
         this.defaultPerspectiveId = perspectiveId;
 
-      this.perspectives[perspectiveId] = [];
-      this.perspectives[perspectiveId]['near'] = near;
-      this.perspectives[perspectiveId]['far'] = far;
-      this.perspectives[perspectiveId]['angle'] = angle;
-      this.perspectives[perspectiveId]['from_values'] = from_values;
-      this.perspectives[perspectiveId]['to_values'] = to_values;
+      this.views[perspectiveId] = [];
+      this.views[perspectiveId]['near'] = near;
+      this.views[perspectiveId]['far'] = far;
+      this.views[perspectiveId]['angle'] = angle;
+      this.views[perspectiveId]['from_values'] = from_values;
+      this.views[perspectiveId]['to_values'] = to_values;
 
       counter++;
     }
@@ -363,8 +365,8 @@ class MySceneGraph {
       return 'at least one perspective must be defined';
     }
 
-    this.near = this.perspectives[this.defaultPerspectiveId].near;
-    this.far = this.perspectives[this.defaultPerspectiveId].far;
+    this.near = this.views[this.defaultPerspectiveId].near;
+    this.far = this.views[this.defaultPerspectiveId].far;
 
     this.log('Parsed perspectives');
 
@@ -526,9 +528,8 @@ class MySceneGraph {
 
 
     for (var object in this.primitives) {
-      if (object === 'cylinder') {
         this.primitives[object].display();
-      }
+      
     }
   }
 }

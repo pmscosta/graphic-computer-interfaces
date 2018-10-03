@@ -515,10 +515,8 @@ class MySceneGraph {
         dispatchComponent(this.scene,this.reader,children[i].children[j],componentId,component);
         
       }
-      this.components[componentId]=component;
-      
+      this.components[componentId] = component;
     }
-
   }
 
   /*
@@ -563,11 +561,12 @@ class MySceneGraph {
   iterateChildren(component){
 
     this.scene.pushMatrix();
-    console.log(component.transformation.getMatrix());
     this.scene.multMatrix(component.transformation.getMatrix());
 
-    for(var child in component.componentChildren){
-      this.iterateChildren(child);
+
+    for(var i = 0; i < component.componentChildren.length; i++){
+      console.log(component.componentChildren[i]);
+      this.iterateChildren(this.components[component.componentChildren[i]]);
     }
 
     for(var i = 0; i < component.primitiveChildren.length; i++){

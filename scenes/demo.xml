@@ -79,9 +79,9 @@
 
     <components>
 
-        <component id="cube">
+        <component id="frontal_face">
             <transformation>
-                <translate x="5" y="0" z="5"/>
+                <translate x="0" y="0" z="0.5"/>
             </transformation>
 
             <materials>
@@ -92,9 +92,117 @@
 
             <children>
                 <primitiveref id="square"/>
-                <primitiveref id="sphere"/>
             </children>
         </component>
+
+        <component id="back_face">
+            <transformation>
+                <rotate axis="x" angle="180"/>
+                <translate x="0" y="0" z="0.5"/>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="trunk" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="square"/>
+            </children>
+
+        </component>
+
+        <component id="top_face">
+            <transformation>
+                <rotate axis="x" angle="-90"/>
+                <translate x="0" y="0" z="0.5"/>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="trunk" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="bottom_face">
+            <transformation>
+                <rotate axis="x" angle="90"/>
+                <translate x="0" y="0" z="0.5"/>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="trunk" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="right_face">
+            <transformation>
+                 <rotate axis="y" angle="90"/>
+                <translate x="0" y="0" z="0.5"/>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="trunk" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+
+        <component id="left_face">
+            <transformation>
+                <rotate axis="y" angle="-90"/>
+                <translate x="0" y="0" z="0.5"/>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="trunk" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="cube">
+            <transformation>
+                <translate x="3" y="2" z="3"/>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="trunk" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="frontal_face"/>
+                <componentref id="back_face"/>
+                <componentref id="bottom_face"/>
+                <componentref id="left_face"/>
+                <componentref id="right_face"/>
+                <componentref id="top_face"/>
+            </children>
+        </component>
+
     </components>
 
     

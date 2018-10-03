@@ -141,10 +141,11 @@ class MySceneGraph {
   }
 
   parseScene(sceneNode) {
-    this.rootNode = this.reader.getString(sceneNode, 'root');
+    this.idRoot = this.reader.getString(sceneNode, 'root');
 
     if (this.rootNode == null)
       this.onXMLMinorError('root node missing; assuming initial node');
+  
     this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
 
     if (this.axis_length == null || this.axis_length < 0) {
@@ -481,8 +482,7 @@ class MySceneGraph {
         this.primitives[primitiveId]=curr_primitive;
       
     }
-
-    console.log(this);
+    
 
   }
 
@@ -491,7 +491,33 @@ class MySceneGraph {
    * @param {components block element} componentsNode
    */
   parseComponents(componentsNode) {
+    var children = componentsNode.children;
+    this.components = [];
 
+
+
+    for(var i = 0; i < children.length;i++){
+      var component = new Component(this.scene);
+      if(children[i].nodeName != "component")
+      {
+        this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
+        continue;
+      }
+
+      var componentId= this.reader.getString(children[i],'id');
+      if(componentId== null){
+        return 'ID must be unique for each component (conflict: ID = ' + componentId + ')';
+      }else{
+        component.id=componentId;
+      }
+       
+      for(var j=0; j < children[i].children.length;j++){
+        dispatchComponent(this.scene,this.reader,children[i].children[j],componentId,component);
+        
+      }
+      this.components[componentId]=component;
+      
+    }
   }
 
 

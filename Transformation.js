@@ -41,4 +41,12 @@ class Transformation {
     this.matrix = this.scene.getMatrix();
     this.scene.popMatrix();
   }
+
+  multiply(matrix){
+    this.scene.pushMatrix();
+    this.scene.setMatrix(this.matrix);
+    this.scene.multMatrix(matrix);
+    this.matrix=this.scene.getMatrix();
+    this.scene.popMatrix();
+  }
 }

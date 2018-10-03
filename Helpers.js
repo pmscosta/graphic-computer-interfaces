@@ -372,10 +372,11 @@ function dispatchComponent(scene, reader, component_spec, componentId, component
     case 'transformation':
       var transformations = component_spec.children;
       for (var i = 0; i < transformations.length; i++) {
-        if (transformations[i].nodeName = "transformationref")
+        if (transformations[i].nodeName == "transformationref")
           component.transformation.multiply(scene.transformations[reader.getString(transformations[i], 'id')].getMatrix());
-        else
-          parseTransformation(reader, component_spec, component.transformation, componentId);
+        else{
+          parseTransformation(reader, transformations[i], component.transformation, componentId);
+        }
       }
       break;
     case 'materials':
@@ -390,10 +391,12 @@ function dispatchComponent(scene, reader, component_spec, componentId, component
     case 'children':
       var childs = component_spec.children;
       for (var i = 0; i < childs.length; i++) {
+        var id = reader.getString(childs[i], "id");
+        component.id = id;
         if (childs[i].nodeName == "componentref") {
-          component.componentChildren.push(reader.getString(childs[i], "id"));
+          component.componentChildren.push(id);
         } else {
-          component.primitiveChildren.push(reader.getString(childs[i], "id"));
+          component.primitiveChildren.push(id);
         }
       }
   }

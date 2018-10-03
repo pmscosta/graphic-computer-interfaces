@@ -81,6 +81,7 @@
 
         <component id="cube">
             <transformation>
+                <translate x="5" y="0" z="5"/>
             </transformation>
 
             <materials>
@@ -91,6 +92,7 @@
 
             <children>
                 <primitiveref id="square"/>
+                <primitiveref id="sphere"/>
             </children>
         </component>
     </components>

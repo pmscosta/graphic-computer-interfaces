@@ -482,7 +482,7 @@ class MySceneGraph {
       if (curr_primitive != null) this.primitives[primitiveId] = curr_primitive;
     }
     
-
+  
     console.log('Passed primitives');
   }
 
@@ -518,6 +518,7 @@ class MySceneGraph {
       this.components[componentId]=component;
       
     }
+
   }
 
   /*
@@ -555,10 +556,27 @@ class MySceneGraph {
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
 
+    var rootElement = this.components[this.idRoot];
+    this.iterateChildren(rootElement);
+  }
 
-    for (var object in this.primitives) {
-        this.primitives[object].display();
+  iterateChildren(component){
+
+    this.scene.pushMatrix();
+    console.log(component.transformation.getMatrix());
+    this.scene.multMatrix(component.transformation.getMatrix());
+
+    for(var child in component.componentChildren){
+      this.iterateChildren(child);
+    }
+
+    for(var i = 0; i < component.primitiveChildren.length; i++){
+      var prim_name = component.primitiveChildren[i];
+      this.primitives[prim_name].display();
       
     }
+
+    this.scene.popMatrix();
+
   }
 }

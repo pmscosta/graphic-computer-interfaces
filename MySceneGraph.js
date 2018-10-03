@@ -478,7 +478,7 @@ class MySceneGraph {
 
         var specifications =["square","x1","y1","x2","y2"];
 
-        var curr_primitive=  parsePrimitive(this.reader,grandchildren[0],primitiveId);
+        var curr_primitive=  parsePrimitive(this.reader,grandchildren,primitiveId);
 
         this.primitives[primitiveId]=curr_primitive;
     }

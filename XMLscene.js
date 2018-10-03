@@ -29,6 +29,7 @@ class XMLscene extends CGFscene {
 
     this.enableTextures(true);
 
+    
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.enable(this.gl.CULL_FACE);
@@ -57,7 +58,14 @@ class XMLscene extends CGFscene {
 
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
+
+    console.log(this.graph.ambient);
+
     // TODO: Change ambient and background details according to parsed graph
+    this.gl.clearColor(this.graph.ambient.background[0], this.graph.ambient.background[1], this.graph.ambient.background[2], this.graph.ambient.background[3]);
+
+    this.setGlobalAmbientLight(this.graph.ambient.ambient[0], this.graph.ambient.ambient[1], this.graph.ambient.ambient[2], this.graph.ambient.ambient[3]);
+
 
     // Adds lights group.
     this.interface.addLightsGroup();

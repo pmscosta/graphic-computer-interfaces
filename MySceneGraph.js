@@ -460,11 +460,12 @@ class MySceneGraph {
     var counter=0;
 
 
+
     for (var i = 0; i < children.length; i++) {
         if(children[i].nodeName != 'primitive')
         {
           this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
-         continue;
+          continue;
         }
 
         var primitiveId=this.reader.getString(children[i],'id');
@@ -475,14 +476,13 @@ class MySceneGraph {
           primitiveId + ')';
 
         grandChildren=children[i].children;
-
-        var specifications =["square","x1","y1","x2","y2"];
-
-        var curr_primitive=  parsePrimitive(this.reader,grandchildren,primitiveId);
+        var curr_primitive=  parsePrimitive(this.scene,this.reader,children[i].children[0],primitiveId);
 
         this.primitives[primitiveId]=curr_primitive;
+      
     }
 
+    console.log("Passed primitives");
 
   }
 
@@ -527,7 +527,7 @@ class MySceneGraph {
    * Displays the scene, processing each node, starting in the root node.
    */
   displayScene() {
-    console.log(this);
+   // console.log(this);
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
   }

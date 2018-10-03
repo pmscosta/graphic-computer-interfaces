@@ -4,7 +4,7 @@ var xyz_comp = ['x', 'y', 'z'];
 
 var xyzw_comp = ['x', 'y', 'z', 'w'];
 
-var rectangle_comp = ['x1', "y1", "x2", "y2"];
+var rectangle_comp = ['x1', 'y1', 'x2', 'y2'];
 
 var triangle_comp = ['x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3'];
 
@@ -364,19 +364,23 @@ function createSpotLight(scene, light_element, reader) {
   scene.lightsID.push(lightID);
 }
 
-function parsePrimitive(reader, children, ID) {
+function parsePrimitive(scene,reader, children, ID) {
+
   switch (children.nodeName) {
     case 'rectangle':
       var values = [];
       getSpaceComponents(
         reader, rectangle_comp, 'rectangle: ' + ID, values, children);
-      return new MyRectangle(this.scene,values);
+      console.log("info: " + values + " " +children.nodeName);
+      var cenas =  new MyRectangle(scene,values);
+
+      console.log(cenas);
       break;
     case 'triangle':
       var values = [];
       getSpaceComponents(
         reader, triangle_comp, 'triangle: ' + ID, values,children);
-      return new MyTriangle(this.scene,values,1,5,1,5); 
+      return new MyTriangle(scene,values,1,5,1,5); 
       break;
     case 'sphere':
       var values = [];

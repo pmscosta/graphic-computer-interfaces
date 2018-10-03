@@ -10,7 +10,7 @@ var triangle_comp = ['x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3'];
 
 var sphere_comp = ['radius', 'slices', 'stacks'];
 
-var cylinder_comp = ['base','top',"heigth",'slices', 'stacks'];
+var cylinder_comp = ['base','top',"height",'slices', 'stacks'];
 
 var torus_comp = ['inner', 'outer', 'slices', 'loops'];
 
@@ -371,10 +371,7 @@ function parsePrimitive(scene,reader, children, ID) {
       var values = [];
       getSpaceComponents(
         reader, rectangle_comp, 'rectangle: ' + ID, values, children);
-      console.log("info: " + values + " " +children.nodeName);
-      var cenas =  new MyRectangle(scene,values);
-
-      console.log(cenas);
+      return new MyRectangle(scene,values);
       break;
     case 'triangle':
       var values = [];

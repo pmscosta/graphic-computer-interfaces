@@ -482,7 +482,7 @@ class MySceneGraph {
       
     }
 
-    console.log("Passed primitives");
+    console.log(this);
 
   }
 

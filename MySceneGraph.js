@@ -439,11 +439,44 @@ class MySceneGraph {
     return null;
   }
 
-  /**
-   * Parses the <PRIMITIVE> node.
+    /**
+   * Parses the <primitives> node.
    * @param {primitives block element} primitivesNode
    */
-  parsePrimitives(primitivesNode) {}
+  parsePrimitives(primitivesNode){
+
+    var children = primitivesNode.children;
+    this.primitives=[];
+    var nodenames=[];
+    var grandchildren=[];
+    var counter=0;
+
+
+    for (var i = 0; i < children.length; i++) {
+        if(children[i].nodeName != 'primitive')
+        {
+          this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
+         continue;
+        }
+
+        var primitiveId=this.reader.getString(children[i],'id');
+        if(primitiveId== null) return 'No id defined for primitive';
+
+        if(this.primitives[primitiveId] !=null)
+          return 'ID must be unique for each primitive (conflict: ID = ' +
+          primitiveId + ')';
+
+        grandChildren=children[i].children;
+
+        var specifications =["square","x1","y1","x2","y2"];
+
+        var curr_primitive;
+        parsePrimitive(this.reader,grandchildren,0,curr_primitive,primitiveId);
+
+        this.primitives[primitiveId]=curr_primitive;
+    }
+
+
 
 
   /**

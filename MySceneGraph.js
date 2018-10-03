@@ -482,7 +482,7 @@ class MySceneGraph {
       
     }
 
-    console.log(this);
+    console.log("Passed primitives");
 
   }
 
@@ -530,5 +530,11 @@ class MySceneGraph {
    // console.log(this);
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
+
+    for(var object in this.primitives){
+      if(typeof object !== undefined)
+        console.log(object);
+    }
+    
   }
 }

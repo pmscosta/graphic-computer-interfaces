@@ -470,7 +470,7 @@ class MySceneGraph {
 
         var specifications =["square","x1","y1","x2","y2"];
 
-        var curr_primitive=  parsePrimitive(this.reader,grandchildren[0],primitiveId);
+        var curr_primitive=  parsePrimitive(this.reader,grandchildren,primitiveId);
 
         this.primitives[primitiveId]=curr_primitive;
     }
@@ -519,6 +519,7 @@ class MySceneGraph {
    * Displays the scene, processing each node, starting in the root node.
    */
   displayScene() {
+    console.log(this);
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
   }

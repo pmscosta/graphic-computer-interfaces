@@ -188,9 +188,6 @@ class MySceneGraph {
     } else
       return 'undefined backgrounds components';
 
-
-    console.log(ambientValues);
-
     this.ambient = [];
     this.ambient['ambient'] = ambientValues;
     this.ambient['background'] = backgroundValues;
@@ -419,15 +416,23 @@ class MySceneGraph {
 
     var numLights = 0;
 
+    this.lights = [];
+
 
     // Any number of lights.
     for (var i = 0; i < children.length; i++) {
+      if (i >= 8) {
+        this.onXMLMinorError(
+            'too many lights defined; WebGL imposes a limit of 8 lights');
+        break;
+      }
+
       switch (children[i].nodeName) {
         case 'omni':
-          createOmniLight(this.scene, children[i], this.reader);
+          createOmniLight(this, children[i], this.reader);
           break;
         case 'spot':
-          createSpotLight(this.scene, children[i], this.reader);
+          createSpotLight(this, children[i], this.reader);
           break;
         default:
           this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
@@ -437,11 +442,7 @@ class MySceneGraph {
       numLights++;
     }
 
-    if (numLights == 0)
-      return 'at least one light must be defined';
-    else if (numLights > 8)
-      this.onXMLMinorError(
-          'too many lights defined; WebGL imposes a limit of 8 lights');
+    if (numLights == 0) return 'at least one light must be defined';
 
     this.log('Parsed lights');
 
@@ -455,9 +456,6 @@ class MySceneGraph {
   parsePrimitives(primitivesNode) {
     var children = primitivesNode.children;
     this.primitives = [];
-    var nodenames = [];
-    var grandchildren = [];
-    var counter = 0;
 
 
 
@@ -480,8 +478,6 @@ class MySceneGraph {
 
       if (curr_primitive != null) this.primitives[primitiveId] = curr_primitive;
     }
-
-    console.log(this.primitives);
 
     console.log('Passed primitives');
   }
@@ -525,13 +521,12 @@ class MySceneGraph {
    * Displays the scene, processing each node, starting in the root node.
    */
   displayScene() {
-    // console.log(this);
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
 
 
     for (var object in this.primitives) {
-      if (object === 'torus'){
+      if (object === 'cylinder') {
         this.primitives[object].display();
       }
     }

@@ -29,15 +29,15 @@ class XMLscene extends CGFscene {
 
     this.enableTextures(true);
 
-    
+    this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-    this.axis = new CGFaxis(this);
-
     this.lights = [];
+
+    this.axis = new CGFaxis(this);
   }
 
   /**
@@ -58,16 +58,75 @@ class XMLscene extends CGFscene {
 
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
-    // TODO: Change ambient and background details according to parsed graph
-    this.gl.clearColor(this.graph.ambient.background[0], this.graph.ambient.background[1], this.graph.ambient.background[2], this.graph.ambient.background[3]);
+    this.setGlobalAmbientLight(
+        this.graph.ambient.ambient[0], this.graph.ambient.ambient[1],
+        this.graph.ambient.ambient[2], this.graph.ambient.ambient[3]);
 
-    this.setGlobalAmbientLight(this.graph.ambient.ambient[0], this.graph.ambient.ambient[1], this.graph.ambient.ambient[2], this.graph.ambient.ambient[3]);
+    this.gl.clearColor(
+        this.graph.ambient.background[0], this.graph.ambient.background[1],
+        this.graph.ambient.background[2], this.graph.ambient.background[3]);
 
+
+
+    this.initLights();
 
     // Adds lights group.
     this.interface.addLightsGroup();
 
+    this.updateLights();
+
     this.sceneInited = true;
+  }
+
+  initLights() {
+    var i = 0;
+
+    for (var key in this.graph.lights) {
+      if (i >= 8) break;
+
+      this.lightsID.push(key);
+
+      this.lights[i] = new CGFlight(this, i);
+
+      var location = this.graph.lights[key].location;
+      var ambientIllumination = this.graph.lights[key].ambient;
+      var diffuseIllumination = this.graph.lights[key].diffuse;
+      var specularIllumination = this.graph.lights[key].specular;
+
+      this.lights[i].setPosition(
+          location[0], location[1], location[2], location[3]);
+      this.lights[i].setAmbient(
+          ambientIllumination[0], ambientIllumination[1],
+          ambientIllumination[2], ambientIllumination[3]);
+      this.lights[i].setDiffuse(
+          diffuseIllumination[0], diffuseIllumination[1],
+          diffuseIllumination[2], diffuseIllumination[3]);
+      this.lights[i].setSpecular(
+          specularIllumination[0], specularIllumination[1],
+          specularIllumination[2], specularIllumination[3]);
+
+      if (this.graph.lights[key].type == 'spot') {
+        var target = this.graph.lights[key].target;
+        var exponent = this.graph.lights[key].exponent;
+        var angle = this.graph.lights[key].angle;
+
+        this.lights[i].setSpotCutOff(angle);
+        this.lights[i].setSpotExponent(exponent);
+        this.lights[i].setSpotDirection(target[0], target[1], target[2]);
+      }
+
+      this.lights[i].setVisible(true);
+
+      if (this.graph.lights[key].enable)
+        this.lights[i].enable();
+      else
+        this.lights[i].disable();
+
+
+      this.lights[i].update();
+
+      i++;
+    }
   }
 
   updateLights() {

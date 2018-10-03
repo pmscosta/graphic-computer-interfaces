@@ -470,20 +470,21 @@ class MySceneGraph {
 
         var specifications =["square","x1","y1","x2","y2"];
 
-        var curr_primitive;
-        parsePrimitive(this.reader,grandchildren,0,curr_primitive,primitiveId);
+        var curr_primitive=  parsePrimitive(this.reader,grandchildren[0],primitiveId);
 
         this.primitives[primitiveId]=curr_primitive;
     }
 
 
-
+  }
 
   /**
    * Parses the <COMPONENTS> node.
    * @param {components block element} componentsNode
    */
-  parseComponents(componentsNode) {}
+  parseComponents(componentsNode) {
+
+  }
 
 
   /*

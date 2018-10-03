@@ -4,17 +4,17 @@ var xyz_comp = ['x', 'y', 'z'];
 
 var xyzw_comp = ['x', 'y', 'z', 'w'];
 
-function getSpaceComponents(reader, components, phase, values, element) {
 var rectangle_comp = ['x1', "y1", "x2", "y2"];
 
 var triangle_comp = ['x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3'];
 
 var sphere_comp = ['radius', 'slices', 'stacks'];
 
-var cylinder_comp = ['slices', 'stacks'];
+var cylinder_comp = ['base','top',"heigth",'slices', 'stacks'];
 
 var torus_comp = ['inner', 'outer', 'slices', 'loops'];
 
+function getSpaceComponents(reader, components, phase, values, element) {
   for (var i = 0; i < components.length; i++) {
     var temp = reader.getFloat(element, components[i]);
 
@@ -364,35 +364,37 @@ function createSpotLight(scene, light_element, reader) {
   scene.lightsID.push(lightID);
 }
 
-function parsePrimitive(reader, children, j, curr_primitive, ID) {
-  switch (children[j].nodeName) {
+function parsePrimitive(reader, children, ID) {
+  switch (children.nodeName) {
     case 'rectangle':
       var values = [];
       getSpaceComponents(
-        reader, rectangle_comp, 'rectangle: ' + ID, values, 0, children);
-      
+        reader, rectangle_comp, 'rectangle: ' + ID, values, children);
+      return new MyRectangle(this.scene,values);
       break;
     case 'triangle':
       var values = [];
       getSpaceComponents(
-        reader, triangle_comp, 'triangle: ' + ID, values, 0, children);
-      curr_primitive = new MyTriangle(this.scene,values,1,5,1,5); //O que se mete?
+        reader, triangle_comp, 'triangle: ' + ID, values,children);
+      return new MyTriangle(this.scene,values,1,5,1,5); 
       break;
     case 'sphere':
       var values = [];
       getSpaceComponents(
-        reader, sphere_comp, 'sphere: ' + ID, values, 0, children);
-      
+        reader, sphere_comp, 'sphere: ' + ID, values, children);
+      //return new MySphere();
       break;
     case 'cylinder':
       var values = [];
       getSpaceComponents(
-        reader, cylinder_comp, 'cylinder: ' + ID, values, 0, children);
+        reader, cylinder_comp, 'cylinder: ' + ID, values, children);
+      //return new MyCylinder();
       break;
     case 'torus':
       var values = [];
       getSpaceComponents(
         reader, torus_comp, 'torus: ' + ID, values, 0, children);
+      //return new MyTorus();
       break;
   }
 }

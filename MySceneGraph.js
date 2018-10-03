@@ -153,6 +153,8 @@ class MySceneGraph {
           'axis_length not specified or invalid; assuming \'axis_length = 5\'');
       this.axis_length = 5;
     }
+
+    console.log(this.rootNode);
   }
 
 
@@ -189,9 +191,6 @@ class MySceneGraph {
     } else
       return 'undefined backgrounds components';
 
-
-      console.log(ambientValues);
-
     this.ambient = [];
     this.ambient['ambient'] = ambientValues;
     this.ambient['background'] = backgroundValues;
@@ -223,8 +222,8 @@ class MySceneGraph {
             textureId + ')';
       }
 
-      this.textures[textureId] = createTexture(this.scene, children[i], this.reader, textureId);
-      
+      this.textures[textureId] =
+          createTexture(this.scene, children[i], this.reader, textureId);
     }
 
     this.log('parsed textures');
@@ -280,7 +279,7 @@ class MySceneGraph {
           'no default perspective specified; assuming first one');
     }
 
-    this.perspectives = [];
+    this.views = [];
     var children = viewsNode.children;
     var nodeNames = [];
     var grandChildren = [];
@@ -295,7 +294,7 @@ class MySceneGraph {
       var perspectiveId = this.reader.getString(children[i], 'id');
       if (perspectiveId == null) return 'no ID defined for perspective';
 
-      if (this.perspectives[perspectiveId] != null) {
+      if (this.views[perspectiveId] != null) {
         return 'ID must be unique for each perspective (conflict: ID = ' +
             perspectiveId + ')';
       }
@@ -353,12 +352,12 @@ class MySceneGraph {
       if (this.defaultPerspectiveId == null)
         this.defaultPerspectiveId = perspectiveId;
 
-      this.perspectives[perspectiveId] = [];
-      this.perspectives[perspectiveId]['near'] = near;
-      this.perspectives[perspectiveId]['far'] = far;
-      this.perspectives[perspectiveId]['angle'] = angle;
-      this.perspectives[perspectiveId]['from_values'] = from_values;
-      this.perspectives[perspectiveId]['to_values'] = to_values;
+      this.views[perspectiveId] = [];
+      this.views[perspectiveId]['near'] = near;
+      this.views[perspectiveId]['far'] = far;
+      this.views[perspectiveId]['angle'] = angle;
+      this.views[perspectiveId]['from_values'] = from_values;
+      this.views[perspectiveId]['to_values'] = to_values;
 
       counter++;
     }
@@ -367,8 +366,8 @@ class MySceneGraph {
       return 'at least one perspective must be defined';
     }
 
-    this.near = this.perspectives[this.defaultPerspectiveId].near;
-    this.far = this.perspectives[this.defaultPerspectiveId].far;
+    this.near = this.views[this.defaultPerspectiveId].near;
+    this.far = this.views[this.defaultPerspectiveId].far;
 
     this.log('Parsed perspectives');
 
@@ -400,7 +399,8 @@ class MySceneGraph {
             materialID + ')';
       }
 
-      this.materials[materialID] = createMaterial(this.scene, children[i], this.reader, materialID);
+      this.materials[materialID] =
+          createMaterial(this.scene, children[i], this.reader, materialID);
     }
 
     this.log('Parsed materials');
@@ -419,15 +419,23 @@ class MySceneGraph {
 
     var numLights = 0;
 
+    this.lights = [];
+
 
     // Any number of lights.
     for (var i = 0; i < children.length; i++) {
+      if (i >= 8) {
+        this.onXMLMinorError(
+            'too many lights defined; WebGL imposes a limit of 8 lights');
+        break;
+      }
+
       switch (children[i].nodeName) {
         case 'omni':
-          createOmniLight(this.scene, children[i], this.reader);
+          createOmniLight(this, children[i], this.reader);
           break;
         case 'spot':
-          createSpotLight(this.scene, children[i], this.reader);
+          createSpotLight(this, children[i], this.reader);
           break;
         default:
           this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
@@ -437,53 +445,45 @@ class MySceneGraph {
       numLights++;
     }
 
-    if (numLights == 0)
-      return 'at least one light must be defined';
-    else if (numLights > 8)
-      this.onXMLMinorError(
-          'too many lights defined; WebGL imposes a limit of 8 lights');
+    if (numLights == 0) return 'at least one light must be defined';
 
     this.log('Parsed lights');
 
     return null;
   }
 
-    /**
+  /**
    * Parses the <primitives> node.
    * @param {primitives block element} primitivesNode
    */
-  parsePrimitives(primitivesNode){
-
+  parsePrimitives(primitivesNode) {
     var children = primitivesNode.children;
-    this.primitives=[];
-    var nodenames=[];
-    var grandchildren=[];
-    var counter=0;
+    this.primitives = [];
 
 
 
     for (var i = 0; i < children.length; i++) {
-        if(children[i].nodeName != 'primitive')
-        {
-          this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
-          continue;
-        }
+      if (children[i].nodeName != 'primitive') {
+        this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
+        continue;
+      }
 
-        var primitiveId=this.reader.getString(children[i],'id');
-        if(primitiveId== null) return 'No id defined for primitive';
+      var primitiveId = this.reader.getString(children[i], 'id');
+      if (primitiveId == null) return 'No id defined for primitive';
 
-        if(this.primitives[primitiveId] !=null)
-          return 'ID must be unique for each primitive (conflict: ID = ' +
-          primitiveId + ')';
+      if (this.primitives[primitiveId] != null)
+        return 'ID must be unique for each primitive (conflict: ID = ' +
+            primitiveId + ')';
 
-        grandChildren=children[i].children;
-        var curr_primitive=  parsePrimitive(this.scene,this.reader,children[i].children[0],primitiveId);
+      grandChildren = children[i].children;
+      var curr_primitive = parsePrimitive(
+          this.scene, this.reader, children[i].children[0], primitiveId);
 
-        this.primitives[primitiveId]=curr_primitive;
-      
+      if (curr_primitive != null) this.primitives[primitiveId] = curr_primitive;
     }
     
 
+    console.log('Passed primitives');
   }
 
   /**
@@ -520,7 +520,6 @@ class MySceneGraph {
     }
   }
 
-
   /*
    * Callback to be executed on any read error, showing an error on the
    * console.
@@ -553,8 +552,13 @@ class MySceneGraph {
    * Displays the scene, processing each node, starting in the root node.
    */
   displayScene() {
-   // console.log(this);
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
+
+
+    for (var object in this.primitives) {
+        this.primitives[object].display();
+      
+    }
   }
 }

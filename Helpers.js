@@ -10,7 +10,7 @@ var triangle_comp = ['x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3'];
 
 var sphere_comp = ['radius', 'slices', 'stacks'];
 
-var cylinder_comp = ['base', 'top', "height", 'slices', 'stacks'];
+var cylinder_comp = ['base', 'top', 'height', 'slices', 'stacks'];
 
 var torus_comp = ['inner', 'outer', 'slices', 'loops'];
 
@@ -76,13 +76,13 @@ function parseTransformation(reader, element, curr_transformation, ID) {
   }
 }
 
-function createOmniLight(scene, light_element, reader) {
+function createOmniLight(graph, light_element, reader) {
   // Get id of the current
   var lightID = reader.getString(light_element, 'id');
   if (lightID == null) return 'no ID defined for light';
 
 
-  if (scene.lightsID.indexOf(lightID) != -1) {
+  if (graph.lights[lightID] != null) {
     return 'ID must be unique for each material (conflict: ID = ' + lightID +
       ')';
   }
@@ -142,29 +142,14 @@ function createOmniLight(scene, light_element, reader) {
   } else
     return 'specular component undefined for ID = ' + lightID;
 
-  var new_light = new CGFlight(scene, scene.lights.length);
 
-
-  if (enabled)
-    new_light.enable();
-  else
-    new_light.disable();
-
-  new_light.setVisible(true);
-  new_light.setPosition(location[0], location[1], location[2], location[3]);
-  new_light.setAmbient(
-    ambientIllumination[0], ambientIllumination[1], ambientIllumination[2],
-    ambientIllumination[3]);
-  new_light.setDiffuse(
-    diffuseIllumination[0], diffuseIllumination[1], diffuseIllumination[2],
-    diffuseIllumination[3]);
-  new_light.setSpecular(
-    specularIllumination[0], specularIllumination[1], specularIllumination[2],
-    specularIllumination[3]);
-
-  new_light.update();
-  scene.lights.push(new_light);
-  scene.lightsID.push(lightID);
+  graph.lights[lightID] = [];
+  graph.lights[lightID]['type'] = 'omni';
+  graph.lights[lightID]['enabled'] = enabled;
+  graph.lights[lightID]['location'] = locations;
+  graph.lights[lightID]['ambient'] = ambientIllumination;
+  graph.lights[lightID]['diffuse'] = diffuseIllumination;
+  graph.lights[lightID]['specular'] = specularIllumination;
 }
 
 function createMaterial(scene, material_element, reader, materialID) {
@@ -229,14 +214,14 @@ function createMaterial(scene, material_element, reader, materialID) {
   var new_material = new CGFappearance(scene);
 
   new_material.setAmbient(
-    ambientComponent[0], ambientComponent[1], ambientComponent[2],
-    ambientComponent[3]);
+      ambientComponent[0], ambientComponent[1], ambientComponent[2],
+      ambientComponent[3]);
   new_material.setDiffuse(
-    diffuseComponent[0], diffuseComponent[1], diffuseComponent[2],
-    diffuseComponent[3]);
+      diffuseComponent[0], diffuseComponent[1], diffuseComponent[2],
+      diffuseComponent[3]);
   new_material.setSpecular(
-    specularComponent[0], specularComponent[1], specularComponent[2],
-    specularComponent[3]);
+      specularComponent[0], specularComponent[1], specularComponent[2],
+      specularComponent[3]);
   new_material.setEmission(
     emissions[0], emissions[1], emissions[2], emissions[3]);
 
@@ -247,9 +232,8 @@ function createMaterial(scene, material_element, reader, materialID) {
 
 function createTexture(scene, texture_element, reader, textureID) {
   var texturePath = reader.getString(texture_element, 'file');
-  if (texturePath == null) return 'no path defined for texture ID = ' + textureID;
-
-  console.log(texturePath);
+  if (texturePath == null)
+    return 'no path defined for texture ID = ' + textureID;
 
   var new_texture = new CGFappearance(scene);
   new_texture.loadTexture(texturePath);
@@ -258,12 +242,12 @@ function createTexture(scene, texture_element, reader, textureID) {
 }
 
 
-function createSpotLight(scene, light_element, reader) {
+function createSpotLight(graph, light_element, reader) {
   // Get id of the current
   var lightID = reader.getString(light_element, 'id');
   if (lightID == null) return 'no ID defined for light';
 
-  if (scene.lightsID.indexOf(lightID) != -1) {
+  if (graph.lights[lightID] != null) {
     return 'ID must be unique for each material (conflict: ID = ' + lightID +
       ')';
   }
@@ -336,65 +320,49 @@ function createSpotLight(scene, light_element, reader) {
   } else
     return 'target component undefined for spot light ID = ' + lightID;
 
-  var new_light = new CGFlight(scene, scene.lights.length);
-
-  if (enabled)
-    new_light.enable();
-  else
-    new_light.disable();
-
-  new_light.setVisible(true);
-  new_light.setSpotCutOff(angle);
-  new_light.setSpotExponent(exponent);
-  new_light.setPosition(location[0], location[1], location[2], location[3]);
-  new_light.setSpotDirection(target[0], target[1], target[2]);
-  new_light.setAmbient(
-    ambientIllumination[0], ambientIllumination[1], ambientIllumination[2],
-    ambientIllumination[3]);
-  new_light.setDiffuse(
-    diffuseIllumination[0], diffuseIllumination[1], diffuseIllumination[2],
-    diffuseIllumination[3]);
-  new_light.setSpecular(
-    specularIllumination[0], specularIllumination[1], specularIllumination[2],
-    specularIllumination[3]);
-
-  new_light.update();
-  scene.lights.push(new_light);
-  scene.lightsID.push(lightID);
+  graph.lights[lightID] = [];
+  graph.lights[lightID]['type'] = 'spot';
+  graph.lights[lightID]['enabled'] = enabled;
+  graph.lights[lightID]['angle'] = angle;
+  graph.lights[lightID]['exponent'] = exponent;
+  graph.lights[lightID]['location'] = locations;
+  graph.lights[lightID]['target'] = target;
+  graph.lights[lightID]['ambient'] = ambientIllumination;
+  graph.lights[lightID]['diffuse'] = diffuseIllumination;
+  graph.lights[lightID]['specular'] = specularIllumination;
 }
 
 function parsePrimitive(scene, reader, children, ID) {
-
   switch (children.nodeName) {
     case 'rectangle':
       var values = [];
       getSpaceComponents(
-        reader, rectangle_comp, 'rectangle: ' + ID, values, children);
+          reader, rectangle_comp, 'rectangle: ' + ID, values, children);
       return new MyRectangle(scene, values);
       break;
     case 'triangle':
       var values = [];
       getSpaceComponents(
-        reader, triangle_comp, 'triangle: ' + ID, values, children);
+          reader, triangle_comp, 'triangle: ' + ID, values, children);
       return new MyTriangle(scene, values, 1, 5, 1, 5);
       break;
     case 'sphere':
       var values = [];
       getSpaceComponents(
-        reader, sphere_comp, 'sphere: ' + ID, values, children);
-      //return new MySphere();
+          reader, sphere_comp, 'sphere: ' + ID, values, children);
+      return new MySphere(scene, values[0], values[1], values[2]);
       break;
     case 'cylinder':
       var values = [];
       getSpaceComponents(
-        reader, cylinder_comp, 'cylinder: ' + ID, values, children);
-      //return new MyCylinder();
+          reader, cylinder_comp, 'cylinder: ' + ID, values, children);
+      return new MyCylinder(
+          scene, values[0], values[1], values[2], values[3], values[4]);
       break;
     case 'torus':
       var values = [];
-      getSpaceComponents(
-        reader, torus_comp, 'torus: ' + ID, values, 0, children);
-      //return new MyTorus();
+      getSpaceComponents(reader, torus_comp, 'torus: ' + ID, values, children);
+      return new MyTorus(scene, values[0], values[1], values[2], values[3]);
       break;
   }
 }

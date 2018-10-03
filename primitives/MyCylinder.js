@@ -12,17 +12,33 @@ class MyCylinder extends CGFobject
 
 		this.slices = slices;
 		this.stacks = stacks;
-
+		this.base = base;
 		this.radius = 1;
-		
+		this.top = top; 
+		this.heigth = heigth;
 		this.ang = (Math.PI * 2) / slices;
 
-		this.stack_divider = 1.0 / stacks;
+		if(this.base > this.top){
+			this.b1 = this.top;
+			this.b2 = this.base;
+		}else{
+			this.b2 = this.base; 
+			this.b1 = this.top;
+		}
+
+		this.stack_divider = this.heigth / stacks;
+
+		this.baseCover = new MyCircle(this.scene, this.base, this.slices);
+		this.topCover = new MyCircle(this.scene, this.top, this.slices);
 
 		this.spacer = 1.0 / slices;
 
 		this.initBuffers();
 	};
+
+	getRadius(z){
+		return (((z / this.heigth) * this.b1) + ((this.heigth - z)/this.heigth) * this.b2);
+	}
 
 	initBuffers() 
 	{
@@ -41,8 +57,8 @@ class MyCylinder extends CGFobject
 			for(let i = 0; i <= this.slices; i++){
 				
 				var angle1 = this.ang * i; 
-				var x1 = Math.cos(angle1);
-				var y1 = Math.sin(angle1); 
+				var x1 = this.getRadius(z_distance) * Math.cos(angle1);
+				var y1 = this.getRadius(z_distance) *  Math.sin(angle1); 
 
 				this.vertices.push(x1, y1, z_distance);
 				this.texCoords.push(i * this.spacer, z_distance);
@@ -76,4 +92,14 @@ class MyCylinder extends CGFobject
 		this.primitiveType=this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};
+
+	display(){
+		this.scene.pushMatrix();
+			this.baseCover.display();
+			super.display();
+			this.scene.translate(0, 0, this.heigth);
+			this.topCover.display();
+		this.scene.popMatrix();
+
+	}
 };

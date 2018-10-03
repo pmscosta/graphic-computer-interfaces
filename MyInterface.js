@@ -42,7 +42,7 @@ class MyInterface extends CGFinterface {
                         else
                           this.scene.lights[i].disable();
                       })
-                      .name(i)
+                      .name(this.scene.lightsID[i])
                       .setValue(true);
     }
 

@@ -189,7 +189,7 @@ class MySceneGraph {
       return 'undefined backgrounds components';
 
 
-      console.log(ambientValues);
+    console.log(ambientValues);
 
     this.ambient = [];
     this.ambient['ambient'] = ambientValues;
@@ -222,8 +222,8 @@ class MySceneGraph {
             textureId + ')';
       }
 
-      this.textures[textureId] = createTexture(this.scene, children[i], this.reader, textureId);
-      
+      this.textures[textureId] =
+          createTexture(this.scene, children[i], this.reader, textureId);
     }
 
     this.log('parsed textures');
@@ -399,7 +399,8 @@ class MySceneGraph {
             materialID + ')';
       }
 
-      this.materials[materialID] = createMaterial(this.scene, children[i], this.reader, materialID);
+      this.materials[materialID] =
+          createMaterial(this.scene, children[i], this.reader, materialID);
     }
 
     this.log('Parsed materials');
@@ -447,52 +448,49 @@ class MySceneGraph {
     return null;
   }
 
-    /**
+  /**
    * Parses the <primitives> node.
    * @param {primitives block element} primitivesNode
    */
-  parsePrimitives(primitivesNode){
-
+  parsePrimitives(primitivesNode) {
     var children = primitivesNode.children;
-    this.primitives=[];
-    var nodenames=[];
-    var grandchildren=[];
-    var counter=0;
+    this.primitives = [];
+    var nodenames = [];
+    var grandchildren = [];
+    var counter = 0;
 
 
 
     for (var i = 0; i < children.length; i++) {
-        if(children[i].nodeName != 'primitive')
-        {
-          this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
-          continue;
-        }
+      if (children[i].nodeName != 'primitive') {
+        this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
+        continue;
+      }
 
-        var primitiveId=this.reader.getString(children[i],'id');
-        if(primitiveId== null) return 'No id defined for primitive';
+      var primitiveId = this.reader.getString(children[i], 'id');
+      if (primitiveId == null) return 'No id defined for primitive';
 
-        if(this.primitives[primitiveId] !=null)
-          return 'ID must be unique for each primitive (conflict: ID = ' +
-          primitiveId + ')';
+      if (this.primitives[primitiveId] != null)
+        return 'ID must be unique for each primitive (conflict: ID = ' +
+            primitiveId + ')';
 
-        grandChildren=children[i].children;
-        var curr_primitive=  parsePrimitive(this.scene,this.reader,children[i].children[0],primitiveId);
+      grandChildren = children[i].children;
+      var curr_primitive = parsePrimitive(
+          this.scene, this.reader, children[i].children[0], primitiveId);
 
-        this.primitives[primitiveId]=curr_primitive;
-      
+      if (curr_primitive != null) this.primitives[primitiveId] = curr_primitive;
     }
 
-    console.log("Passed primitives");
+    console.log(this.primitives);
 
+    console.log('Passed primitives');
   }
 
   /**
    * Parses the <COMPONENTS> node.
    * @param {components block element} componentsNode
    */
-  parseComponents(componentsNode) {
-
-  }
+  parseComponents(componentsNode) {}
 
 
   /*
@@ -527,14 +525,15 @@ class MySceneGraph {
    * Displays the scene, processing each node, starting in the root node.
    */
   displayScene() {
-   // console.log(this);
+    // console.log(this);
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
 
-    for(var object in this.primitives){
-      if(typeof object !== undefined)
-        console.log(object);
+
+    for (var object in this.primitives) {
+      if (object === 'torus'){
+        this.primitives[object].display();
+      }
     }
-    
   }
 }

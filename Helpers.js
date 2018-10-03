@@ -383,19 +383,19 @@ function parsePrimitive(scene,reader, children, ID) {
       var values = [];
       getSpaceComponents(
         reader, sphere_comp, 'sphere: ' + ID, values, children);
-      //return new MySphere();
+      return new MySphere(scene, values[0], values[1], values[2]);
       break;
     case 'cylinder':
       var values = [];
       getSpaceComponents(
         reader, cylinder_comp, 'cylinder: ' + ID, values, children);
-      //return new MyCylinder();
+      return new MyCylinder(scene, values[0], values[1], values[2], values[3], values[4]);
       break;
     case 'torus':
       var values = [];
       getSpaceComponents(
-        reader, torus_comp, 'torus: ' + ID, values, 0, children);
-      //return new MyTorus();
+        reader, torus_comp, 'torus: ' + ID, values, children);
+      return new MyTorus(scene, values[0], values[1], values[2], values[3]);
       break;
   }
 }

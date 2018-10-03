@@ -25,15 +25,15 @@ class MyRectangle extends CGFobject
 	{
 
 		this.vertices = [
-			this.x1, this.y2, 0, 
-			this.x2, this.y2, 0,
-			this.x2, this.y1, 0, 
-			this.x1, this.y1, 0
+			this.x1, this.y1, 0, 
+			this.x2, this.y1, 0,
+			this.x2, this.y2, 0, 
+			this.x1, this.y2, 0
 		];
 		
 		this.indices = [
 				0, 1, 2, 
-				3, 2, 1
+				2, 3, 0
 			];
 
 		this.normals = [

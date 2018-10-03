@@ -121,6 +121,8 @@ class MySceneGraph {
         return this.parseScene(node);
       case 'views':
         return this.parseViews(node);
+      case 'ambient':
+        return this.parseAmbient(node);
       case 'lights':
         return this.parseLights(node);
       case 'textures':
@@ -186,9 +188,16 @@ class MySceneGraph {
     } else
       return 'undefined backgrounds components';
 
+
+      console.log(ambientValues);
+
     this.ambient = [];
     this.ambient['ambient'] = ambientValues;
     this.ambient['background'] = backgroundValues;
+
+    this.log('parsed ambient');
+
+    return null;
   }
 
   /**
@@ -395,7 +404,6 @@ class MySceneGraph {
 
     this.log('Parsed materials');
 
-    console.log(this.materials);
     return null;
   }
 

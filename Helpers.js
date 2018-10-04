@@ -57,7 +57,7 @@ function parseTransformation(reader, element, curr_transformation, ID) {
     case 'translate':
       var values = [];
       getSpaceComponents(
-        reader, xyz_comp, 'transformation: ' + ID, values, element);
+          reader, xyz_comp, 'transformation: ' + ID, values, element);
       curr_transformation.translate(values);
       break;
 
@@ -70,13 +70,13 @@ function parseTransformation(reader, element, curr_transformation, ID) {
     case 'scale':
       var values = [];
       getSpaceComponents(
-        reader, xyz_comp, 'transformation: ' + ID, values, element);
+          reader, xyz_comp, 'transformation: ' + ID, values, element);
       curr_transformation.scale(values);
       break;
   }
 }
 
-function createOmniLight(graph, light_element, reader) {
+function createLight(graph, light_element, reader) {
   // Get id of the current
   var lightID = reader.getString(light_element, 'id');
   if (lightID == null) return 'no ID defined for light';
@@ -84,15 +84,16 @@ function createOmniLight(graph, light_element, reader) {
 
   if (graph.lights[lightID] != null) {
     return 'ID must be unique for each material (conflict: ID = ' + lightID +
-      ')';
+        ')';
   }
 
   // Get enabled status
   var enabled = reader.getBoolean(light_element, 'enabled');
   if (enabled == null) {
     onXMLMinorError(
-      'Enabled wasn\'t correctly specified, assuming light enabled');
-    enabled = true;;
+        'Enabled wasn\'t correctly specified, assuming light enabled');
+    enabled = true;
+    ;
   }
 
   grandChildren = light_element.children;
@@ -113,8 +114,8 @@ function createOmniLight(graph, light_element, reader) {
   var locations = [];
   if (locationIndex != -1) {
     getSpaceComponents(
-      reader, xyzw_comp, 'light ID= ' + lightID, locations,
-      grandChildren[locationIndex]);
+        reader, xyzw_comp, 'light ID= ' + lightID, locations,
+        grandChildren[locationIndex]);
   } else
     return 'light position undefined for ID = ' + lightId;
 
@@ -122,7 +123,7 @@ function createOmniLight(graph, light_element, reader) {
   var ambientIllumination = [];
   if (ambientIndex != -1) {
     getRGBComponents(
-      reader, 'lights', ambientIllumination, grandChildren[ambientIndex]);
+        reader, 'lights', ambientIllumination, grandChildren[ambientIndex]);
   } else
     return 'ambient component undefined for ID = ' + lightID;
 
@@ -130,7 +131,7 @@ function createOmniLight(graph, light_element, reader) {
   var diffuseIllumination = [];
   if (diffuseIndex != -1) {
     getRGBComponents(
-      reader, 'lights', diffuseIllumination, grandChildren[diffuseIndex]);
+        reader, 'lights', diffuseIllumination, grandChildren[diffuseIndex]);
   } else
     return 'ambient component undefined for ID = ' + lightID;
 
@@ -138,7 +139,7 @@ function createOmniLight(graph, light_element, reader) {
   var specularIllumination = [];
   if (specularIndex != -1) {
     getRGBComponents(
-      reader, 'lights', specularIllumination, grandChildren[specularIndex]);
+        reader, 'lights', specularIllumination, grandChildren[specularIndex]);
   } else
     return 'specular component undefined for ID = ' + lightID;
 
@@ -150,6 +151,27 @@ function createOmniLight(graph, light_element, reader) {
   graph.lights[lightID]['ambient'] = ambientIllumination;
   graph.lights[lightID]['diffuse'] = diffuseIllumination;
   graph.lights[lightID]['specular'] = specularIllumination;
+
+  if (light_element.nodeName == 'spot') {
+    var angle = reader.getString(light_element, 'angle');
+    var exponent = reader.getString(light_element, 'exponent');
+
+    var target = [];
+    var targetIndex = nodeNames.indexOf('target');
+
+    if (targetIndex != -1) {
+      getSpaceComponents(
+          reader, xyz_comp, 'lights ID= ' + lightID, target,
+          grandChildren[targetIndex]);
+    } else
+      return 'target component undefined for spot light ID = ' + lightID;
+
+    graph.lights[lightID]['type'] = 'spot';
+    graph.lights[lightID]['enabled'] = enabled;
+    graph.lights[lightID]['angle'] = angle;
+    graph.lights[lightID]['exponent'] = exponent;
+    graph.lights[lightID]['target'] = target;
+  }
 }
 
 function createMaterial(scene, material_element, reader, materialID) {
@@ -157,7 +179,7 @@ function createMaterial(scene, material_element, reader, materialID) {
   var shininess = reader.getFloat(material_element, 'shininess');
   if (shininess == null) {
     onXMLMinorError(
-      'shininess wasn\'t correctly specified, assuming shininess 0');
+        'shininess wasn\'t correctly specified, assuming shininess 0');
     shininess = 0;
   }
 
@@ -179,8 +201,8 @@ function createMaterial(scene, material_element, reader, materialID) {
   var emissions = [];
   if (emissionIndex != -1) {
     getSpaceComponents(
-      reader, rgb_comp, 'material ID= ' + materialID, emissions,
-      grandChildren[emissionIndex]);
+        reader, rgb_comp, 'material ID= ' + materialID, emissions,
+        grandChildren[emissionIndex]);
   } else
     return 'emission component undefined for ID = ' + materialID;
 
@@ -188,8 +210,8 @@ function createMaterial(scene, material_element, reader, materialID) {
   var ambientComponent = [];
   if (ambientIndex != -1) {
     getRGBComponents(
-      reader, 'material ID= ' + materialID, ambientComponent,
-      grandChildren[ambientIndex]);
+        reader, 'material ID= ' + materialID, ambientComponent,
+        grandChildren[ambientIndex]);
   } else
     return 'ambient component undefined for ID = ' + materialID;
 
@@ -197,8 +219,8 @@ function createMaterial(scene, material_element, reader, materialID) {
   var diffuseComponent = [];
   if (diffuseIndex != -1) {
     getRGBComponents(
-      reader, 'material ID= ' + materialID, diffuseComponent,
-      grandChildren[diffuseIndex]);
+        reader, 'material ID= ' + materialID, diffuseComponent,
+        grandChildren[diffuseIndex]);
   } else
     return 'diffuse component undefined for ID = ' + materialID;
 
@@ -206,8 +228,8 @@ function createMaterial(scene, material_element, reader, materialID) {
   var specularComponent = [];
   if (specularIndex != -1) {
     getRGBComponents(
-      reader, 'material ID= ' + materialID, specularComponent,
-      grandChildren[specularIndex]);
+        reader, 'material ID= ' + materialID, specularComponent,
+        grandChildren[specularIndex]);
   } else
     return 'specular component undefined for ID = ' + materialID;
 
@@ -223,7 +245,7 @@ function createMaterial(scene, material_element, reader, materialID) {
       specularComponent[0], specularComponent[1], specularComponent[2],
       specularComponent[3]);
   new_material.setEmission(
-    emissions[0], emissions[1], emissions[2], emissions[3]);
+      emissions[0], emissions[1], emissions[2], emissions[3]);
 
   new_material.setShininess(shininess);
 
@@ -239,97 +261,6 @@ function createTexture(scene, texture_element, reader, textureID) {
   new_texture.loadTexture(texturePath);
 
   return new_texture;
-}
-
-
-function createSpotLight(graph, light_element, reader) {
-  // Get id of the current
-  var lightID = reader.getString(light_element, 'id');
-  if (lightID == null) return 'no ID defined for light';
-
-  if (graph.lights[lightID] != null) {
-    return 'ID must be unique for each material (conflict: ID = ' + lightID +
-      ')';
-  }
-
-  // Get enabled status
-  var enabled = reader.getBoolean(light_element, 'enabled');
-  if (enabled == null) {
-    this.onXMLMinorError(
-      'Enabled wasn\'t correctly specified, assuming light enabled');
-    enabled = true;
-  }
-
-  grandChildren = light_element.children;
-  // Specifications for the current light.
-  nodeNames = [];
-  for (var j = 0; j < grandChildren.length; j++) {
-    nodeNames.push(grandChildren[j].nodeName);
-  }
-
-  // Gets indices of each element.
-  var locationIndex = nodeNames.indexOf('location');
-  var ambientIndex = nodeNames.indexOf('ambient');
-  var diffuseIndex = nodeNames.indexOf('diffuse');
-  var specularIndex = nodeNames.indexOf('specular');
-
-
-  // Retrieves the light location.
-  var locations = [];
-  if (locationIndex != -1) {
-    getSpaceComponents(
-      reader, xyzw_comp, 'light ID= ' + lightID, locations,
-      grandChildren[locationIndex]);
-  } else
-    return 'light position undefined for ID = ' + lightId;
-
-  // Retrieves the ambient component.
-  var ambientIllumination = [];
-  if (ambientIndex != -1) {
-    getRGBComponents(
-      reader, 'lights', ambientIllumination, grandChildren[ambientIndex]);
-  } else
-    return 'ambient component undefined for ID = ' + lightID;
-
-  // Retrieve the diffuse component
-  var diffuseIllumination = [];
-  if (diffuseIndex != -1) {
-    getRGBComponents(
-      reader, 'lights', diffuseIllumination, grandChildren[diffuseIndex]);
-  } else
-    return 'ambient component undefined for ID = ' + lightID;
-
-  // Retrieve the specular component
-  var specularIllumination = [];
-  if (specularIndex != -1) {
-    getRGBComponents(
-      reader, 'lights', specularIllumination, grandChildren[specularIndex]);
-  } else
-    return 'specular component undefined for ID = ' + lightID;
-
-  var angle = reader.getString(light_element, 'angle');
-  var exponent = reader.getString(light_element, 'exponent');
-
-  var target = [];
-  var targetIndex = nodeNames.indexOf('target');
-
-  if (targetIndex != -1) {
-    getSpaceComponents(
-      reader, xyz_comp, 'lights ID= ' + lightID, target,
-      grandChildren[targetIndex]);
-  } else
-    return 'target component undefined for spot light ID = ' + lightID;
-
-  graph.lights[lightID] = [];
-  graph.lights[lightID]['type'] = 'spot';
-  graph.lights[lightID]['enabled'] = enabled;
-  graph.lights[lightID]['angle'] = angle;
-  graph.lights[lightID]['exponent'] = exponent;
-  graph.lights[lightID]['location'] = locations;
-  graph.lights[lightID]['target'] = target;
-  graph.lights[lightID]['ambient'] = ambientIllumination;
-  graph.lights[lightID]['diffuse'] = diffuseIllumination;
-  graph.lights[lightID]['specular'] = specularIllumination;
 }
 
 function parsePrimitive(scene, reader, children, ID) {
@@ -367,38 +298,46 @@ function parsePrimitive(scene, reader, children, ID) {
   }
 }
 
-function dispatchComponent(scene, reader, component_spec, componentId, component) {
+function dispatchComponent(
+    scene, reader, component_spec, componentId, component) {
   switch (component_spec.nodeName) {
     case 'transformation':
       var transformations = component_spec.children;
       for (var i = 0; i < transformations.length; i++) {
-        if (transformations[i].nodeName == "transformationref")
-          component.transformation.multiply(scene.transformations[reader.getString(transformations[i], 'id')].getMatrix());
-        else{
-          parseTransformation(reader, transformations[i], component.transformation, componentId);
+        if (transformations[i].nodeName == 'transformationref')
+          component.transformation.multiply(
+              scene.transformations[reader.getString(transformations[i], 'id')]
+                  .getMatrix());
+        else {
+          parseTransformation(
+              reader, transformations[i], component.transformation,
+              componentId);
         }
       }
       break;
     case 'materials':
       var materials = component_spec.children;
       for (var i = 0; i < materials.length; i++) {
-        component.materials[i] = reader.getString(materials[i], "id");
+        component.materials[i] = reader.getString(materials[i], 'id');
       }
       break;
     case 'texture':
-      component.texture = [reader.getString(component_spec, "id"), reader.getFloat(component_spec, "length_s"), reader.getFloat(component_spec, "length_t")];
+      component.texture = [
+        reader.getString(component_spec, 'id'),
+        reader.getFloat(component_spec, 'length_s'),
+        reader.getFloat(component_spec, 'length_t')
+      ];
       break;
     case 'children':
       var childs = component_spec.children;
       for (var i = 0; i < childs.length; i++) {
-        var id = reader.getString(childs[i], "id");
+        var id = reader.getString(childs[i], 'id');
         component.id = id;
-        if (childs[i].nodeName == "componentref") {
+        if (childs[i].nodeName == 'componentref') {
           component.componentChildren.push(id);
         } else {
           component.primitiveChildren.push(id);
         }
       }
   }
-
 }

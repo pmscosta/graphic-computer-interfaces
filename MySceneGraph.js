@@ -143,9 +143,9 @@ class MySceneGraph {
   parseScene(sceneNode) {
     this.idRoot = this.reader.getString(sceneNode, 'root');
 
-    if (this.rootNode == null)
+    if (this.idRoot == null)
       this.onXMLMinorError('root node missing; assuming initial node');
-  
+
     this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
 
     if (this.axis_length == null || this.axis_length < 0) {
@@ -154,7 +154,9 @@ class MySceneGraph {
       this.axis_length = 5;
     }
 
-    console.log(this.rootNode);
+    this.log('parsed scene');
+
+    return null;
   }
 
 
@@ -238,9 +240,7 @@ class MySceneGraph {
   parseTransformations(transformationsNode) {
     this.transformations = [];
     var children = transformationsNode.children;
-    var nodeNames = [];
     var grandChildren = [];
-    var counter = 0;
 
     for (var i = 0; i < children.length; i++) {
       if (children[i].nodeName != 'transformation') {
@@ -269,6 +269,10 @@ class MySceneGraph {
 
       this.transformations[transformationID] = curr_transformation;
     }
+
+    this.log('parsed transformations');
+
+    return null;
   }
 
   parseViews(viewsNode) {
@@ -369,7 +373,7 @@ class MySceneGraph {
     this.near = this.views[this.defaultPerspectiveId].near;
     this.far = this.views[this.defaultPerspectiveId].far;
 
-    this.log('Parsed perspectives');
+    this.log('parsed perspectives');
 
     return null;
   }
@@ -381,8 +385,6 @@ class MySceneGraph {
   parseMaterials(materialsNode) {
     var children = materialsNode.children;
     this.materials = [];
-    var grandChildren = [];
-    var nodeNames = [];
 
     for (var i = 0; i < children.length; i++) {
       if (children[i].nodeName != 'material') {
@@ -430,17 +432,8 @@ class MySceneGraph {
         break;
       }
 
-      switch (children[i].nodeName) {
-        case 'omni':
-          createOmniLight(this, children[i], this.reader);
-          break;
-        case 'spot':
-          createSpotLight(this, children[i], this.reader);
-          break;
-        default:
-          this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
-          continue;
-      }
+      if (children[i].nodeName == 'omni' || children[i].nodeName == 'spot')
+        createLight(this, children[i], this.reader);
 
       numLights++;
     }
@@ -481,9 +474,11 @@ class MySceneGraph {
 
       if (curr_primitive != null) this.primitives[primitiveId] = curr_primitive;
     }
-    
-  
-    console.log('Passed primitives');
+
+
+    this.log('parsed primitives');
+
+    return null;
   }
 
   /**
@@ -494,29 +489,32 @@ class MySceneGraph {
     var children = componentsNode.children;
     this.components = [];
 
-
-
-    for(var i = 0; i < children.length;i++){
+    for (var i = 0; i < children.length; i++) {
       var component = new Component(this.scene);
-      if(children[i].nodeName != "component")
-      {
+      if (children[i].nodeName != 'component') {
         this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
         continue;
       }
 
-      var componentId= this.reader.getString(children[i],'id');
-      if(componentId== null){
-        return 'ID must be unique for each component (conflict: ID = ' + componentId + ')';
-      }else{
-        component.id=componentId;
+      var componentId = this.reader.getString(children[i], 'id');
+      if (componentId == null) {
+        return 'ID must be unique for each component (conflict: ID = ' +
+            componentId + ')';
+      } else {
+        component.id = componentId;
       }
-       
-      for(var j=0; j < children[i].children.length;j++){
-        dispatchComponent(this.scene,this.reader,children[i].children[j],componentId,component);
-        
+
+      for (var j = 0; j < children[i].children.length; j++) {
+        dispatchComponent(
+            this.scene, this.reader, children[i].children[j], componentId,
+            component);
       }
       this.components[componentId] = component;
     }
+
+    this.log('parsed components');
+
+    return null;
   }
 
   /*
@@ -559,23 +557,20 @@ class MySceneGraph {
     this.iterateChildren(rootElement);
   }
 
-  iterateChildren(component){
-
+  iterateChildren(component) {
     this.scene.pushMatrix();
+
     this.scene.multMatrix(component.transformation.getMatrix());
 
-
-    for(var i = 0; i < component.componentChildren.length; i++){
+    for (var i = 0; i < component.componentChildren.length; i++) {
       this.iterateChildren(this.components[component.componentChildren[i]]);
     }
 
-    for(var i = 0; i < component.primitiveChildren.length; i++){
+    for (var i = 0; i < component.primitiveChildren.length; i++) {
       var prim_name = component.primitiveChildren[i];
       this.primitives[prim_name].display();
-      
     }
 
     this.scene.popMatrix();
-
   }
 }

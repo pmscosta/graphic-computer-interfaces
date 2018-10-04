@@ -61,11 +61,8 @@ class XMLscene extends CGFscene {
       this.cameras[key] = new_camera;
     }
 
-    console.log(this.camera);
-
     this.camera = this.cameras[this.graph.defaultPerspectiveId];
     this.interface.setActiveCamera(this.camera);
-    console.log(this.camera);
   }
 
   /* Handler called when the graph is finally loaded.
@@ -124,6 +121,7 @@ class XMLscene extends CGFscene {
       this.lights[i].setSpecular(
           specularIllumination[0], specularIllumination[1],
           specularIllumination[2], specularIllumination[3]);
+
 
       if (this.graph.lights[key].type == 'spot') {
         var target = this.graph.lights[key].target;

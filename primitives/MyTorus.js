@@ -5,7 +5,7 @@
  */
 
 class MyTorus extends CGFobject {
-  constructor(scene, inner, outer, slices, loops) {
+  constructor(scene, inner, outer, slices = 100, loops = 500) {
     super(scene);
     this.scene = scene;
     this.inner = inner;
@@ -22,7 +22,7 @@ class MyTorus extends CGFobject {
   initBuffers() {
 
     var radius = this.inner;
-    var tube = this.outer;
+    var tube = (this.outer - this.inner) / 2;
     var radialSegments = this.slices;
     var tubularSegments = this.loops;
     var arc = this.arc;
@@ -48,7 +48,7 @@ class MyTorus extends CGFobject {
 		for ( i = 0; i <= tubularSegments; i ++ ) {
 
 			var u = i / tubularSegments * arc;
-			var v = j / radialSegments * Math.PI * 2;
+			var v = j / radialSegments * arc;
 
 			// vertex
 
@@ -67,11 +67,11 @@ class MyTorus extends CGFobject {
             normal.y = vertex.y - center.y;
             normal.z = vertex.z - center.z;
 
-            let comp = Math.sqrt(Math.pow(normal.x, 2) +Math.pow(normal.y, 2) +Math.pow(normal.z, 2))
+            let comp = Math.sqrt(normal.x * normal.x + normal.y * normal.y + normal.z + normal.z);
 
-            normal.x = normal.x / comp; 
-            normal.y = normal.y / comp; 
-            normal.z = normal.z / comp;
+            normal.x /=  comp; 
+            normal.y /=  comp; 
+            normal.z /= comp;
 
 			normals.push( normal.x, normal.y, normal.z );
 
@@ -108,7 +108,8 @@ class MyTorus extends CGFobject {
     
     this.texCoords = uvs;
     this.indices = indices;
-    this.vertices = vertices;
+	this.vertices = vertices;
+	this.normals = normals;
     
 
 

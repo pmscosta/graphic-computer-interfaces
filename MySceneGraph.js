@@ -555,6 +555,7 @@ class MySceneGraph {
     // TODO: Render loop starting at root of graph
 
     var rootElement = this.components[this.idRoot];
+    this.materials[rootElement.materials[0]].apply();
     this.iterateChildren(rootElement);
   }
 
@@ -565,7 +566,6 @@ class MySceneGraph {
 
 
     for(var i = 0; i < component.componentChildren.length; i++){
-      console.log(component.componentChildren[i]);
       this.iterateChildren(this.components[component.componentChildren[i]]);
     }
 

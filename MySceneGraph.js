@@ -261,16 +261,17 @@ class MySceneGraph {
 
       var curr_transformation = new Transformation(this.scene);
 
+
       for (var j = 0; j < grandChildren.length; j++) {
         parseTransformation(
-            this.reader, grandChildren, j, curr_transformation,
+            this.reader, grandChildren[j], curr_transformation,
             transformationID);
       }
 
       this.transformations[transformationID] = curr_transformation;
     }
 
-    this.log('parsed transformations');
+    this.log("parsed transformations");
 
     return null;
   }
@@ -506,8 +507,7 @@ class MySceneGraph {
 
       for (var j = 0; j < children[i].children.length; j++) {
         dispatchComponent(
-            this.scene, this.reader, children[i].children[j], componentId,
-            component);
+            this, this.reader, children[i].children[j], componentId, component);
       }
       this.components[componentId] = component;
     }
@@ -562,6 +562,8 @@ class MySceneGraph {
 
     this.scene.multMatrix(component.transformation.getMatrix());
 
+    this.applyMaterial(component);
+
     for (var i = 0; i < component.componentChildren.length; i++) {
       this.iterateChildren(this.components[component.componentChildren[i]]);
     }
@@ -572,5 +574,11 @@ class MySceneGraph {
     }
 
     this.scene.popMatrix();
+  }
+
+  applyMaterial(component) {
+    if (component.materials[0] != 'inherit') {
+      this.materials[component.materials[0]].apply();
+    }
   }
 }

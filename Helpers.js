@@ -304,10 +304,11 @@ function dispatchComponent(
     case 'transformation':
       var transformations = component_spec.children;
       for (var i = 0; i < transformations.length; i++) {
-        if (transformations[i].nodeName == 'transformationref')
+        if (transformations[i].nodeName == 'transformationref'){
           component.transformation.multiply(
               scene.transformations[reader.getString(transformations[i], 'id')]
                   .getMatrix());
+          }
         else {
           parseTransformation(
               reader, transformations[i], component.transformation,

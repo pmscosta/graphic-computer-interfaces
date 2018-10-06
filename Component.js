@@ -5,7 +5,7 @@ class Component {
       this.transformation = new Transformation(this.scene);
       this.componentChildren = [];
       this.primitiveChildren = [];
-      this.textures = [];
+      this.texture = [];
       this.materials = [];
       this.id;
   }

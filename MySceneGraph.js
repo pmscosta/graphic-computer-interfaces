@@ -532,10 +532,9 @@ class MySceneGraph {
   }
 
   applyAddOns(component) {
-    if (!this.materialsPile.empty) 
-      this.materials[this.materialsPile[this.materialsPile.length -1]].apply();
-      
-    if(!this.texturesPile.empty)
+    if(!this.texturesPile.empty && this.texturesPile[this.texturesPile.length-1]!='none')
       this.textures[this.texturesPile[this.texturesPile.length-1]].apply();
+    else if (!this.materialsPile.empty) 
+      this.materials[this.materialsPile[this.materialsPile.length -1]].apply();
   }
 }

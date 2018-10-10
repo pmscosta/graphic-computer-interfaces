@@ -59,8 +59,7 @@ class MySceneGraph {
     this.reader.open('scenes/' + filename, this);
 
     this.texturesPile = [];
-    this.materialsPile=[];
-
+    this.materialsPile = [];
   }
 
 
@@ -186,16 +185,22 @@ class MySceneGraph {
     if (ambientIndex != -1) {
       getRGBComponents(
           this.reader, 'ambient', ambientValues, children[ambientIndex]);
-    } else
-      return 'ambient components not defined';
+    } else {
+      console.warn(
+          'Warning:  ambient component not defined for ambient block, assuming 0');
+      ambientValues = [0, 0, 0, 0];
+    }
 
     var backgroundValues = [];
     if (backgroundIndex != -1) {
       getRGBComponents(
           this.reader, 'background', backgroundValues,
           children[backgroundIndex]);
-    } else
-      return 'undefined backgrounds components';
+    } else {
+      console.warn(
+          'Warning:  background component not defined for ambient block, assuming blue color');
+      backgroundValues = [0.53, 0.81, 0.92, 1];
+    }
 
     this.ambient = [];
     this.ambient['ambient'] = ambientValues;
@@ -224,8 +229,9 @@ class MySceneGraph {
       if (textureId == null) return 'no ID defined for texture';
 
       if (this.textures[textureId] != null) {
-        return 'ID must be unique for each texture (conflict: ID = ' +
-            textureId + ')';
+        console.warn(
+            'Warning: ID must be unique for each texture, conflict: ID =' +
+            textureId);
       }
 
       this.textures[textureId] =
@@ -255,9 +261,11 @@ class MySceneGraph {
       var transformationID = this.reader.getString(children[i], 'id');
       if (transformationID == null) return 'no ID defined for perspective';
 
-      if (this.transformations[transformationID] != null)
-        return 'ID must be unique for each perspective (conflict: ID = ' +
-            transformationID + ')';
+      if (this.transformations[transformationID] != null) {
+        console.warn(
+            'Warning: ID must be unique for each perspective, conflict: ID =' +
+            transformationID);
+      }
 
 
       grandChildren = children[i].children;
@@ -293,7 +301,8 @@ class MySceneGraph {
     var counter = 0;
 
     for (var i = 0; i < children.length; i++) {
-      if (children[i].nodeName != 'perspective' && children[i].nodeName != 'ortho' ) {
+      if (children[i].nodeName != 'perspective' &&
+          children[i].nodeName != 'ortho') {
         this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
         continue;
       }
@@ -413,6 +422,7 @@ class MySceneGraph {
 
 
     this.log('parsed primitives');
+    console.log(this.primitives);
 
     return null;
   }
@@ -498,15 +508,16 @@ class MySceneGraph {
     this.scene.multMatrix(component.transformation.getMatrix());
 
 
-    //Insert into pile
-    if(component.texture == 'inherit' && !this.texturesPile.empty)
-      this.texturesPile.push(this.texturesPile[this.texturesPile.length-1]);
-    else if(component.texture != 'inherit')
+    // Insert into pile
+    if (component.texture == 'inherit' && !this.texturesPile.empty)
+      this.texturesPile.push(this.texturesPile[this.texturesPile.length - 1]);
+    else if (component.texture != 'inherit')
       this.texturesPile.push(component.texture[0]);
 
-    if(component.materials[0]=='inherit' && !this.materialsPile.empty)
-      this.materialsPile.push(this.materialsPile[this.materialsPile.length-1]);
-    else if(component.materials[0] != 'inherit')
+    if (component.materials[0] == 'inherit' && !this.materialsPile.empty)
+      this.materialsPile.push(
+          this.materialsPile[this.materialsPile.length - 1]);
+    else if (component.materials[0] != 'inherit')
       this.materialsPile.push(component.materials[0]);
 
 
@@ -521,20 +532,20 @@ class MySceneGraph {
       this.primitives[prim_name].display();
     }
 
-    //Remove from pile
-    if(this.texturesPile.length>0)
-      this.texturesPile.pop(component.texture);
-    
-    if(this.materialsPile.length>0)
+    // Remove from pile
+    if (this.texturesPile.length > 0) this.texturesPile.pop(component.texture);
+
+    if (this.materialsPile.length > 0)
       this.materialsPile.pop(component.material);
 
     this.scene.popMatrix();
   }
 
   applyAddOns(component) {
-    if(!this.texturesPile.empty && this.texturesPile[this.texturesPile.length-1]!='none')
-      this.textures[this.texturesPile[this.texturesPile.length-1]].apply();
-    else if (!this.materialsPile.empty) 
-      this.materials[this.materialsPile[this.materialsPile.length -1]].apply();
+    if (!this.texturesPile.empty &&
+        this.texturesPile[this.texturesPile.length - 1] != 'none')
+      this.textures[this.texturesPile[this.texturesPile.length - 1]].apply();
+    else if (!this.materialsPile.empty)
+      this.materials[this.materialsPile[this.materialsPile.length - 1]].apply();
   }
 }

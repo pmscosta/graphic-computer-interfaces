@@ -14,12 +14,33 @@ var cylinder_comp = ['base', 'top', 'height', 'slices', 'stacks'];
 
 var torus_comp = ['inner', 'outer', 'slices', 'loops'];
 
+var perspective_comp = ['near', 'far', 'angle'];
+var perspective_default = [0.1, 500, 0.4];
+
+var ortho_comp = ['near', 'far', 'left', 'right', 'top', 'bottom'];
+var ortho_default = [0.1, 500, -5, 5, 5, -5];
+
+
+function getValuesOrDefault(reader, components, phase, values, element, def) {
+  for (var i = 0; i < components.length; i++) {
+    var temp = reader.getFloat(element, components[i]);
+
+    if (!(temp != null && !isNaN(temp))) {
+      console.warn(
+          'Warning: ' + components[i] + 'not specified or invalid in ' + phase +
+          ' assuming ' + components[i] + ' = ' + def[i])
+      values.push(def[i]);
+    } else
+      values.push(temp);
+  }
+}
+
 function getSpaceComponents(reader, components, phase, values, element) {
   for (var i = 0; i < components.length; i++) {
     var temp = reader.getFloat(element, components[i]);
 
     if (!(temp != null && !isNaN(temp)))
-      return 'unable to parse ' + xyz_comp[i] + ' component of the ' + phase;
+      return 'unable to parse ' + components[i] + ' component of the ' + phase;
     else
       values.push(temp);
   }
@@ -29,9 +50,12 @@ function getRGBComponents(reader, phase, values, element) {
   for (var i = 0; i < 4; i++) {
     var temp = reader.getFloat(element, rgb_comp[i]);
 
-    if (!(temp != null && !isNaN(temp)) || ((i == 3 && temp < 0 && temp > 1)))
-      return 'unable to parse ' + rgb_comp[i] + ' component of the ' + phase;
-    else
+    if (!(temp != null && !isNaN(temp)) || ((i == 3 && temp < 0 && temp > 1))) {
+      console.warn(
+          'Warning: unable to parse ' + rgb_comp[i] + ' component of the ' +
+          phase + 'assuming 0.')
+      values.push(0);
+    } else
       values.push(temp);
   }
 }
@@ -61,30 +85,12 @@ function parsePerspective(graph, reader, element) {
         ')';
   }
 
-  var near = reader.getFloat(element, 'near');
 
-  if (near == null || near < 0) {
-    this.onXMLMinorError(
-        'near not specified or invalid; assuming \'near = 0.1\'');
-    near = 5;
-  }
+  var values = [];
 
-
-  var far = reader.getFloat(element, 'far');
-
-  if (far == null || far < 0) {
-    this.onXMLMinorError(
-        'far not specified or invalid; assuming \'far = 500\'');
-    far = 500;
-  }
-
-  var angle = reader.getFloat(element, 'angle');
-
-  if (angle == null || angle < 0) {
-    this.onXMLMinorError(
-        'angle not specified or invalid; assuming \'angle = 0\'');
-    angle = 0;
-  }
+  getValuesOrDefault(
+      reader, perspective_comp, 'perspective ' + perspectiveId, values, element,
+      perspective_default);
 
   grandChildren = element.children;
 
@@ -97,26 +103,40 @@ function parsePerspective(graph, reader, element) {
   var fromIndex = nodeNames.indexOf('from');
   var toIndex = nodeNames.indexOf('to');
 
-  if (fromIndex == -1 || toIndex == -1)
-    return 'from or to values undefined for perspective with id' +
-        perspectiveId;
 
   var from_values = [];
   var to_values = [];
 
-  getSpaceComponents(
-      reader, xyz_comp, 'perspective', from_values, grandChildren[fromIndex]);
-  getSpaceComponents(
-      reader, xyz_comp, 'perspective', to_values, grandChildren[toIndex]);
+  if (fromIndex != -1) {
+    getSpaceComponents(
+        reader, xyz_comp, 'perspective', from_values, grandChildren[fromIndex]);
+  } else {
+    console.warn(
+        'Warning: from component undefined for view = ' + perspectiveId +
+        '. Assuming 10 for all');
+
+    from_values = [10, 10, 10];
+  }
+
+  if (toIndex != -1) {
+    getSpaceComponents(
+        reader, xyz_comp, 'perspective', to_values, grandChildren[toIndex]);
+  } else {
+    console.warn(
+        'Warning: to component undefined for view = ' + perspectiveId +
+        '. Assuming 0 for all');
+
+    to_values = [0, 0, 0];
+  }
 
   if (graph.defaultPerspectiveId == null)
     graph.defaultPerspectiveId = perspectiveId;
 
   graph.views[perspectiveId] = [];
   graph.views[perspectiveId]['type'] = 'perspective';
-  graph.views[perspectiveId]['near'] = near;
-  graph.views[perspectiveId]['far'] = far;
-  graph.views[perspectiveId]['angle'] = angle;
+  graph.views[perspectiveId]['near'] = values[0];
+  graph.views[perspectiveId]['far'] = values[1];
+  graph.views[perspectiveId]['angle'] = values[2];
   graph.views[perspectiveId]['from_values'] = from_values;
   graph.views[perspectiveId]['to_values'] = to_values;
 }
@@ -129,53 +149,12 @@ function parseOrtho(graph, reader, element) {
     return 'ID must be unique for each view (conflict: ID = ' + orthoID + ')';
   }
 
-  var near = reader.getFloat(element, 'near');
 
-  if (near == null || near < 0) {
-    this.onXMLMinorError(
-        'near not specified or invalid; assuming \'near = 0.1\'');
-    near = 5;
-  }
+  var values = [];
 
+  getValuesOrDefault(
+      reader, ortho_comp, 'ortho ' + orthoID, values, element, ortho_default);
 
-  var far = reader.getFloat(element, 'far');
-
-  if (far == null || far < 0) {
-    this.onXMLMinorError(
-        'far not specified or invalid; assuming \'far = 500\'');
-    far = 500;
-  }
-
-  var left = reader.getFloat(element, 'left');
-
-  if (left == null) {
-    this.onXMLMinorError(
-        'far not specified or invalid; assuming \'left = -5\'');
-    left = -5;
-  }
-
-  var right = reader.getFloat(element, 'right');
-
-  if (right == null) {
-    this.onXMLMinorError(
-        'far not specified or invalid; assuming \'right = -5\'');
-    right = -5;
-  }
-
-  var top = reader.getFloat(element, 'top');
-
-  if (top == null) {
-    this.onXMLMinorError('far not specified or invalid; assuming \'top = -5\'');
-    top = -5;
-  }
-
-  var bottom = reader.getFloat(element, 'bottom');
-
-  if (bottom == null) {
-    this.onXMLMinorError(
-        'far not specified or invalid; assuming \'bottom = -5\'');
-    bottom = -5;
-  }
 
 
   grandChildren = element.children;
@@ -188,28 +167,41 @@ function parseOrtho(graph, reader, element) {
 
   var fromIndex = nodeNames.indexOf('from');
   var toIndex = nodeNames.indexOf('to');
-
-  if (fromIndex == -1 || toIndex == -1)
-    return 'from or to values undefined for perspective with id' + orthoID;
-
   var from_values = [];
-  var to_values = [];
+  var to_values =[];
 
-  getSpaceComponents(
-      reader, xyz_comp, 'orth', from_values, grandChildren[fromIndex]);
-  getSpaceComponents(
-      reader, xyz_comp, 'orth', to_values, grandChildren[toIndex]);
+  if (fromIndex != -1) {
+    getSpaceComponents(
+        reader, xyz_comp, 'perspective', from_values, grandChildren[fromIndex]);
+  } else {
+    console.warn(
+        'Warning: from component undefined for view = ' + perspectiveId +
+        '. Assuming 10 for all');
+
+    from_values = [10, 10, 10];
+  }
+
+  if (toIndex != -1) {
+    getSpaceComponents(
+        reader, xyz_comp, 'perspective', to_values, grandChildren[toIndex]);
+  } else {
+    console.warn(
+        'Warning: to component undefined for view = ' + perspectiveId +
+        '. Assuming 0 for all');
+
+    to_values = [0, 0, 0];
+  }
 
   if (graph.defaultPerspectiveId == null) graph.defaultPerspectiveId = orthoID;
 
   graph.views[orthoID] = [];
   graph.views[orthoID]['type'] = 'ortho';
-  graph.views[orthoID]['near'] = near;
-  graph.views[orthoID]['far'] = far;
-  graph.views[orthoID]['left'] = left;
-  graph.views[orthoID]['right'] = right;
-  graph.views[orthoID]['top'] = top;
-  graph.views[orthoID]['bottom'] = bottom;
+  graph.views[orthoID]['near'] = values[0];
+  graph.views[orthoID]['far'] = values[1];
+  graph.views[orthoID]['left'] = values[2];
+  graph.views[orthoID]['right'] = values[3];
+  graph.views[orthoID]['top'] = values[4];
+  graph.views[orthoID]['bottom'] = values[5];
   graph.views[orthoID]['position'] = from_values;
   graph.views[orthoID]['target'] = to_values;
 }
@@ -253,10 +245,9 @@ function createLight(graph, light_element, reader) {
   // Get enabled status
   var enabled = reader.getBoolean(light_element, 'enabled');
   if (enabled == null) {
-    onXMLMinorError(
-        'Enabled wasn\'t correctly specified, assuming light enabled');
+    console.warn(
+        'Warning: Enabled wasn\'t correctly specified, assuming light enabled');
     enabled = true;
-    ;
   }
 
   grandChildren = light_element.children;
@@ -279,32 +270,52 @@ function createLight(graph, light_element, reader) {
     getSpaceComponents(
         reader, xyzw_comp, 'light ID= ' + lightID, locations,
         grandChildren[locationIndex]);
-  } else
-    return 'light position undefined for ID = ' + lightId;
+  } else {
+    console.warn(
+        'Warning: location component undefined for light = ' + lightID +
+        '. Assuming 10 for all');
+
+    locations = [10, 10, 10, 1];
+  }
 
   // Retrieves the ambient component.
   var ambientIllumination = [];
   if (ambientIndex != -1) {
     getRGBComponents(
         reader, 'lights', ambientIllumination, grandChildren[ambientIndex]);
-  } else
-    return 'ambient component undefined for ID = ' + lightID;
+  } else {
+    console.warn(
+        'Warning: ambient component undefined for light = ' + lightID +
+        '. Assuming 0 for all');
+
+    ambientIllumination = [0, 0, 0, 1];
+  }
 
   // Retrieve the diffuse component
   var diffuseIllumination = [];
   if (diffuseIndex != -1) {
     getRGBComponents(
         reader, 'lights', diffuseIllumination, grandChildren[diffuseIndex]);
-  } else
-    return 'ambient component undefined for ID = ' + lightID;
+  } else {
+    console.warn(
+        'Warning: diffuse component undefined for light = ' + lightID +
+        '. Assuming 0 for all');
+
+    diffuseIllumination = [0, 0, 0, 1];
+  }
 
   // Retrieve the specular component
   var specularIllumination = [];
   if (specularIndex != -1) {
     getRGBComponents(
         reader, 'lights', specularIllumination, grandChildren[specularIndex]);
-  } else
-    return 'specular component undefined for ID = ' + lightID;
+  } else {
+    console.warn(
+        'Warning: specular component undefined for light = ' + lightID +
+        '. Assuming 0 for all');
+
+    specularIllumination = [0, 0, 0, 1];
+  }
 
 
   graph.lights[lightID] = [];
@@ -326,8 +337,13 @@ function createLight(graph, light_element, reader) {
       getSpaceComponents(
           reader, xyz_comp, 'lights ID= ' + lightID, target,
           grandChildren[targetIndex]);
-    } else
-      return 'target component undefined for spot light ID = ' + lightID;
+    } else {
+      console.warn(
+          'Warning: target component undefined for light = ' + lightID +
+          '. Assuming 0 for all');
+
+      target = [0, 0, 0, 1];
+    }
 
     graph.lights[lightID]['type'] = 'spot';
     graph.lights[lightID]['enabled'] = enabled;
@@ -366,8 +382,13 @@ function createMaterial(scene, material_element, reader, materialID) {
     getSpaceComponents(
         reader, rgb_comp, 'material ID= ' + materialID, emissions,
         grandChildren[emissionIndex]);
-  } else
-    return 'emission component undefined for ID = ' + materialID;
+  } else {
+    console.warn(
+        'Warning: emission component undefined for material = ' + materialID +
+        '. Assuming 0 for all');
+
+    emissions = [0, 0, 0, 1];
+  }
 
   // Retrieves the ambient component.
   var ambientComponent = [];
@@ -375,8 +396,13 @@ function createMaterial(scene, material_element, reader, materialID) {
     getRGBComponents(
         reader, 'material ID= ' + materialID, ambientComponent,
         grandChildren[ambientIndex]);
-  } else
-    return 'ambient component undefined for ID = ' + materialID;
+  } else {
+    console.warn(
+        'Warning: ambient component undefined for material = ' + materialID +
+        '. Assuming 0 for all');
+
+    ambientComponent = [0, 0, 0, 1];
+  }
 
   // Retrieve the diffuse component
   var diffuseComponent = [];
@@ -384,8 +410,13 @@ function createMaterial(scene, material_element, reader, materialID) {
     getRGBComponents(
         reader, 'material ID= ' + materialID, diffuseComponent,
         grandChildren[diffuseIndex]);
-  } else
-    return 'diffuse component undefined for ID = ' + materialID;
+  } else {
+    console.warn(
+        'Warning: diffuse component undefined for material = ' + materialID +
+        '. Assuming 0 for all');
+
+    diffuseComponent = [0, 0, 0, 1];
+  }
 
   // Retrieve the specular component
   var specularComponent = [];
@@ -393,8 +424,13 @@ function createMaterial(scene, material_element, reader, materialID) {
     getRGBComponents(
         reader, 'material ID= ' + materialID, specularComponent,
         grandChildren[specularIndex]);
-  } else
-    return 'specular component undefined for ID = ' + materialID;
+  } else {
+    console.warn(
+        'Warning: specular component undefined for material = ' + materialID +
+        '. Assuming 0 for all');
+
+    specularComponent = [0, 0, 0, 1];
+  }
 
   var new_material = new CGFappearance(scene);
 
@@ -417,8 +453,13 @@ function createMaterial(scene, material_element, reader, materialID) {
 
 function createTexture(scene, texture_element, reader, textureID) {
   var texturePath = reader.getString(texture_element, 'file');
-  if (texturePath == null)
-    return 'no path defined for texture ID = ' + textureID;
+  if (texturePath == null) {
+    console.warn(
+        'Warning: no path defined for texture = ' + textureID +
+        '. Assuming default path for all');
+
+    texturePath = '/scenes/images/default-texture.png';
+  }
 
   var new_texture = new CGFappearance(scene);
   new_texture.loadTexture(texturePath);
@@ -433,31 +474,30 @@ function parsePrimitive(scene, reader, children, ID) {
       getSpaceComponents(
           reader, rectangle_comp, 'rectangle: ' + ID, values, children);
       return new MyRectangle(scene, values);
-      break;
+
     case 'triangle':
       var values = [];
       getSpaceComponents(
           reader, triangle_comp, 'triangle: ' + ID, values, children);
-      return new MyTriangle(scene, values, 1, 5, 1, 5);
-      break;
+      return new MyTriangle(scene, values);
+
     case 'sphere':
       var values = [];
       getSpaceComponents(
           reader, sphere_comp, 'sphere: ' + ID, values, children);
       return new MySphere(scene, values[0], values[1], values[2]);
-      break;
+
     case 'cylinder':
       var values = [];
       getSpaceComponents(
           reader, cylinder_comp, 'cylinder: ' + ID, values, children);
       return new MyCylinder(
           scene, values[0], values[1], values[2], values[3], values[4]);
-      break;
+
     case 'torus':
       var values = [];
       getSpaceComponents(reader, torus_comp, 'torus: ' + ID, values, children);
       return new MyTorus(scene, values[0], values[1], values[2], values[3]);
-      break;
   }
 }
 

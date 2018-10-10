@@ -574,7 +574,6 @@
             </children>
         </component>
 
-
         <component id="chair_right_bar">
             <transformation>
                 <translate x="0.925" y="0.9" z="0"/>

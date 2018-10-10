@@ -52,6 +52,169 @@ function getRotationComponents(reader, phase, values, element) {
 }
 
 
+function parsePerspective(graph, reader, element) {
+  var perspectiveId = reader.getString(element, 'id');
+  if (perspectiveId == null) return 'no ID defined for perspective';
+
+  if (graph.views[perspectiveId] != null) {
+    return 'ID must be unique for each view (conflict: ID = ' + perspectiveId +
+        ')';
+  }
+
+  var near = reader.getFloat(element, 'near');
+
+  if (near == null || near < 0) {
+    this.onXMLMinorError(
+        'near not specified or invalid; assuming \'near = 0.1\'');
+    near = 5;
+  }
+
+
+  var far = reader.getFloat(element, 'far');
+
+  if (far == null || far < 0) {
+    this.onXMLMinorError(
+        'far not specified or invalid; assuming \'far = 500\'');
+    far = 500;
+  }
+
+  var angle = reader.getFloat(element, 'angle');
+
+  if (angle == null || angle < 0) {
+    this.onXMLMinorError(
+        'angle not specified or invalid; assuming \'angle = 0\'');
+    angle = 0;
+  }
+
+  grandChildren = element.children;
+
+  // specifications for the current perspective
+  nodeNames = [];
+  for (var j = 0; j < grandChildren.length; j++) {
+    nodeNames.push(grandChildren[j].nodeName);
+  }
+
+  var fromIndex = nodeNames.indexOf('from');
+  var toIndex = nodeNames.indexOf('to');
+
+  if (fromIndex == -1 || toIndex == -1)
+    return 'from or to values undefined for perspective with id' +
+        perspectiveId;
+
+  var from_values = [];
+  var to_values = [];
+
+  getSpaceComponents(
+      reader, xyz_comp, 'perspective', from_values, grandChildren[fromIndex]);
+  getSpaceComponents(
+      reader, xyz_comp, 'perspective', to_values, grandChildren[toIndex]);
+
+  if (graph.defaultPerspectiveId == null)
+    graph.defaultPerspectiveId = perspectiveId;
+
+  graph.views[perspectiveId] = [];
+  graph.views[perspectiveId]['type'] = 'perspective';
+  graph.views[perspectiveId]['near'] = near;
+  graph.views[perspectiveId]['far'] = far;
+  graph.views[perspectiveId]['angle'] = angle;
+  graph.views[perspectiveId]['from_values'] = from_values;
+  graph.views[perspectiveId]['to_values'] = to_values;
+}
+
+function parseOrtho(graph, reader, element) {
+  var orthoID = reader.getString(element, 'id');
+  if (orthoID == null) return 'no ID defined for view';
+
+  if (graph.views[orthoID] != null) {
+    return 'ID must be unique for each view (conflict: ID = ' + orthoID + ')';
+  }
+
+  var near = reader.getFloat(element, 'near');
+
+  if (near == null || near < 0) {
+    this.onXMLMinorError(
+        'near not specified or invalid; assuming \'near = 0.1\'');
+    near = 5;
+  }
+
+
+  var far = reader.getFloat(element, 'far');
+
+  if (far == null || far < 0) {
+    this.onXMLMinorError(
+        'far not specified or invalid; assuming \'far = 500\'');
+    far = 500;
+  }
+
+  var left = reader.getFloat(element, 'left');
+
+  if (left == null) {
+    this.onXMLMinorError(
+        'far not specified or invalid; assuming \'left = -5\'');
+    left = -5;
+  }
+
+  var right = reader.getFloat(element, 'right');
+
+  if (right == null) {
+    this.onXMLMinorError(
+        'far not specified or invalid; assuming \'right = -5\'');
+    right = -5;
+  }
+
+  var top = reader.getFloat(element, 'top');
+
+  if (top == null) {
+    this.onXMLMinorError('far not specified or invalid; assuming \'top = -5\'');
+    top = -5;
+  }
+
+  var bottom = reader.getFloat(element, 'bottom');
+
+  if (bottom == null) {
+    this.onXMLMinorError(
+        'far not specified or invalid; assuming \'bottom = -5\'');
+    bottom = -5;
+  }
+
+
+  grandChildren = element.children;
+
+  // specifications for the current perspective
+  nodeNames = [];
+  for (var j = 0; j < grandChildren.length; j++) {
+    nodeNames.push(grandChildren[j].nodeName);
+  }
+
+  var fromIndex = nodeNames.indexOf('from');
+  var toIndex = nodeNames.indexOf('to');
+
+  if (fromIndex == -1 || toIndex == -1)
+    return 'from or to values undefined for perspective with id' + orthoID;
+
+  var from_values = [];
+  var to_values = [];
+
+  getSpaceComponents(
+      reader, xyz_comp, 'orth', from_values, grandChildren[fromIndex]);
+  getSpaceComponents(
+      reader, xyz_comp, 'orth', to_values, grandChildren[toIndex]);
+
+  if (graph.defaultPerspectiveId == null) graph.defaultPerspectiveId = orthoID;
+
+  graph.views[orthoID] = [];
+  graph.views[orthoID]['type'] = 'ortho';
+  graph.views[orthoID]['near'] = near;
+  graph.views[orthoID]['far'] = far;
+  graph.views[orthoID]['left'] = left;
+  graph.views[orthoID]['right'] = right;
+  graph.views[orthoID]['top'] = top;
+  graph.views[orthoID]['bottom'] = bottom;
+  graph.views[orthoID]['position'] = from_values;
+  graph.views[orthoID]['target'] = to_values;
+}
+
+
 function parseTransformation(reader, element, curr_transformation, ID) {
   switch (element.nodeName) {
     case 'translate':
@@ -304,12 +467,11 @@ function dispatchComponent(
     case 'transformation':
       var transformations = component_spec.children;
       for (var i = 0; i < transformations.length; i++) {
-        if (transformations[i].nodeName == 'transformationref'){
+        if (transformations[i].nodeName == 'transformationref') {
           component.transformation.multiply(
               scene.transformations[reader.getString(transformations[i], 'id')]
                   .getMatrix());
-          }
-        else {
+        } else {
           parseTransformation(
               reader, transformations[i], component.transformation,
               componentId);

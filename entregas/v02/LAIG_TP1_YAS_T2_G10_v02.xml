@@ -1,20 +1,10 @@
 <yas>
     <scene root="living_room" axis_length="5"/>
-    <views default="far_view">
-        <perspective id="far_view" near="0.1" far="500" angle="0.4">
+    <views default="c1">
+        <perspective id="c1" near="0.1" far="500" angle="0.4">
             <from x="15" y="15" z="15"/>
             <to x="0" y="0" z="0"/>
         </perspective>
-
-        <perspective id="close_up" near="0.1" far="500" angle="0.4">
-            <from x="10" y="10" z="10"/>
-            <to x="0" y="0" z="0"/>
-        </perspective>
-
-        <ortho id="ortho_view" near="0.1" far="500" left="-5" right="5" top="5" bottom="-5">
-            <from x="10" y="10" z="10"/>
-            <to x="0" y="0" z="0"/>
-        </ortho>
     </views>
 
     <ambient>

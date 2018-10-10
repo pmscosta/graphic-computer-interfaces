@@ -46,6 +46,14 @@ class MyInterface extends CGFinterface {
                       .setValue(true);
     }
 
+
     group.close();
+  }
+
+  addCameraGroup() {
+    var keys = Object.keys(this.scene.cameras);
+
+    this.gui.add(this.scene, 'camera', keys)
+        .onChange((val) => {this.scene.updateCamera(val)});
   }
 }

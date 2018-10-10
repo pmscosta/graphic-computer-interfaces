@@ -57,6 +57,10 @@ class MySceneGraph {
      */
 
     this.reader.open('scenes/' + filename, this);
+
+    this.texturesPile = [];
+    this.materialsPile=[];
+
   }
 
 
@@ -493,7 +497,19 @@ class MySceneGraph {
 
     this.scene.multMatrix(component.transformation.getMatrix());
 
-    this.applyMaterial(component);
+
+    //Insert into pile
+    if(component.texture == 'inherit' && !this.texturesPile.empty)
+      this.texturesPile.push(this.texturesPile[this.texturesPile.length-1]);
+    else if(component.texture[0] != 'inherit')
+      this.texturesPile.push(component.texture[0]);
+
+    if(component.materials[0]=='inherit' && !this.materialsPile.empty)
+      this.materialsPile.push(this.materialsPile[this.materialsPile.length-1]);
+    else if(!this.materialsPile.empty)
+      this.materialsPile.push(component.materials[0]);
+
+
 
     for (var i = 0; i < component.componentChildren.length; i++) {
       this.iterateChildren(this.components[component.componentChildren[i]]);
@@ -501,15 +517,29 @@ class MySceneGraph {
 
     for (var i = 0; i < component.primitiveChildren.length; i++) {
       var prim_name = component.primitiveChildren[i];
+      this.applyAddOns(this.primitives[prim_name]);
       this.primitives[prim_name].display();
     }
+
+    //Remove from pile
+    if(this.texturesPile.length>0)
+      this.texturesPile.pop(component.texture);
+    
+    if(this.materialsPile.length>0)
+      this.materialsPile.pop(component.material);
 
     this.scene.popMatrix();
   }
 
-  applyMaterial(component) {
-    if (component.materials[0] != 'inherit') {
-      this.materials[component.materials[0]].apply();
+  applyAddOns(component) {
+    if (!this.materialsPile.empty) 
+      this.materials[this.materialsPile[this.materialsPile.length -1]].apply();
+      
+    
+    if(!this.texturesPile.empty){
+      this.textures[this.texturesPile[this.texturesPile.length-1]].apply();
+
     }
+      
   }
 }

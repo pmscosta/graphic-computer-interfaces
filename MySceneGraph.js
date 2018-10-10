@@ -182,31 +182,23 @@ class MySceneGraph {
     var backgroundIndex = nodeNames.indexOf('background');
 
     var ambientValues = [];
-    if (ambientIndex != -1) {
-      getRGBComponents(
-          this.reader, 'ambient', ambientValues, children[ambientIndex]);
-    } else {
-      console.warn(
-          'Warning:  ambient component not defined for ambient block, assuming 0');
-      ambientValues = [0, 0, 0, 0];
-    }
+    getValuesOrDefault(
+        this.reader, rgb_comp, 'ambient of ambient block', ambientValues,
+        children[ambientIndex], rgb_default);
+
 
     var backgroundValues = [];
-    if (backgroundIndex != -1) {
-      getRGBComponents(
-          this.reader, 'background', backgroundValues,
-          children[backgroundIndex]);
-    } else {
-      console.warn(
-          'Warning:  background component not defined for ambient block, assuming blue color');
-      backgroundValues = [0.53, 0.81, 0.92, 1];
-    }
+    getValuesOrDefault(
+        this.reader, rgb_comp, 'background of ambient block',
+        backgroundValues, children[backgroundIndex], [0.53, 0.81, 0.92, 1]);
 
     this.ambient = [];
     this.ambient['ambient'] = ambientValues;
     this.ambient['background'] = backgroundValues;
 
     this.log('parsed ambient');
+
+    console.log(this.ambient);
 
     return null;
   }
@@ -225,14 +217,8 @@ class MySceneGraph {
         continue;
       }
 
-      var textureId = this.reader.getString(children[i], 'id');
-      if (textureId == null) return 'no ID defined for texture';
-
-      if (this.textures[textureId] != null) {
-        console.warn(
-            'Warning: ID must be unique for each texture, conflict: ID =' +
-            textureId);
-      }
+      var textureId =
+          getID(this.reader, children[i], this.textures, ' texture ');
 
       this.textures[textureId] =
           createTexture(this.scene, children[i], this.reader, textureId);
@@ -258,21 +244,12 @@ class MySceneGraph {
         continue;
       }
 
-      var transformationID = this.reader.getString(children[i], 'id');
-      if (transformationID == null) return 'no ID defined for perspective';
-
-      if (this.transformations[transformationID] != null) {
-        console.warn(
-            'Warning: ID must be unique for each perspective, conflict: ID =' +
-            transformationID);
-      }
-
+      var transformationID = getID(
+          this.reader, children[i], this.transformations, ' transformation ');
 
       grandChildren = children[i].children;
 
-
       var curr_transformation = new Transformation(this.scene);
-
 
       for (var j = 0; j < grandChildren.length; j++) {
         parseTransformation(
@@ -338,13 +315,8 @@ class MySceneGraph {
       }
 
       // Get id of the current
-      var materialID = this.reader.getString(children[i], 'id');
-      if (materialID == null) return 'no ID defined for material';
-
-      if (this.materials[materialID] != null) {
-        return 'ID must be unique for each material (conflict: ID = ' +
-            materialID + ')';
-      }
+      var materialID =
+          getID(this.reader, children[i], this.materials, ' material ');
 
       this.materials[materialID] =
           createMaterial(this.scene, children[i], this.reader, materialID);
@@ -398,20 +370,14 @@ class MySceneGraph {
     var children = primitivesNode.children;
     this.primitives = [];
 
-
-
     for (var i = 0; i < children.length; i++) {
       if (children[i].nodeName != 'primitive') {
         this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
         continue;
       }
 
-      var primitiveId = this.reader.getString(children[i], 'id');
-      if (primitiveId == null) return 'No id defined for primitive';
-
-      if (this.primitives[primitiveId] != null)
-        return 'ID must be unique for each primitive (conflict: ID = ' +
-            primitiveId + ')';
+      var primitiveId =
+          getID(this.reader, children[i], this.primitives, ' primitive ');
 
       grandChildren = children[i].children;
       var curr_primitive = parsePrimitive(
@@ -420,9 +386,7 @@ class MySceneGraph {
       if (curr_primitive != null) this.primitives[primitiveId] = curr_primitive;
     }
 
-
     this.log('parsed primitives');
-    console.log(this.primitives);
 
     return null;
   }

@@ -31,7 +31,11 @@
     </lights>
 
     <textures>
-        <texture id="trunk" file="/scenes/images/trunk-image.jpg"/>                      
+        <texture id="trunk" file="/scenes/images/trunk-image.jpg"/>    
+        <texture id="vidral" file="/scenes/images/vidral.jpg"/>    
+        <texture id="leaves" file="/scenes/images/leaves.jpg"/>    
+        <texture id="rocks" file="/scenes/images/rocks.jpg"/>                      
+        <texture id="bank" file="/scenes/images/bank.jpg"/>    
     </textures>
 
     <materials>
@@ -149,7 +153,7 @@
                 <material id ="beige"/>
             </materials>
 
-            <texture id="trunk" length_s="1" length_t="1"/>
+            <texture id="leaves" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>

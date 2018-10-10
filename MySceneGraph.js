@@ -570,12 +570,12 @@ class MySceneGraph {
     //Insert into pile
     if(component.texture == 'inherit' && !this.texturesPile.empty)
       this.texturesPile.push(this.texturesPile[this.texturesPile.length-1]);
-    else if(component.texture[0] != 'inherit')
+    else if(component.texture != 'inherit')
       this.texturesPile.push(component.texture[0]);
 
     if(component.materials[0]=='inherit' && !this.materialsPile.empty)
       this.materialsPile.push(this.materialsPile[this.materialsPile.length-1]);
-    else if(!this.materialsPile.empty)
+    else if(component.materials[0] != 'inherit')
       this.materialsPile.push(component.materials[0]);
 
 
@@ -604,11 +604,7 @@ class MySceneGraph {
     if (!this.materialsPile.empty) 
       this.materials[this.materialsPile[this.materialsPile.length -1]].apply();
       
-    
-    if(!this.texturesPile.empty){
+    if(!this.texturesPile.empty)
       this.textures[this.texturesPile[this.texturesPile.length-1]].apply();
-
-    }
-      
   }
 }

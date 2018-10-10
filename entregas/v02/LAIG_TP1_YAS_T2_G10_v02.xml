@@ -1,20 +1,10 @@
 <yas>
     <scene root="living_room" axis_length="5"/>
-    <views default="far_view">
-        <perspective id="far_view" near="0.1" far="500" angle="0.4">
+    <views default="c1">
+        <perspective id="c1" near="0.1" far="500" angle="0.4">
             <from x="15" y="15" z="15"/>
             <to x="0" y="0" z="0"/>
         </perspective>
-
-        <perspective id="close_up" near="0.1" far="500" angle="0.4">
-            <from x="10" y="10" z="10"/>
-            <to x="0" y="0" z="0"/>
-        </perspective>
-
-        <ortho id="ortho_view" near="0.1" far="500" left="-5" right="5" top="5" bottom="-5">
-            <from x="10" y="10" z="10"/>
-            <to x="0" y="0" z="0"/>
-        </ortho>
     </views>
 
     <ambient>
@@ -41,11 +31,7 @@
     </lights>
 
     <textures>
-        <texture id="trunk" file="/scenes/images/trunk-image.jpg"/>    
-        <texture id="vidral" file="/scenes/images/vidral.jpg"/>    
-        <texture id="leaves" file="/scenes/images/leaves.jpg"/>    
-        <texture id="rocks" file="/scenes/images/rocks.jpg"/>                      
-        <texture id="bank" file="/scenes/images/bank.jpg"/>    
+        <texture id="trunk" file="/scenes/images/trunk-image.jpg"/>                      
     </textures>
 
     <materials>
@@ -163,7 +149,7 @@
                 <material id ="beige"/>
             </materials>
 
-            <texture id="leaves" length_s="1" length_t="1"/>
+            <texture id="none" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>

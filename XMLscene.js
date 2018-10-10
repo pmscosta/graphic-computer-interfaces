@@ -54,14 +54,29 @@ class XMLscene extends CGFscene {
    */
   getViews() {
     for (var key in this.graph.views) {
-      var new_camera = new CGFcamera(
-          this.graph.views[key].angle, this.graph.views[key].near,
-          this.graph.views[key].far, this.graph.views[key].from_values,
-          this.graph.views[key].to_values);
-      this.cameras[key] = new_camera;
+      if (this.graph.views[key].type == 'perspective') {
+        var new_camera = new CGFcamera(
+            this.graph.views[key].angle, this.graph.views[key].near,
+            this.graph.views[key].far, this.graph.views[key].from_values,
+            this.graph.views[key].to_values);
+        this.cameras[key] = new_camera;
+      } else {
+        var new_camera = new CGFcameraOrtho(
+            this.graph.views[key].left, this.graph.views[key].right,
+            this.graph.views[key].bottom, this.graph.views[key].top,
+            this.graph.views[key].near, this.graph.views[key].far,
+            this.graph.views[key].position, this.graph.views[key].target,
+            vec3.fromValues(0, 1, 0));
+        this.cameras[key] = new_camera;
+      }
     }
 
     this.camera = this.cameras[this.graph.defaultPerspectiveId];
+    this.interface.setActiveCamera(this.camera);
+  }
+
+  updateCamera(key) {
+    this.camera = this.cameras[key];
     this.interface.setActiveCamera(this.camera);
   }
 
@@ -70,9 +85,6 @@ class XMLscene extends CGFscene {
    * application has started the run loop
    */
   onGraphLoaded() {
-    this.camera.near = this.graph.near;
-    this.camera.far = this.graph.far;
-
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
     this.setGlobalAmbientLight(
@@ -83,9 +95,11 @@ class XMLscene extends CGFscene {
         this.graph.ambient.background[0], this.graph.ambient.background[1],
         this.graph.ambient.background[2], this.graph.ambient.background[3]);
 
-    this.initLights();
-
     this.getViews();
+
+    this.interface.addCameraGroup();
+
+    this.initLights();
 
     // Adds lights group.
     this.interface.addLightsGroup();

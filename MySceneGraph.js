@@ -275,7 +275,7 @@ class MySceneGraph {
       this.transformations[transformationID] = curr_transformation;
     }
 
-    this.log("parsed transformations");
+    this.log('parsed transformations');
 
     return null;
   }
@@ -290,83 +290,17 @@ class MySceneGraph {
 
     this.views = [];
     var children = viewsNode.children;
-    var nodeNames = [];
-    var grandChildren = [];
     var counter = 0;
 
     for (var i = 0; i < children.length; i++) {
-      if (children[i].nodeName != 'perspective') {
+      if (children[i].nodeName != 'perspective' && children[i].nodeName != 'ortho' ) {
         this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
         continue;
       }
 
-      var perspectiveId = this.reader.getString(children[i], 'id');
-      if (perspectiveId == null) return 'no ID defined for perspective';
-
-      if (this.views[perspectiveId] != null) {
-        return 'ID must be unique for each perspective (conflict: ID = ' +
-            perspectiveId + ')';
-      }
-
-      var near = this.reader.getFloat(children[i], 'near');
-
-      if (near == null || near < 0) {
-        this.onXMLMinorError(
-            'near not specified or invalid; assuming \'near = 0.1\'');
-        near = 5;
-      }
-
-
-      var far = this.reader.getFloat(children[i], 'far');
-
-      if (far == null || far < 0) {
-        this.onXMLMinorError(
-            'far not specified or invalid; assuming \'far = 500\'');
-        far = 500;
-      }
-
-      var angle = this.reader.getFloat(children[i], 'angle');
-
-      if (angle == null || angle < 0) {
-        this.onXMLMinorError(
-            'angle not specified or invalid; assuming \'angle = 0\'');
-        angle = 0;
-      }
-
-      grandChildren = children[i].children;
-
-      // specifications for the current perspective
-      nodeNames = [];
-      for (var j = 0; j < grandChildren.length; j++) {
-        nodeNames.push(grandChildren[j].nodeName);
-      }
-
-      var fromIndex = nodeNames.indexOf('from');
-      var toIndex = nodeNames.indexOf('to');
-
-      if (fromIndex == -1 || toIndex == -1)
-        return 'from or to values undefined for perspective with id' +
-            perspectiveId;
-
-      var from_values = [];
-      var to_values = [];
-
-      getSpaceComponents(
-          this.reader, xyz_comp, 'perspective', from_values,
-          grandChildren[fromIndex]);
-      getSpaceComponents(
-          this.reader, xyz_comp, 'perspective', to_values,
-          grandChildren[toIndex]);
-
-      if (this.defaultPerspectiveId == null)
-        this.defaultPerspectiveId = perspectiveId;
-
-      this.views[perspectiveId] = [];
-      this.views[perspectiveId]['near'] = near;
-      this.views[perspectiveId]['far'] = far;
-      this.views[perspectiveId]['angle'] = angle;
-      this.views[perspectiveId]['from_values'] = from_values;
-      this.views[perspectiveId]['to_values'] = to_values;
+      if (children[i].nodeName == 'perspective')
+        parsePerspective(this, this.reader, children[i])
+        else parseOrtho(this, this.reader, children[i]);
 
       counter++;
     }
@@ -374,9 +308,6 @@ class MySceneGraph {
     if (counter == 0) {
       return 'at least one perspective must be defined';
     }
-
-    this.near = this.views[this.defaultPerspectiveId].near;
-    this.far = this.views[this.defaultPerspectiveId].far;
 
     this.log('parsed perspectives');
 

@@ -63,6 +63,17 @@ class MyTriangle extends CGFobject {
 	var P2 = [c, 1];
 
 	this.texCoords.push(P0[0], P0[1], P1[0], P1[1], P2[0], P2[1]);
+
+	this.originalTex = this.texCoords.slice();
 	
+  };
+
+  updateTexCoords(length_s, lenght_t) {
+	for (let i = 0; i < this.originalTex.length; i += 2) {
+	  this.texCoords[i] = this.originalTex[i] / length_s;
+	  this.texCoords[i + 1] = this.originalTex[i + 1] / lenght_t;
+	}
+
+	this.updateTexCoordsGLBuffers();
   };
 };

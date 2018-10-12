@@ -53,7 +53,12 @@ class MyInterface extends CGFinterface {
   addCameraGroup() {
     var keys = Object.keys(this.scene.cameras);
 
-    this.gui.add(this.scene, 'camera', keys)
+    this.Camera = [];
+
+    this.Camera = this.scene.graph.defaultPerspectiveId;
+
+
+    this.gui.add(this, 'Camera', keys)
         .onChange((val) => {this.scene.updateCamera(val)});
   }
 }

@@ -44,6 +44,7 @@
         <texture id="trunk" file="/scenes/images/trunk-image.jpg"/>    
         <texture id="vidral" file="/scenes/images/vidral.jpg"/>    
         <texture id="big_lamp" file="/scenes/images/lamp.jpeg"/>
+        <texture id="small_lamp" file="/scenes/images/small_lamp.jpg"/>
         <texture id="white_wall" file="/scenes/images/white_wall.jpg"/>
         <texture id="floor" file="/scenes/images/floor.jpg"/>
         <texture id="brick_wall" file="/scenes/images/brick_wall.jpg"/>
@@ -51,7 +52,9 @@
         <texture id="rocks" file="/scenes/images/rocks.jpg"/>                      
         <texture id="bank" file="/scenes/images/bank.jpg"/>
         <texture id="desk" file="/scenes/images/desk.jpg"/>
-        <texture id="metal" file="/scenes/images/metal.jpeg"/>    
+        <texture id="metal" file="/scenes/images/metal.jpeg"/>
+        <texture id="leather" file="/scenes/images/leather.jpeg"/>    
+        <texture id="def_text" file="/scenes/images/default-texture.png"/>
     </textures>
 
     <materials>
@@ -453,7 +456,7 @@
                 <material id ="table_wood"/>
             </materials>
 
-            <texture id="desk" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="legs"/>
@@ -461,6 +464,23 @@
                 
             </children>
         </component>
+
+        <component id="desk">
+            <transformation>
+            </transformation>
+
+            <materials>
+                <material id ="table_wood"/>
+            </materials>
+
+            <texture id="desk" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="table"/>
+            </children>
+        </component>
+
+
 
         <component id="lamp_top">
             <transformation>
@@ -490,7 +510,7 @@
                 <material id ="silver"/>
             </materials>
 
-            <texture id="desk" length_s="1" length_t="1"/>
+            <texture id="def_text" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="cylinder"/>
@@ -543,7 +563,7 @@
                 <material id ="lamp"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="small_lamp" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="cut_cone"/>
@@ -579,7 +599,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="leather" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -649,7 +669,7 @@
                 <material id ="table_wood"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="def_text" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="chair_right_bar"/>
@@ -678,7 +698,7 @@
         <component id="ball">
             <transformation>
                 
-                <translate x="2" y="2.2" z="3.4"/>
+                <translate x="2" y="2.3" z="3.4"/>
                 <scale x="0.4" y="0.4" z="0.4"/>
             </transformation>
 
@@ -705,7 +725,7 @@
             <texture id="none" length_s="1" length_t="1"/>
 
             <children>
-                <componentref id="table"/>
+                <componentref id="desk"/>
                 <componentref id="big_lamp"/>
                 <componentref id="small_lamp"/>
                 <componentref id="left_wall"/>

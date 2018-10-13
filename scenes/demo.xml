@@ -11,9 +11,9 @@
             <to x="0" y="0" z="0"/>
         </perspective>
 
-        <ortho id="ortho_view" near="0.1" far="500" left="-5" right="5" top="5" bottom="-5">
-            <from x="10" y="10" z="10"/>
-            <to x="0" y="0" z="0"/>
+        <ortho id="ortho_view" near="0.1" far="500" left="-2" right="2" top="2" bottom="-2">
+            <from x="2.9" y="3" z="0.8"/>
+            <to x="2.5" y="2" z="50"/>
         </ortho>
     </views>
 
@@ -25,7 +25,7 @@
     <lights>
         <omni id="g_light" enabled="1">
             <location x="3.5" y="15" z="3.5" w="0" />
-            <ambient r="0.1" g="0.1" b="0.1" a="1"/>
+            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
             <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
             <specular r="0.7" g="0.7" b="0.7" a="1"/>
         </omni>
@@ -43,11 +43,15 @@
     <textures>
         <texture id="trunk" file="/scenes/images/trunk-image.jpg"/>    
         <texture id="vidral" file="/scenes/images/vidral.jpg"/>    
+        <texture id="big_lamp" file="/scenes/images/lamp.jpeg"/>
+        <texture id="white_wall" file="/scenes/images/white_wall.jpg"/>
+        <texture id="floor" file="/scenes/images/floor.jpg"/>
+        <texture id="brick_wall" file="/scenes/images/brick_wall.jpg"/>
         <texture id="leaves" file="/scenes/images/leaves.jpg"/>    
         <texture id="rocks" file="/scenes/images/rocks.jpg"/>                      
         <texture id="bank" file="/scenes/images/bank.jpg"/>
         <texture id="desk" file="/scenes/images/desk.jpg"/>
-        <texture id="metal" file="/scenes/images/metal.jpg"/>    
+        <texture id="metal" file="/scenes/images/metal.jpeg"/>    
     </textures>
 
     <materials>
@@ -65,6 +69,12 @@
             <specular r="0.1" g="0.1" b="0.1" a="1"/>
         </material>
 
+        <material id="full_white" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
+        </material>
         <material id="light_orange" shininess="10">
             <emission r="0" g="0" b="0" a="0"/>
             <ambient r="1" g="0.65" b="0.29" a="1"/>
@@ -162,10 +172,10 @@
             </transformation>
 
             <materials>
-                <material id ="beige"/>
+                <material id ="full_white"/>
             </materials>
 
-            <texture id="metal" length_s="1" length_t="1"/>
+            <texture id="white_wall" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -181,7 +191,7 @@
                 <material id ="beige"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="brick_wall" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -197,7 +207,7 @@
                 <material id ="floor"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="floor" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -480,7 +490,7 @@
                 <material id ="silver"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="desk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="cylinder"/>
@@ -497,7 +507,7 @@
                 <material id ="silver"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="metal" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="cylinder"/>
@@ -513,7 +523,7 @@
                 <material id ="m1"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="big_lamp" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="lamp_top"/>
@@ -676,7 +686,7 @@
                 <material id ="fuschia"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="vidral" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="sphere"/>

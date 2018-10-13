@@ -189,8 +189,8 @@ class MySceneGraph {
 
     var backgroundValues = [];
     getValuesOrDefault(
-        this.reader, rgb_comp, 'background of ambient block',
-        backgroundValues, children[backgroundIndex], [0.53, 0.81, 0.92, 1]);
+        this.reader, rgb_comp, 'background of ambient block', backgroundValues,
+        children[backgroundIndex], [0.53, 0.81, 0.92, 1]);
 
     this.ambient = [];
     this.ambient['ambient'] = ambientValues;
@@ -224,7 +224,11 @@ class MySceneGraph {
           createTexture(this.scene, children[i], this.reader, textureId);
     }
 
+    console.log(this.textures);
+
     this.log('parsed textures');
+
+   
 
     return null;
   }
@@ -472,19 +476,22 @@ class MySceneGraph {
     this.scene.multMatrix(component.transformation.getMatrix());
 
 
-    //Insert into pile
-    console.log("Drawing " + component.id);
-    console.log("Texture: " + component.texture[0]+ "\n\n\n");
-    if(component.texture == "inherit" && this.texturesPile.length>0)
-      this.texturesPile.push(this.texturesPile[this.texturesPile.length-1]);
-    else if(component.texture[0]!= "inherit")
+    // Insert into pile
+/*     console.log('Drawing ' + component.id);
+    console.log('Texture: ' + component.texture[0] + '\n\n\n'); */
+    if (component.texture == 'inherit' && this.texturesPile.length > 0)
+      this.texturesPile.push(this.texturesPile[this.texturesPile.length - 1]);
+    else if (component.texture[0] != 'inherit')
       this.texturesPile.push(component.texture[0]);
 
-    if(component.materials[0]=='inherit' && this.materialsPile.length>0)
-      this.materialsPile.push(this.materialsPile[this.materialsPile.length-1]);
-    else if(component.materials[0] != 'inherit')
+    if (component.materials[0] == 'inherit' && this.materialsPile.length > 0)
+      this.materialsPile.push(
+          this.materialsPile[this.materialsPile.length - 1]);
+    else if (component.materials[0] != 'inherit')
       this.materialsPile.push(component.materials[0]);
 
+
+    this.applyAddOns();
 
 
     for (var i = 0; i < component.componentChildren.length; i++) {
@@ -493,25 +500,24 @@ class MySceneGraph {
 
     for (var i = 0; i < component.primitiveChildren.length; i++) {
       var prim_name = component.primitiveChildren[i];
-      this.applyAddOns(this.primitives[prim_name]);
+      // this.applyAddOns(this.primitives[prim_name]);
       this.primitives[prim_name].display();
     }
 
-    //Remove from pile
-    if(this.texturesPile.length>0)
-      this.texturesPile.pop();
-    
-    if(this.materialsPile.length>0)
-      this.materialsPile.pop();
+    // Remove from pile
+    this.texturesPile.pop();
+
+    this.materialsPile.pop();
 
     this.scene.popMatrix();
   }
 
-  applyAddOns(component) {
-    console.log(this.texturesPile.empty);
-    if(this.texturesPile.length>0 && this.texturesPile[this.texturesPile.length-1]!='none')
-      this.textures[this.texturesPile[this.texturesPile.length-1]].apply();
-    else if (this.materialsPile >0) 
-      this.materials[this.materialsPile[this.materialsPile.length -1]].apply();
+  applyAddOns() {
+    let last = this.texturesPile.length - 1;
+
+    if (this.texturesPile.length > 0 && this.texturesPile[last] != 'none')
+      this.textures[this.texturesPile[last]].apply();
+    else if (this.materialsPile > 0)
+      this.materials[this.materialsPile[this.materialsPile.length - 1]].apply();
   }
 }

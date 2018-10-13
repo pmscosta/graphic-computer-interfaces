@@ -32,6 +32,7 @@ class MyCylinder extends CGFobject
 		this.topCover = new MyCircle(this.scene, this.top, this.slices);
 
 		this.spacer = 1.0 / slices;
+		this.spacer_y = 1.0 / this.stacks;
 
 		this.initBuffers();
 	};
@@ -50,6 +51,10 @@ class MyCylinder extends CGFobject
 
 		this.texCoords = [];
 
+		let u_coord = 0;
+		
+		let v_coord = 0; 
+
 		for(let j = 0; j <= this.stacks; j++){
 
 			var z_distance = j * this.stack_divider;
@@ -61,10 +66,15 @@ class MyCylinder extends CGFobject
 				var y1 = this.getRadius(z_distance) *  Math.sin(angle1); 
 
 				this.vertices.push(x1, y1, z_distance);
-				this.texCoords.push(i * this.spacer, z_distance);
+				//this.texCoords.push(i * this.spacer, z_distance);
+				this.texCoords.push(u_coord, v_coord);
 				this.normals.push(x1, y1, 0);
 
+				u_coord += this.spacer;
 			}
+
+			u_coord = 0; 
+			v_coord += this.spacer_y;
 
 		}
 		

@@ -44,10 +44,10 @@ class MyRectangle extends CGFobject
 		];
 
 		this.texCoords = [
-				this.minS, this.maxT,
-				this.maxS, this.maxT,
-				this.minS, this.minT, 
-				this.maxS, this.minT
+				0, 0,
+				1, 0,
+				1, 1,
+				0, 1
 		];
 
 		this.originalTex = this.texCoords.slice();

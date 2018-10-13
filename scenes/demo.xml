@@ -55,6 +55,7 @@
         <texture id="metal" file="/scenes/images/metal.jpeg"/>
         <texture id="leather" file="/scenes/images/leather.jpeg"/>    
         <texture id="def_text" file="/scenes/images/default-texture.png"/>
+        <texture id="test_coords" file="/scenes/images/test_coords.jpeg"/>
     </textures>
 
     <materials>

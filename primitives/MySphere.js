@@ -47,7 +47,7 @@ class MySphere extends CGFobject
                 
 				this.vertices.push(x1, y1, z1);
 				this.normals.push(x1, y1, z1);
-				var u = 0.5 + (Math.atan2(z1, x1) / 2 * Math.PI);
+				var u = 0.5 + (Math.atan2(z1, x1) /  (2 * Math.PI));
 				var v = 0.5 - (Math.asin(y1) / Math.PI);
 				this.texCoords.push(u, v);
 

@@ -38,7 +38,7 @@ function getID(reader, element, storage, description) {
     console.warn(
         'ID must be unique for each ' + description + ' (conflict: ID = ' + ID +
         '). Generating a new one');
-    ID = makeId();
+    ID = makeid();
   }
 
   return ID;

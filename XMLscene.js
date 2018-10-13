@@ -149,7 +149,7 @@ class XMLscene extends CGFscene {
 
       this.lights[i].setVisible(true);
 
-      if (this.graph.lights[key].enable)
+      if (this.graph.lights[key].enabled)
         this.lights[i].enable();
       else
         this.lights[i].disable();
@@ -159,6 +159,13 @@ class XMLscene extends CGFscene {
 
       i++;
     }
+  }
+
+
+  isLightEnable(key) {
+
+    return this.graph.lights[key].enabled;
+
   }
 
   updateLights() {

@@ -198,8 +198,6 @@ class MySceneGraph {
 
     this.log('parsed ambient');
 
-    console.log(this.ambient);
-
     return null;
   }
 
@@ -224,11 +222,7 @@ class MySceneGraph {
           createTexture(this.scene, children[i], this.reader, textureId);
     }
 
-    console.log(this.textures);
-
     this.log('parsed textures');
-
-   
 
     return null;
   }
@@ -326,7 +320,7 @@ class MySceneGraph {
           createMaterial(this.scene, children[i], this.reader, materialID);
     }
 
-    this.log('Parsed materials');
+    this.log('parsed materials');
 
     return null;
   }
@@ -361,7 +355,7 @@ class MySceneGraph {
 
     if (numLights == 0) return 'at least one light must be defined';
 
-    this.log('Parsed lights');
+    this.log('parsed lights');
 
     return null;
   }
@@ -410,13 +404,7 @@ class MySceneGraph {
         continue;
       }
 
-      var componentId = this.reader.getString(children[i], 'id');
-      if (componentId == null) {
-        return 'ID must be unique for each component (conflict: ID = ' +
-            componentId + ')';
-      } else {
-        component.id = componentId;
-      }
+      var componentId = getID(this.reader, children[i], this.components, ' component ');
 
       for (var j = 0; j < children[i].children.length; j++) {
         dispatchComponent(

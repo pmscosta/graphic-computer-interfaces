@@ -11,9 +11,9 @@
             <to x="0" y="0" z="0"/>
         </perspective>
 
-        <ortho id="ortho_view" near="0.1" far="500" left="-2" right="2" top="2" bottom="-2">
-            <from x="2.9" y="3" z="0.8"/>
-            <to x="2.5" y="2" z="50"/>
+        <ortho id="ortho_view" near="0.1" far="5" left="-2" right="2" top="2" bottom="-2">
+            <from x="4.1" y="3" z="1.8"/>
+            <to x="4.1" y="4" z="50"/>
         </ortho>
     </views>
 
@@ -23,14 +23,35 @@
     </ambient>
 
     <lights>
-        <omni id="g_light" enabled="1">
-            <location x="3.5" y="15" z="3.5" w="0" />
+        <omni id="back_1" enabled="1">
+            <location x="1" y="6" z="1" w="0" />
             <ambient r="0.7" g="0.7" b="0.7" a="1"/>
             <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
             <specular r="0.7" g="0.7" b="0.7" a="1"/>
         </omni>
 
-        <spot id="s_light" enabled="0" angle="14" exponent="20">
+        <omni id="back_2" enabled="1">
+            <location x="7" y="6" z="1" w="0" />
+            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
+            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
+            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+        </omni>
+
+        <omni id="front_1" enabled="1">
+            <location x="1" y="6" z="7" w="0" />
+            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
+            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
+            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+        </omni>
+
+        <omni id="front_2" enabled="1">
+            <location x="7" y="6" z="7" w="0" />
+            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
+            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
+            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+        </omni>
+
+        <spot id="spot_light" enabled="0" angle="14" exponent="1">
             <location x="15" y="5" z="15" w="0" />
             <target x="0" y="0" z="0" />
             <ambient r="0" g="0" b="0" a="0"/>
@@ -448,8 +469,7 @@
 
         <component id="table">
             <transformation>
-                <translate x="3" y="0" z="3"/>
-                <scale x="0.7" y="0.5" z="0.7"/>
+                
                 
             </transformation>
 
@@ -468,6 +488,8 @@
 
         <component id="desk">
             <transformation>
+                <translate x="4.2" y="0" z="4"/>
+                <scale x="0.7" y="0.5" z="0.7"/>
             </transformation>
 
             <materials>
@@ -573,7 +595,7 @@
 
          <component id="small_lamp">
             <transformation>
-                <translate x="4" y="1.9" z="3.4"/>
+                <translate x="5.2" y="1.9" z="4.4"/>
             </transformation>
 
             <materials>
@@ -647,6 +669,8 @@
             <transformation>
                 <translate x="-0.4" y="0" z="-0.8"/>
                 <scale x="0.3" y="0.5" z="0.4"/>
+                <translate x="3" y="0" z="3"/>
+                <scale x="0.7" y="0.5" z="0.7"/>
             </transformation>
 
             <materials>
@@ -663,7 +687,7 @@
         <component id="chair">
             <transformation>
                 <scale x="1.1" y="1.2" z="1.1"/>
-                <translate x="2.2" y="0" z="1"/>
+                <translate x="3.4" y="0" z="2"/>
             </transformation>
 
             <materials>
@@ -682,7 +706,7 @@
         
         <component id="flowers">
             <transformation>
-                <translate x="3" y="4" z="0"/>
+                <translate x="4" y="4" z="0.1"/>
             </transformation>
 
             <materials>
@@ -699,7 +723,7 @@
         <component id="ball">
             <transformation>
                 
-                <translate x="2" y="2.3" z="3.4"/>
+                <translate x="3.2" y="2.3" z="4.4"/>
                 <scale x="0.4" y="0.4" z="0.4"/>
             </transformation>
 

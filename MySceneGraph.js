@@ -404,7 +404,8 @@ class MySceneGraph {
         continue;
       }
 
-      var componentId = getID(this.reader, children[i], this.components, ' component ');
+      var componentId =
+          getID(this.reader, children[i], this.components, ' component ');
 
       for (var j = 0; j < children[i].children.length; j++) {
         dispatchComponent(
@@ -459,22 +460,24 @@ class MySceneGraph {
   }
 
   iterateChildren(component) {
+
+
     this.scene.pushMatrix();
 
     this.scene.multMatrix(component.transformation.getMatrix());
 
+    let last_tex = this.texturesPile.length - 1;
+    let last_mat = this.materialsPile.length - 1;
+
 
     // Insert into pile
-/*     console.log('Drawing ' + component.id);
-    console.log('Texture: ' + component.texture[0] + '\n\n\n'); */
-    if (component.texture == 'inherit' && this.texturesPile.length > 0)
-      this.texturesPile.push(this.texturesPile[this.texturesPile.length - 1]);
+    if (component.texture[0] == 'inherit' && this.texturesPile.length > 0)
+      this.texturesPile.push(this.texturesPile[last_tex]);
     else if (component.texture[0] != 'inherit')
       this.texturesPile.push(component.texture[0]);
 
     if (component.materials[0] == 'inherit' && this.materialsPile.length > 0)
-      this.materialsPile.push(
-          this.materialsPile[this.materialsPile.length - 1]);
+      this.materialsPile.push(this.materialsPile[last_mat]);
     else if (component.materials[0] != 'inherit')
       this.materialsPile.push(component.materials[0]);
 
@@ -488,7 +491,6 @@ class MySceneGraph {
 
     for (var i = 0; i < component.primitiveChildren.length; i++) {
       var prim_name = component.primitiveChildren[i];
-      // this.applyAddOns(this.primitives[prim_name]);
       this.primitives[prim_name].display();
     }
 
@@ -501,11 +503,17 @@ class MySceneGraph {
   }
 
   applyAddOns() {
-    let last = this.texturesPile.length - 1;
+    let last_tex = this.texturesPile.length - 1;
+    let last_mat = this.materialsPile.length - 1;
 
-    if (this.texturesPile.length > 0 && this.texturesPile[last] != 'none')
-      this.textures[this.texturesPile[last]].apply();
-    else if (this.materialsPile > 0)
-      this.materials[this.materialsPile[this.materialsPile.length - 1]].apply();
+
+    if (this.texturesPile.length > 0 && this.texturesPile[last_tex] != 'none') {
+      this.materials[this.materialsPile[last_mat]].setTexture(
+          this.textures[this.texturesPile[last_tex]]);
+          this.materials[this.materialsPile[last_mat]].apply();
+    } else {
+      this.materials[this.materialsPile[last_mat]].setTexture(null);
+      this.materials[this.materialsPile[last_mat]].apply();
+    }
   }
 }

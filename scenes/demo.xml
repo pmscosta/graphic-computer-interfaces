@@ -1,19 +1,24 @@
 <yas>
     <scene root="living_room" axis_length="5"/>
     <views default="far_view">
-        <perspective id="far_view" near="0.1" far="500" angle="0.4">
-            <from x="20" y="15" z="20"/>
+        <perspective id="far_view" near="0.1" far="40" angle="45">
+            <from x="15" y="10" z="15"/>
             <to x="0" y="0" z="0"/>
         </perspective>
 
-        <perspective id="close_up" near="0.1" far="500" angle="0.4">
-            <from x="10" y="10" z="10"/>
+        <perspective id="close_up" near="0.1" far="50" angle="30">
+            <from x="7" y="3.5" z="7"/>
             <to x="0" y="0" z="0"/>
         </perspective>
 
         <ortho id="ortho_view" near="0.1" far="5" left="-2" right="2" top="2" bottom="-2">
             <from x="4.1" y="3" z="1.8"/>
             <to x="4.1" y="4" z="50"/>
+        </ortho>
+
+        <ortho id="painting_view" near="0.1" far="5" left="-3" right="3" top="2" bottom="-2">
+            <from x="2" y="3" z="4"/>
+            <to x="0" y="3" z="4"/>
         </ortho>
     </views>
 
@@ -23,33 +28,41 @@
     </ambient>
 
     <lights>
-        <omni id="back_1" enabled="1">
-            <location x="1" y="6" z="1" w="0" />
-            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
-            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
-            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+        <omni id="back_1" enabled="0">
+            <location x="1" y="12" z="1" w="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
         </omni>
 
-        <omni id="back_2" enabled="1">
-            <location x="7" y="6" z="1" w="0" />
-            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
-            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
-            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+        <omni id="back_2" enabled="0">
+            <location x="7" y="12" z="1" w="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
         </omni>
 
-        <omni id="front_1" enabled="1">
-            <location x="1" y="6" z="7" w="0" />
-            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
-            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
-            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+        <omni id="front_1" enabled="0">
+            <location x="1" y="12" z="7" w="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
         </omni>
 
-        <omni id="front_2" enabled="1">
-            <location x="7" y="6" z="7" w="0" />
-            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
-            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
-            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+        <omni id="front_2" enabled="0">
+            <location x="7" y="12" z="7" w="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
         </omni>
+
+        <spot id="center" enabled="1" angle="0" exponent="10">
+            <location x="4" y="10" z="4" w="0" />
+            <target x="4" y="0" z="4" />
+            <ambient r="0.3" g="0.3" b="0.3" a="0.3"/>
+            <diffuse r="0.5" g="0.5" b="0.5" a="0"/>
+            <specular r="0.5" g="0.5" b="0.5" a="0"/>
+        </spot>
 
         <spot id="spot_light" enabled="0" angle="14" exponent="1">
             <location x="15" y="5" z="15" w="0" />
@@ -62,21 +75,23 @@
     </lights>
 
     <textures>
-        <texture id="trunk" file="/scenes/images/trunk-image.jpg"/>    
-        <texture id="vidral" file="/scenes/images/vidral.jpg"/>    
-        <texture id="big_lamp" file="/scenes/images/lamp.jpeg"/>
-        <texture id="small_lamp" file="/scenes/images/small_lamp.jpg"/>
-        <texture id="white_wall" file="/scenes/images/white_wall.jpg"/>
-        <texture id="floor" file="/scenes/images/floor.jpg"/>
-        <texture id="brick_wall" file="/scenes/images/brick_wall.jpg"/>
-        <texture id="leaves" file="/scenes/images/leaves.jpg"/>    
-        <texture id="rocks" file="/scenes/images/rocks.jpg"/>                      
-        <texture id="bank" file="/scenes/images/bank.jpg"/>
-        <texture id="desk" file="/scenes/images/desk.jpg"/>
-        <texture id="metal" file="/scenes/images/metal.jpeg"/>
-        <texture id="leather" file="/scenes/images/leather.jpeg"/>    
-        <texture id="def_text" file="/scenes/images/default-texture.png"/>
-        <texture id="test_coords" file="/scenes/images/test_coords.jpeg"/>
+        <texture id="trunk" file="scenes/images/trunk-image.jpg"/>    
+        <texture id="vidral" file="scenes/images/vidral.jpg"/>    
+        <texture id="big_lamp" file="scenes/images/lamp.jpeg"/>
+        <texture id="small_lamp" file="scenes/images/small_lamp.jpg"/>
+        <texture id="white_wall" file="scenes/images/white_wall.jpg"/>
+        <texture id="floor" file="scenes/images/floor.jpg"/>
+        <texture id="brick_wall" file="scenes/images/brick_wall.jpg"/>
+        <texture id="leaves" file="scenes/images/leaves.jpg"/>    
+        <texture id="rocks" file="scenes/images/rocks.jpg"/>                      
+        <texture id="bank" file="scenes/images/bank.jpg"/>
+        <texture id="desk" file="scenes/images/desk.jpg"/>
+        <texture id="metal" file="scenes/images/metal.jpeg"/>
+        <texture id="leather" file="scenes/images/leather.jpeg"/>    
+        <texture id="def_text" file="scenes/images/default-texture.png"/>
+        <texture id="test_coords" file="scenes/images/test_coords.jpeg"/>
+        <texture id="starry_night" file="scenes/images/starry_night.jpg"/>
+        <texture id="wood_grain" file="scenes/images/wood_grain.png"/>
     </textures>
 
     <materials>
@@ -121,18 +136,18 @@
             <specular r="0" g="0" b="0" a="1"/>
         </material>   
 
-        <material id="table_wood" shininess="0.001">
+        <material id="table_wood" shininess="1">
             <emission r="0" g="0" b="0" a="0"/>
-            <ambient r="0.28" g="0.19" b="0.09" a="1"/>
-            <diffuse r="0.28" g="0.19" b="0.09" a="1"/>
-            <specular r="0" g="0" b="0." a="1"/>
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
         </material>
 
-        <material id="lamp" shininess="10">
+        <material id="lamp" shininess="1">
             <emission r="0" g="0" b="0" a="0"/>
-            <ambient r="0.67" g="0.84" b="0.89" a="1"/>
-            <diffuse r="0.67" g="0.84" b="0.89" a="1"/>
-            <specular r="0.67" g="0.84" b="0.89" a="1"/>
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
         </material>
 
         <material id="silver" shininess="1000">
@@ -713,7 +728,7 @@
                 <material id ="lamp"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="leather" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="torus"/>
@@ -737,6 +752,136 @@
                 <primitiveref id="sphere"/>
             </children>
         </component>
+
+        <component id="canvas">
+            <transformation>
+                <scale x="3" y="2" z="0.15"/>
+
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="cube"/>
+            </children>
+
+        </component>
+
+        <component id="left_frame">
+            <transformation>
+                <translate x="-1.5" y="0" z="0"/>
+                <scale x="0.2" y="2.4" z="0.3"/>
+                
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="cube"/>
+            </children>
+
+        </component>
+
+        <component id="right_frame">
+            <transformation>
+                <translate x="1.5" y="0" z="0"/>
+                <scale x="0.2" y="2.4" z="0.3"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="cube"/>
+            </children>
+
+        </component>
+
+        <component id="top_frame">
+            <transformation>
+                <translate x="0" y="1.1" z="0"/>
+                <scale x="2.8" y="0.2" z="0.3"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="cube"/>
+            </children>
+
+        </component>
+
+        <component id="bot_frame">
+            <transformation>
+                <translate x="0" y="-1.1" z="0"/>
+                <scale x="2.8" y="0.2" z="0.3"/>
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="cube"/>
+            </children>
+
+        </component>
+
+        <component id="frame">
+            <transformation>
+
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="leather" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="left_frame"/>
+                <componentref id="right_frame"/>
+                <componentref id="top_frame"/>
+                <componentref id="bot_frame"/>
+            </children>
+
+        </component>
+
+        <component id="starry_night">
+            <transformation>
+                <translate x="0.2" y="2.8" z="4"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+
+            <materials>
+                <material id="table_wood"/>
+            </materials>
+
+            <texture id="starry_night" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="canvas"/>
+                <componentref id="frame"/>
+            </children>
+
+        </component>
         
 
         <component id="living_room">
@@ -751,6 +896,7 @@
 
             <children>
                 <componentref id="desk"/>
+                <componentref id="ball"/>
                 <componentref id="big_lamp"/>
                 <componentref id="small_lamp"/>
                 <componentref id="left_wall"/>
@@ -758,7 +904,7 @@
                 <componentref id="floor"/>
                 <componentref id="chair"/>
                 <componentref id="flowers"/>
-                <componentref id="ball"/>
+                <componentref id="starry_night"/>
             </children>
         </component>
 

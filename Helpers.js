@@ -394,9 +394,8 @@ function createTexture(scene, texture_element, reader, textureID) {
     texturePath = '/scenes/images/default-texture.png';
   }
 
-  var new_texture = new CGFappearance(scene);
-  new_texture.loadTexture(texturePath);
-
+  var new_texture = new CGFtexture(scene, texturePath);
+  
   return new_texture;
 }
 

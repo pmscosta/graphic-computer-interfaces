@@ -34,7 +34,7 @@ class MySphere extends CGFobject
 			for(let j = 0; j <= this.stacks; j++){
 
 			var ang_theta = j * this.theta;
-			var z1 = Math.sin(ang_theta);
+			var z1 = this.radius * Math.sin(ang_theta);
 
 			for(let i = 0; i < this.slices; i++){
 
@@ -88,4 +88,11 @@ class MySphere extends CGFobject
 
 		this.updateTexCoordsGLBuffers();
 	  };
+
+	display(){
+		this.scene.pushMatrix();
+		this.scene.rotate(Math.PI / 2, 1, 0, 0); 
+		super.display();
+		this.scene.popMatrix();
+	}
 };

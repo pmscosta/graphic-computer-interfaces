@@ -74,22 +74,17 @@
 
     </lights>
 
-    <textures>
-        <texture id="trunk" file="scenes/images/trunk-image.jpg"/>    
+    <textures> 
         <texture id="vidral" file="scenes/images/vidral.jpg"/>    
         <texture id="big_lamp" file="scenes/images/lamp.jpeg"/>
         <texture id="small_lamp" file="scenes/images/small_lamp.jpg"/>
         <texture id="white_wall" file="scenes/images/white_wall.jpg"/>
         <texture id="floor" file="scenes/images/floor.jpg"/>
         <texture id="brick_wall" file="scenes/images/brick_wall.jpg"/>
-        <texture id="leaves" file="scenes/images/leaves.jpg"/>    
-        <texture id="rocks" file="scenes/images/rocks.jpg"/>                      
-        <texture id="bank" file="scenes/images/bank.jpg"/>
         <texture id="desk" file="scenes/images/desk.jpg"/>
         <texture id="metal" file="scenes/images/metal.jpeg"/>
         <texture id="leather" file="scenes/images/leather.jpeg"/>    
         <texture id="def_text" file="scenes/images/default-texture.png"/>
-        <texture id="test_coords" file="scenes/images/test_coords.jpeg"/>
         <texture id="starry_night" file="scenes/images/starry_night.jpg"/>
         <texture id="wood_grain" file="scenes/images/wood_grain.png"/>
     </textures>
@@ -175,7 +170,6 @@
         <primitive id="square_at_zero">
             <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
-
         <primitive id="triangle">
             <triangle x1="1" y1="0" z1="0"
                     x2="-0.5" y2="0.866" z2="0"
@@ -187,15 +181,15 @@
         </primitive>
 
         <primitive id="cylinder">
-            <cylinder base="1" top="1" height="5" slices="250" stacks="250"/>
+            <cylinder base="1" top="1" height="5" slices="20" stacks="20"/>
         </primitive>
 
         <primitive id="cut_cone">
-            <cylinder base="3" top="1" height="5" slices="250" stacks="250"/>
+            <cylinder base="3" top="1" height="5" slices="20" stacks="20"/>
         </primitive>
 
         <primitive id="torus">
-            <torus inner="0.3" outer="0.1" slices="100" loops="300"/>
+            <torus inner="0.3" outer="0.1" slices="20" loops="20"/>
         </primitive>
 
     </primitives>
@@ -247,7 +241,7 @@
                 <material id ="floor"/>
             </materials>
 
-            <texture id="floor" length_s="0.125" length_t="0.125"/>
+            <texture id="floor" length_s="0.25" length_t="0.25"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -388,7 +382,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="inherit" length_s="5" length_t="5"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>

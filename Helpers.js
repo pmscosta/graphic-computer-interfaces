@@ -397,7 +397,7 @@ function createTexture(scene, texture_element, reader, textureID) {
   }
 
   var new_texture = new CGFtexture(scene, texturePath);
-  
+
   return new_texture;
 }
 
@@ -459,11 +459,30 @@ function dispatchComponent(
       }
       break;
     case 'texture':
-      component.texture = [
-        reader.getString(component_spec, 'id'),
-        reader.getFloat(component_spec, 'length_s'),
-        reader.getFloat(component_spec, 'length_t')
-      ];
+
+      var id = reader.getString(component_spec, 'id');
+
+      if (id == 'inherit') {
+
+        component.texture.push(id);
+
+        var l_s = reader.getFloat(component_spec, 'length_s', false);
+
+        var l_t = reader.getFloat(component_spec, 'length_t', false)
+
+        if(l_s !== null)
+          component.texture.push(l_s);
+
+        if(l_t !== null)
+          component.texture.push(l_t);
+          
+
+      } else if (id != 'none') {
+        component.texture = [
+          id, reader.getFloat(component_spec, 'length_s'),
+          reader.getFloat(component_spec, 'length_t')
+        ];
+      }
       break;
     case 'children':
       var childs = component_spec.children;

@@ -78,8 +78,6 @@ class XMLscene extends CGFscene {
   updateCamera(key) {
     this.camera = this.cameras[key];
     this.interface.setActiveCamera(this.camera);
-
-    console.log(this.camera);
   }
 
   /* Handler called when the graph is finally loaded.

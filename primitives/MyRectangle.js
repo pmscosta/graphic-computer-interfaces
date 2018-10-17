@@ -60,6 +60,7 @@ class MyRectangle extends CGFobject
 	};
 
 	updateTexCoords(length_s, lenght_t) {
+
 		for (let i = 0; i < this.originalTex.length; i += 2) {
 		  this.texCoords[i] = this.originalTex[i] / length_s;
 		  this.texCoords[i + 1] = this.originalTex[i + 1] / lenght_t;

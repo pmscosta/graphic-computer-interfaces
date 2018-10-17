@@ -7,8 +7,6 @@
 class MyTriangle extends CGFobject {
   constructor(scene, points, minS = 0, maxS = 1, minT = 0, maxT = 1) {
     super(scene);
-
-    console.log(points);
     this.minS = minS;
     this.maxS = maxS;
     this.minT = minT;
@@ -57,8 +55,6 @@ class MyTriangle extends CGFobject {
         Math.pow((this.z1 - this.z3), 2));
 
     this.cosb = (this.a * this.a - this.b * this.b + this.c * this.c) / (2 * this.a * this.c);
-
-    this.ang_b = Math.acos(this.cosb);
 
     this.sinb = Math.sqrt(1 - Math.pow(this.cosb, 2));
   };

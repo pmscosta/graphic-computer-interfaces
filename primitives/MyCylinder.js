@@ -67,7 +67,7 @@ class MyCylinder extends CGFobject
 
 				this.vertices.push(x1, y1, z_distance);
 				//this.texCoords.push(i * this.spacer, z_distance);
-				this.texCoords.push(u_coord, v_coord);
+				this.texCoords.push(1- u_coord, 1-  v_coord);
 				this.normals.push(x1, y1, 0);
 
 				u_coord += this.spacer;

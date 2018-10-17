@@ -21,8 +21,8 @@ class MyTorus extends CGFobject {
 
   initBuffers() {
 
-    var radius = this.inner;
-    var tube = (this.outer - this.inner) / 2;
+    var radius = this.outer;
+    var tube = this.inner;
     var radialSegments = this.slices;
     var tubularSegments = this.loops;
     var arc = this.arc;

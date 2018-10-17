@@ -231,7 +231,7 @@
                 <material id ="beige"/>
             </materials>
 
-            <texture id="brick_wall" length_s="1" length_t="1"/>
+            <texture id="brick_wall" length_s="0.5" length_t="0.5"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -247,7 +247,7 @@
                 <material id ="floor"/>
             </materials>
 
-            <texture id="floor" length_s="1" length_t="1"/>
+            <texture id="floor" length_s="0.125" length_t="0.125"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -388,7 +388,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="5" length_t="5"/>
 
             <children>
                 <componentref id="cube"/>

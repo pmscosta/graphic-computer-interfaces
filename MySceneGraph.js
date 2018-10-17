@@ -491,6 +491,7 @@ class MySceneGraph {
 
     for (var i = 0; i < component.primitiveChildren.length; i++) {
       var prim_name = component.primitiveChildren[i];
+      this.primitives[prim_name].updateTexCoords(component.texture[1],component.texture[2]);
       this.primitives[prim_name].display();
     }
 

@@ -381,6 +381,8 @@ function createMaterial(scene, material_element, reader, materialID) {
 
   new_material.setShininess(shininess);
 
+  new_material.setTextureWrap('REPEAT', 'REPEAT');
+
   return new_material;
 }
 

@@ -744,7 +744,9 @@
 
             <materials>
                 <material id ="fuschia"/>
+                <material id="light_orange"/>
             </materials>
+            
 
             <texture id="vidral" length_s="1" length_t="1"/>
 

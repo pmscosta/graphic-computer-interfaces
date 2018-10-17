@@ -197,6 +197,8 @@ class XMLscene extends CGFscene {
     this.pushMatrix();
 
     if (this.sceneInited) {
+      this.updateMaterials();
+
       // Draw axis
       this.axis.display();
 
@@ -211,5 +213,12 @@ class XMLscene extends CGFscene {
 
     this.popMatrix();
     // ---- END Background, camera and axis setup
+  }
+
+  updateMaterials(){
+    if(this.interface.isKeyPressed("KeyM") || this.interface.isKeyPressed("Keym"))
+    {
+      this.graph.updateMaterials();
+    }
   }
 }

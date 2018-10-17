@@ -8,6 +8,7 @@ class Component {
       this.texture = [];
       this.materials = [];
       this.id;
+      this.materialPos=0;
   }
 
 }

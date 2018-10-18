@@ -60,6 +60,7 @@ class MySceneGraph {
 
     this.texturesPile = [];
     this.materialsPile = [];
+    this.lengthPile = [];
   }
 
 
@@ -468,19 +469,34 @@ class MySceneGraph {
 
     let last_tex = this.texturesPile.length - 1;
     let last_mat = this.materialsPile.length - 1;
+    let last_length = this.lengthPile.length -1;
 
 
     // Insert into pile
-    if (component.texture[0] == 'inherit' && this.texturesPile.length > 0)
-      this.texturesPile.push(this.texturesPile[last_tex]);
-    else if (component.texture[0] != 'inherit')
+    if (component.texture[0] == 'inherit'){
+
+      if(this.texturesPile.length > 0)
+        this.texturesPile.push(this.texturesPile[last_tex]);
+
+      if(component.texture[1] === undefined &&  component.texture[2] === undefined && this.lengthPile.length>0)
+        this.lengthPile.push(this.lengthPile[last_length - 1], this.lengthPile[last_length]);
+      else
+        this.lengthPile.push(component.texture[1],component.texture[2]);
+    }
+    else if (component.texture[0] != 'inherit'){
       this.texturesPile.push(component.texture[0]);
+
+      if(component.texture[0] != 'none')
+        this.lengthPile.push(component.texture[1],component.texture[2]);
+    }
 
     if (component.materials[component.materialPos] == 'inherit' && this.materialsPile.length > 0)
       this.materialsPile.push(this.materialsPile[last_mat]);
     else if (component.materials[component.materialPos] != 'inherit')
       this.materialsPile.push(component.materials[component.materialPos]);
       
+
+    console.log(this.lengthPile);
 
     this.applyAddOns();
 
@@ -489,12 +505,22 @@ class MySceneGraph {
       this.iterateChildren(this.components[component.componentChildren[i]]);
     }
 
+    let l_pile = this.lengthPile.length - 1;
+
     for (var i = 0; i < component.primitiveChildren.length; i++) {
       var prim_name = component.primitiveChildren[i];
-      this.primitives[prim_name].updateTexCoords(component.texture[1],component.texture[2]);
+
+      if(component.texture[0] !='none'){
+        this.primitives[prim_name].updateTexCoords(this.lengthPile[l_pile - 1] , this.lengthPile[l_pile]);
+      }
       this.primitives[prim_name].display();
     }
 
+
+    if(component.texture[0] != 'none'){
+      this.lengthPile.pop();
+      this.lengthPile.pop();      
+    }
     // Remove from pile
     this.texturesPile.pop();
 

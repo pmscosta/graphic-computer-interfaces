@@ -462,9 +462,9 @@ function dispatchComponent(
 
       var id = reader.getString(component_spec, 'id');
 
-      if (id == 'inherit') {
+      component.texture.push(id);
 
-        component.texture.push(id);
+      if (id == 'inherit') {
 
         var l_s = reader.getFloat(component_spec, 'length_s', false);
 
@@ -478,10 +478,7 @@ function dispatchComponent(
           
 
       } else if (id != 'none') {
-        component.texture = [
-          id, reader.getFloat(component_spec, 'length_s'),
-          reader.getFloat(component_spec, 'length_t')
-        ];
+        component.texture.push(reader.getFloat(component_spec, 'length_s'),reader.getFloat(component_spec, 'length_t'));
       }
       break;
     case 'children':

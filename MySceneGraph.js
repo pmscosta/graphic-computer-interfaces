@@ -495,9 +495,6 @@ class MySceneGraph {
     else if (component.materials[component.materialPos] != 'inherit')
       this.materialsPile.push(component.materials[component.materialPos]);
       
-
-    console.log(this.lengthPile);
-
     this.applyAddOns();
 
 

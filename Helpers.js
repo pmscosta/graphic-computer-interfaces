@@ -23,10 +23,16 @@ var torus_comp = ['inner', 'outer', 'slices', 'loops'];
 var torus_def = [0.1, 0.4, 20, 20];
 
 var perspective_comp = ['near', 'far', 'angle'];
-var perspective_default = [0.1, 500, 0.4];
+var perspective_default = [0.1, 5, 0.4];
 
 var ortho_comp = ['near', 'far', 'left', 'right', 'top', 'bottom'];
-var ortho_default = [0.1, 500, -5, 5, 5, -5];
+var ortho_default = [0.1, 5, -5, 5, 5, -5];
+
+var angle_comp = ['angle'];
+var angle_def = 0;
+
+var exponent_comp = ['exponent'];
+var exponent_def = 0;
 
 var from_def = [10, 10, 10];
 var to_def = [0, 0, 0];
@@ -46,20 +52,24 @@ var trans_def = [1, 1, 1];
 function getID(reader, element, storage, description) {
   var ID = reader.getString(element, 'id');
 
-  if (ID == null) {
+  if (ID == null || ID.length == 0) {
     console.warn(
-        'Warning:  ID not defined for ' + element +
-        '. Generating a random one.');
+      'Warning:  ID not defined for ' + description +
+      '. Generating a random one.');
 
     ID = makeid();
   }
 
   while (storage[ID] != null) {
     console.warn(
-        'ID must be unique for each ' + description + ' (conflict: ID = ' + ID +
-        '). Generating a new one');
+      'ID must be unique for each ' + description + ' (conflict: ID = ' + ID +
+      '). Generating a new one');
     ID = makeid();
+
+    
   }
+
+  
 
   return ID;
 }
@@ -76,8 +86,8 @@ function getID(reader, element, storage, description) {
 function getValuesOrDefault(reader, components, phase, values, element, def) {
   if (element == null) {
     console.warn(
-        'Warning: ' + phase + 'component undefined. Assuming ' + def +
-        'for all');
+      'Warning: ' + phase + 'component undefined. Assuming ' + def +
+      'for all');
     values.push(...def);
     return;
   }
@@ -87,12 +97,38 @@ function getValuesOrDefault(reader, components, phase, values, element, def) {
 
     if (!(temp != null && !isNaN(temp))) {
       console.warn(
-          'Warning: ' + components[i] + ' not specified or invalid in ' +
-          phase + ' assuming ' + components[i] + ' = ' + def[i])
+        'Warning: ' + components[i] + ' not specified or invalid in ' +
+        phase + ' assuming ' + components[i] + ' = ' + def[i])
       values.push(def[i]);
     } else
       values.push(temp);
   }
+}
+
+function getValueOrDefault(reader, component, phase, element, def) {
+
+  var result = 0; 
+
+  if (element == null) {
+    console.warn(
+      'Warning: ' + phase + ' component undefined. Assuming ' + def);
+      result = def;
+    return;
+  }
+
+
+  var temp = reader.getFloat(element, component[0]);
+
+  if (!(temp != null && !isNaN(temp))) {
+    console.warn(
+      'Warning: ' + component[0] + ' not specified or invalid in ' +
+      phase + ' assuming ' + component[0] + ' = ' + def)
+      result = def;
+  } else
+  result = temp;
+
+  return result;
+
 }
 
 /**
@@ -109,8 +145,8 @@ function getRGBComponents(reader, phase, values, element) {
 
     if (!(temp != null && !isNaN(temp)) || ((i == 3 && temp < 0 && temp > 1))) {
       console.warn(
-          'Warning: unable to parse ' + rgb_comp[i] + ' component of the ' +
-          phase + 'assuming 0.')
+        'Warning: unable to parse ' + rgb_comp[i] + ' component of the ' +
+        phase + 'assuming 0.')
       values.push(0);
     } else
       values.push(temp);
@@ -131,8 +167,8 @@ function getRotationComponents(reader, phase, values, element) {
 
   if (axis == null) {
     console.warn(
-        'Warning:  unable to parse the axis of component ' + phase +
-        '. Assuming axis=x.');
+      'Warning:  unable to parse the axis of component ' + phase +
+      '. Assuming axis=x.');
     axis = 'x';
   }
 
@@ -140,8 +176,8 @@ function getRotationComponents(reader, phase, values, element) {
 
   if (!(angle != null && !isNaN(angle))) {
     console.warn(
-        'Warning:  unable to parse the angle of the component ' + phase +
-        '. Assuming angle = 0.')
+      'Warning:  unable to parse the angle of the component ' + phase +
+      '. Assuming angle = 0.')
     angle = 0;
   }
 
@@ -161,8 +197,8 @@ function parsePerspective(graph, reader, element) {
   var values = [];
 
   getValuesOrDefault(
-      reader, perspective_comp, 'perspective ' + perspectiveId, values, element,
-      perspective_default);
+    reader, perspective_comp, 'perspective ' + perspectiveId, values, element,
+    perspective_default);
 
   grandChildren = element.children;
 
@@ -180,16 +216,18 @@ function parsePerspective(graph, reader, element) {
   var to_values = [];
 
   getValuesOrDefault(
-      reader, xyz_comp, 'perspective: ' + perspectiveId, from_values,
-      grandChildren[fromIndex], from_def);
+    reader, xyz_comp, 'perspective: ' + perspectiveId, from_values,
+    grandChildren[fromIndex], from_def);
 
   getValuesOrDefault(
-      reader, xyz_comp, 'perspective: ' + perspectiveId, to_values,
-      grandChildren[toIndex], to_def);
+    reader, xyz_comp, 'perspective: ' + perspectiveId, to_values,
+    grandChildren[toIndex], to_def);
 
 
-  if (graph.defaultPerspectiveId == null)
+  if (graph.defaultPerspectiveId == null || graph.defaultPerspectiveId.length == 0) {
+    graph.onXMLMinorError("assumed default view: " + perspectiveId);
     graph.defaultPerspectiveId = perspectiveId;
+  }
 
   graph.views[perspectiveId] = [];
   graph.views[perspectiveId]['type'] = 'perspective';
@@ -212,7 +250,7 @@ function parseOrtho(graph, reader, element) {
   var values = [];
 
   getValuesOrDefault(
-      reader, ortho_comp, 'ortho ' + orthoID, values, element, ortho_default);
+    reader, ortho_comp, 'ortho ' + orthoID, values, element, ortho_default);
 
   grandChildren = element.children;
 
@@ -228,16 +266,18 @@ function parseOrtho(graph, reader, element) {
   var to_values = [];
 
   getValuesOrDefault(
-      reader, xyz_comp, 'view: ' + orthoID + ' from ', from_values,
-      grandChildren[fromIndex], [10, 10, 10]);
+    reader, xyz_comp, 'view: ' + orthoID + ' from ', from_values,
+    grandChildren[fromIndex], [10, 10, 10]);
 
 
   getValuesOrDefault(
-      reader, xyz_comp, 'view: ' + orthoID + ' to ', to_values,
-      grandChildren[toIndex], xyz_default);
+    reader, xyz_comp, 'view: ' + orthoID + ' to ', to_values,
+    grandChildren[toIndex], xyz_default);
 
-  if (graph.defaultPerspectiveId == null) graph.defaultPerspectiveId = orthoID;
-
+  if (graph.defaultPerspectiveId == null || graph.defaultPerspectiveId.length == 0) {
+    graph.onXMLMinorError("assumed default view: " + orthoID);
+    graph.defaultPerspectiveId = orthoID;
+  }
   graph.views[orthoID] = [];
   graph.views[orthoID]['type'] = 'ortho';
   graph.views[orthoID]['near'] = values[0];
@@ -263,8 +303,8 @@ function parseTransformation(reader, element, curr_transformation, ID) {
     case 'translate':
       var values = [];
       getValuesOrDefault(
-          reader, xyz_comp, 'translate: ' + ID, values, element,
-          trans_def);
+        reader, xyz_comp, 'translate: ' + ID, values, element,
+        trans_def);
       curr_transformation.translate(values);
       break;
 
@@ -277,8 +317,8 @@ function parseTransformation(reader, element, curr_transformation, ID) {
     case 'scale':
       var values = [];
       getValuesOrDefault(
-          reader, xyz_comp, 'scale: ' + ID, values, element,
-          scale_def);
+        reader, xyz_comp, 'scale: ' + ID, values, element,
+        scale_def);
       curr_transformation.scale(values);
       break;
   }
@@ -294,11 +334,12 @@ function createLight(graph, light_element, reader) {
   // Get id of the current
   var lightID = getID(reader, light_element, graph.lights, 'light');
   // Get enabled status
-  var enabled = reader.getBoolean(light_element, 'enabled');
+  var enabled = reader.getBoolean(light_element, 'enabled', false);
+
   if (enabled == null) {
     console.warn(
-        'Warning: Enabled wasn\'t correctly specified, assuming light enabled');
-    enabled = true;
+      'Warning: Enabled wasn\'t correctly specified, assuming light disabled');
+    enabled = false;
   }
 
   grandChildren = light_element.children;
@@ -317,27 +358,27 @@ function createLight(graph, light_element, reader) {
   // Retrieves the location component
   var locations = [];
   getValuesOrDefault(
-      reader, xyzw_comp, 'light: ' + lightID + ' location ', locations,
-      grandChildren[locationIndex], xyzw_default);
+    reader, xyzw_comp, 'light: ' + lightID + ' location ', locations,
+    grandChildren[locationIndex], xyzw_default);
 
   // Retrieves the ambient component.
   var ambientIllumination = [];
   getValuesOrDefault(
-      reader, rgb_comp, 'light: ' + lightID + ' ambient ', ambientIllumination,
-      grandChildren[ambientIndex], rgb_default);
+    reader, rgb_comp, 'light: ' + lightID + ' ambient ', ambientIllumination,
+    grandChildren[ambientIndex], rgb_default);
 
   // Retrieve the diffuse component
   var diffuseIllumination = [];
   getValuesOrDefault(
-      reader, rgb_comp, 'light: ' + lightID + ' diffuse ', diffuseIllumination,
-      grandChildren[diffuseIndex], rgb_default);
+    reader, rgb_comp, 'light: ' + lightID + ' diffuse ', diffuseIllumination,
+    grandChildren[diffuseIndex], rgb_default);
 
 
   // Retrieve the specular component
   var specularIllumination = [];
   getValuesOrDefault(
-      reader, rgb_comp, 'light: ' + lightID + ' specular ',
-      specularIllumination, grandChildren[specularIndex], rgb_default);
+    reader, rgb_comp, 'light: ' + lightID + ' specular ',
+    specularIllumination, grandChildren[specularIndex], rgb_default);
 
   graph.lights[lightID] = [];
   graph.lights[lightID]['type'] = 'omni';
@@ -348,15 +389,26 @@ function createLight(graph, light_element, reader) {
   graph.lights[lightID]['specular'] = specularIllumination;
 
   if (light_element.nodeName == 'spot') {
-    var angle = reader.getString(light_element, 'angle');
-    var exponent = reader.getString(light_element, 'exponent');
+    /*  var angle = reader.getString(light_element, 'angle');
+     var exponent = reader.getString(light_element, 'exponent'); */
+
+
+    var angle = getValueOrDefault(
+      reader, angle_comp, 'light: ' + lightID + ' angle ',
+      light_element, angle_def);
+
+   var exponent =  getValueOrDefault(
+      reader, exponent_comp, 'light: ' + lightID + ' exponent ', 
+      light_element, exponent_def);
+
+
 
     var target = [];
     var targetIndex = nodeNames.indexOf('target');
 
     getValuesOrDefault(
-        reader, xyz_comp, 'light: ' + lightID + ' target ', target,
-        grandChildren[targetIndex], xyz_default);
+      reader, xyz_comp, 'light: ' + lightID + ' target ', target,
+      grandChildren[targetIndex], xyz_default);
 
 
     graph.lights[lightID]['type'] = 'spot';
@@ -377,10 +429,10 @@ function createLight(graph, light_element, reader) {
 function createMaterial(scene, material_element, reader, materialID) {
   // Get shininess status
   var shininess = reader.getFloat(material_element, 'shininess');
-  if (shininess == null) {
-    onXMLMinorError(
-        'shininess wasn\'t correctly specified, assuming shininess 0');
-    shininess = 0;
+  if (shininess == null || isNaN(shininess)) {
+    console.warn(
+      'shininess wasn\'t correctly specified, assuming shininess 0.1');
+    shininess = 0.1;
   }
 
   grandChildren = material_element.children;
@@ -399,40 +451,40 @@ function createMaterial(scene, material_element, reader, materialID) {
   // Retrives the material emission
   var emissions = [];
   getValuesOrDefault(
-      reader, rgb_comp, 'material: ' + materialID + ' emission ', emissions,
-      grandChildren[emissionIndex], rgb_default);
+    reader, rgb_comp, 'material: ' + materialID + ' emission ', emissions,
+    grandChildren[emissionIndex], rgb_default);
 
   // Retrieves the ambient component.
   var ambientComponent = [];
   getValuesOrDefault(
-      reader, rgb_comp, 'material: ' + materialID + ' ambient ',
-      ambientComponent, grandChildren[ambientIndex], rgb_default);
+    reader, rgb_comp, 'material: ' + materialID + ' ambient ',
+    ambientComponent, grandChildren[ambientIndex], rgb_default);
 
   // Retrieve the diffuse component
   var diffuseComponent = [];
   getValuesOrDefault(
-      reader, rgb_comp, 'material: ' + materialID + ' diffuse ',
-      diffuseComponent, grandChildren[diffuseIndex], rgb_default);
+    reader, rgb_comp, 'material: ' + materialID + ' diffuse ',
+    diffuseComponent, grandChildren[diffuseIndex], rgb_default);
 
   // Retrieve the specular component
   var specularComponent = [];
   getValuesOrDefault(
-      reader, rgb_comp, 'material: ' + materialID + ' specular ',
-      specularComponent, grandChildren[specularIndex], rgb_default);
+    reader, rgb_comp, 'material: ' + materialID + ' specular ',
+    specularComponent, grandChildren[specularIndex], rgb_default);
 
   var new_material = new CGFappearance(scene);
 
   new_material.setAmbient(
-      ambientComponent[0], ambientComponent[1], ambientComponent[2],
-      ambientComponent[3]);
+    ambientComponent[0], ambientComponent[1], ambientComponent[2],
+    ambientComponent[3]);
   new_material.setDiffuse(
-      diffuseComponent[0], diffuseComponent[1], diffuseComponent[2],
-      diffuseComponent[3]);
+    diffuseComponent[0], diffuseComponent[1], diffuseComponent[2],
+    diffuseComponent[3]);
   new_material.setSpecular(
-      specularComponent[0], specularComponent[1], specularComponent[2],
-      specularComponent[3]);
+    specularComponent[0], specularComponent[1], specularComponent[2],
+    specularComponent[3]);
   new_material.setEmission(
-      emissions[0], emissions[1], emissions[2], emissions[3]);
+    emissions[0], emissions[1], emissions[2], emissions[3]);
 
   new_material.setShininess(shininess);
 
@@ -452,8 +504,8 @@ function createTexture(scene, texture_element, reader, textureID) {
   var texturePath = reader.getString(texture_element, 'file');
   if (texturePath == null) {
     console.warn(
-        'Warning: no path defined for texture = ' + textureID +
-        '. Assuming default path for all');
+      'Warning: no path defined for texture = ' + textureID +
+      '. Assuming default path for all');
 
     texturePath = '/scenes/images/default-texture.png';
   }
@@ -469,8 +521,8 @@ function parsePrimitive(scene, reader, children, ID) {
       var values = [];
 
       getValuesOrDefault(
-          reader, rectangle_comp, 'rectangle: ' + ID, values, children,
-          rec_default);
+        reader, rectangle_comp, 'rectangle: ' + ID, values, children,
+        rec_default);
 
       return new MyRectangle(scene, values);
 
@@ -478,28 +530,28 @@ function parsePrimitive(scene, reader, children, ID) {
       var values = [];
 
       getValuesOrDefault(
-          reader, triangle_comp, 'triangle: ' + ID, values, children,
-          triangle_def);
+        reader, triangle_comp, 'triangle: ' + ID, values, children,
+        triangle_def);
       return new MyTriangle(scene, values);
 
     case 'sphere':
       var values = [];
       getValuesOrDefault(
-          reader, sphere_comp, 'sphere: ' + ID, values, children, sphere_def);
+        reader, sphere_comp, 'sphere: ' + ID, values, children, sphere_def);
       return new MySphere(scene, values[0], values[1], values[2]);
 
     case 'cylinder':
       var values = [];
       getValuesOrDefault(
-          reader, cylinder_comp, 'cylinder: ' + ID, values, children,
-          cylinder_def);
+        reader, cylinder_comp, 'cylinder: ' + ID, values, children,
+        cylinder_def);
       return new MyCylinder(
-          scene, values[0], values[1], values[2], values[3], values[4]);
+        scene, values[0], values[1], values[2], values[3], values[4]);
 
     case 'torus':
       var values = [];
       getValuesOrDefault(
-          reader, torus_comp, 'torus: ' + ID, values, children, torus_def);
+        reader, torus_comp, 'torus: ' + ID, values, children, torus_def);
       return new MyTorus(scene, values[0], values[1], values[2], values[3]);
   }
 }
@@ -513,19 +565,19 @@ function parsePrimitive(scene, reader, children, ID) {
  * @param {Component Object} component - object created by us to store all the transformatios/texture/materials
  */
 function dispatchComponent(
-    scene, reader, component_spec, componentId, component) {
+  scene, reader, component_spec, componentId, component) {
   switch (component_spec.nodeName) {
     case 'transformation':
       var transformations = component_spec.children;
       for (var i = 0; i < transformations.length; i++) {
         if (transformations[i].nodeName == 'transformationref') {
           component.transformation.multiply(
-              scene.transformations[reader.getString(transformations[i], 'id')]
-                  .getMatrix());
+            scene.transformations[reader.getString(transformations[i], 'id')]
+            .getMatrix());
         } else {
           parseTransformation(
-              reader, transformations[i], component.transformation,
-              componentId);
+            reader, transformations[i], component.transformation,
+            componentId);
         }
       }
       break;
@@ -553,8 +605,8 @@ function dispatchComponent(
 
       } else if (id != 'none') {
         component.texture.push(
-            reader.getFloat(component_spec, 'length_s'),
-            reader.getFloat(component_spec, 'length_t'));
+          reader.getFloat(component_spec, 'length_s'),
+          reader.getFloat(component_spec, 'length_t'));
       }
       break;
     case 'children':
@@ -577,10 +629,12 @@ function dispatchComponent(
 function makeid() {
   var text = '';
   var possible =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
   for (var i = 0; i < 5; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    console.warn("New ID is " + text);
 
   return text;
 }

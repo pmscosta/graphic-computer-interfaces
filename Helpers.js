@@ -8,14 +8,19 @@ var xyzw_comp = ['x', 'y', 'z', 'w'];
 var xyzw_default = [10, 10, 10, 0];
 
 var rectangle_comp = ['x1', 'y1', 'x2', 'y2'];
+var rec_default = [0, 0, 1, 1];
 
 var triangle_comp = ['x1', 'y1', 'z1', 'x2', 'y2', 'z2', 'x3', 'y3', 'z3'];
+var triangle_def = [0, 1, 0, 0, 1, 0, 0, 0, 0];
 
 var sphere_comp = ['radius', 'slices', 'stacks'];
+var sphere_def = [1, 20, 20];
 
 var cylinder_comp = ['base', 'top', 'height', 'slices', 'stacks'];
+var cylinder_def = [1, 1, 1, 20, 20];
 
 var torus_comp = ['inner', 'outer', 'slices', 'loops'];
+var torus_def = [0.1, 0.4, 20, 20];
 
 var perspective_comp = ['near', 'far', 'angle'];
 var perspective_default = [0.1, 500, 0.4];
@@ -23,6 +28,21 @@ var perspective_default = [0.1, 500, 0.4];
 var ortho_comp = ['near', 'far', 'left', 'right', 'top', 'bottom'];
 var ortho_default = [0.1, 500, -5, 5, 5, -5];
 
+var from_def = [10, 10, 10];
+var to_def = [0, 0, 0];
+
+var scale_def = [1, 1, 1];
+var trans_def = [1, 1, 1];
+
+
+/**
+ * Reads an ID from the XML file and if it is a repeated one generates
+ * a random one until it's not and stores it.
+ * @param {XML Reader} reader
+ * @param {XML Child} element
+ * @param {ID Storage} storage
+ * @param {string} description
+ */
 function getID(reader, element, storage, description) {
   var ID = reader.getString(element, 'id');
 
@@ -43,7 +63,16 @@ function getID(reader, element, storage, description) {
 
   return ID;
 }
-
+/**
+ * Reads some values from the XML as defined in [components] and outputs them in
+ * [values]. If some or all values are not defined, returns default ones.
+ * @param {XML Reader} reader
+ * @param {Default Values} components
+ * @param {string} phase
+ * @param {output array} values
+ * @param {XML Child} element
+ * @param {Default Values} def
+ */
 function getValuesOrDefault(reader, components, phase, values, element, def) {
   if (element == null) {
     console.warn(
@@ -66,17 +95,14 @@ function getValuesOrDefault(reader, components, phase, values, element, def) {
   }
 }
 
-function getSpaceComponents(reader, components, phase, values, element) {
-  for (var i = 0; i < components.length; i++) {
-    var temp = reader.getFloat(element, components[i]);
-
-    if (!(temp != null && !isNaN(temp)))
-      return 'unable to parse ' + components[i] + ' component of the ' + phase;
-    else
-      values.push(temp);
-  }
-}
-
+/**
+ * Reads RGB components from a child in the XML. If such values are not defined,
+ * sets 0 as default.
+ * @param {XML Reader} reader
+ * @param {string} phase
+ * @param {Output array} values
+ * @param {XML child} element
+ */
 function getRGBComponents(reader, phase, values, element) {
   for (var i = 0; i < 4; i++) {
     var temp = reader.getFloat(element, rgb_comp[i]);
@@ -91,6 +117,15 @@ function getRGBComponents(reader, phase, values, element) {
   }
 }
 
+/**
+ * Reads he rotation values from the XML file,
+ * if the angle is not defined, the default is 0,
+ * 'x' for the axis.
+ * @param {XML Reader} reader
+ * @param {string} phase
+ * @param {Output array} values
+ * @param {XML child} element
+ */
 function getRotationComponents(reader, phase, values, element) {
   var axis = reader.getString(element, 'axis');
 
@@ -114,7 +149,12 @@ function getRotationComponents(reader, phase, values, element) {
   values['angle'] = angle;
 }
 
-
+/**
+ * Parses a perspective form the XML file
+ * @param {Scene Graph} graph - to store the perspectives
+ * @param {XML Reader} reader
+ * @param {XML perspective} element
+ */
 function parsePerspective(graph, reader, element) {
   var perspectiveId = getID(reader, element, graph.views, 'perspective view');
 
@@ -139,27 +179,14 @@ function parsePerspective(graph, reader, element) {
   var from_values = [];
   var to_values = [];
 
-  if (fromIndex != -1) {
-    getSpaceComponents(
-        reader, xyz_comp, 'perspective', from_values, grandChildren[fromIndex]);
-  } else {
-    console.warn(
-        'Warning: from component undefined for view = ' + perspectiveId +
-        '. Assuming 10 for all');
+  getValuesOrDefault(
+      reader, xyz_comp, 'perspective: ' + perspectiveId, from_values,
+      grandChildren[fromIndex], from_def);
 
-    from_values = [10, 10, 10];
-  }
+  getValuesOrDefault(
+      reader, xyz_comp, 'perspective: ' + perspectiveId, to_values,
+      grandChildren[toIndex], to_def);
 
-  if (toIndex != -1) {
-    getSpaceComponents(
-        reader, xyz_comp, 'perspective', to_values, grandChildren[toIndex]);
-  } else {
-    console.warn(
-        'Warning: to component undefined for view = ' + perspectiveId +
-        '. Assuming 0 for all');
-
-    to_values = [0, 0, 0];
-  }
 
   if (graph.defaultPerspectiveId == null)
     graph.defaultPerspectiveId = perspectiveId;
@@ -173,6 +200,12 @@ function parsePerspective(graph, reader, element) {
   graph.views[perspectiveId]['to_values'] = to_values;
 }
 
+/**
+ * Parses an ortho view from the XML file.
+ * @param {Scene Graph} graph - to store the ortho view
+ * @param {XML Reader} reader
+ * @param {XML orth} element
+ */
 function parseOrtho(graph, reader, element) {
   var orthoID = getID(reader, element, graph.views, 'ortho view');
 
@@ -217,31 +250,46 @@ function parseOrtho(graph, reader, element) {
   graph.views[orthoID]['target'] = to_values;
 }
 
-
+/**
+ * Parses and store a transformation form the XML file.
+ * It calculates all the transformations and store the final/resulting matrix.
+ * @param {XML Reader} reader
+ * @param {XML transformation} element
+ * @param {Transformation object} curr_transformation
+ * @param {Transformation ID} ID
+ */
 function parseTransformation(reader, element, curr_transformation, ID) {
   switch (element.nodeName) {
     case 'translate':
       var values = [];
-      getSpaceComponents(
-          reader, xyz_comp, 'transformation: ' + ID, values, element);
+      getValuesOrDefault(
+          reader, xyz_comp, 'translate: ' + ID, values, element,
+          trans_def);
       curr_transformation.translate(values);
       break;
 
     case 'rotate':
       var values = [];
-      getRotationComponents(reader, 'transformation: ' + ID, values, element);
+      getRotationComponents(reader, 'rotate: ' + ID, values, element);
       curr_transformation.rotate(values.angle, values.axis);
       break;
 
     case 'scale':
       var values = [];
-      getSpaceComponents(
-          reader, xyz_comp, 'transformation: ' + ID, values, element);
+      getValuesOrDefault(
+          reader, xyz_comp, 'scale: ' + ID, values, element,
+          scale_def);
       curr_transformation.scale(values);
       break;
   }
 }
 
+/**
+ * Parses and creates a light from the XML file
+ * @param {Scene Graph} graph
+ * @param {XML light} light_element
+ * @param {XML reader} reader
+ */
 function createLight(graph, light_element, reader) {
   // Get id of the current
   var lightID = getID(reader, light_element, graph.lights, 'light');
@@ -319,6 +367,13 @@ function createLight(graph, light_element, reader) {
   }
 }
 
+/**
+ * Parses and creates a material from the XML
+ * @param {XMLScene} scene  - material constructor requeries the scene
+ * @param {XML material} material_element
+ * @param {XML Reader} reader
+ * @param {string} materialID
+ */
 function createMaterial(scene, material_element, reader, materialID) {
   // Get shininess status
   var shininess = reader.getFloat(material_element, 'shininess');
@@ -386,6 +441,13 @@ function createMaterial(scene, material_element, reader, materialID) {
   return new_material;
 }
 
+/**
+ * Parses and creates a CGFTexture Object from the XML file
+ * @param {XMLScene} scene - CGFtexture constructor requires scene
+ * @param {XML texture} texture_element
+ * @param {XML reader} reader
+ * @param {string} textureID
+ */
 function createTexture(scene, texture_element, reader, textureID) {
   var texturePath = reader.getString(texture_element, 'file');
   if (texturePath == null) {
@@ -405,36 +467,51 @@ function parsePrimitive(scene, reader, children, ID) {
   switch (children.nodeName) {
     case 'rectangle':
       var values = [];
-      getSpaceComponents(
-          reader, rectangle_comp, 'rectangle: ' + ID, values, children);
+
+      getValuesOrDefault(
+          reader, rectangle_comp, 'rectangle: ' + ID, values, children,
+          rec_default);
+
       return new MyRectangle(scene, values);
 
     case 'triangle':
       var values = [];
-      getSpaceComponents(
-          reader, triangle_comp, 'triangle: ' + ID, values, children);
+
+      getValuesOrDefault(
+          reader, triangle_comp, 'triangle: ' + ID, values, children,
+          triangle_def);
       return new MyTriangle(scene, values);
 
     case 'sphere':
       var values = [];
-      getSpaceComponents(
-          reader, sphere_comp, 'sphere: ' + ID, values, children);
+      getValuesOrDefault(
+          reader, sphere_comp, 'sphere: ' + ID, values, children, sphere_def);
       return new MySphere(scene, values[0], values[1], values[2]);
 
     case 'cylinder':
       var values = [];
-      getSpaceComponents(
-          reader, cylinder_comp, 'cylinder: ' + ID, values, children);
+      getValuesOrDefault(
+          reader, cylinder_comp, 'cylinder: ' + ID, values, children,
+          cylinder_def);
       return new MyCylinder(
           scene, values[0], values[1], values[2], values[3], values[4]);
 
     case 'torus':
       var values = [];
-      getSpaceComponents(reader, torus_comp, 'torus: ' + ID, values, children);
+      getValuesOrDefault(
+          reader, torus_comp, 'torus: ' + ID, values, children, torus_def);
       return new MyTorus(scene, values[0], values[1], values[2], values[3]);
   }
 }
 
+/**
+ * Parses and creates a component and all of it's children in one.
+ * @param {XMLScene} scene
+ * @param {XMLreader} reader
+ * @param {XML component} component_spec
+ * @param {string} componentId
+ * @param {Component Object} component - object created by us to store all the transformatios/texture/materials
+ */
 function dispatchComponent(
     scene, reader, component_spec, componentId, component) {
   switch (component_spec.nodeName) {
@@ -465,20 +542,19 @@ function dispatchComponent(
       component.texture.push(id);
 
       if (id == 'inherit') {
-
         var l_s = reader.getFloat(component_spec, 'length_s', false);
 
         var l_t = reader.getFloat(component_spec, 'length_t', false)
 
-        if(l_s !== null)
-          component.texture.push(l_s);
+        if (l_s !== null) component.texture.push(l_s);
 
-        if(l_t !== null)
-          component.texture.push(l_t);
-          
+        if (l_t !== null) component.texture.push(l_t);
+
 
       } else if (id != 'none') {
-        component.texture.push(reader.getFloat(component_spec, 'length_s'),reader.getFloat(component_spec, 'length_t'));
+        component.texture.push(
+            reader.getFloat(component_spec, 'length_s'),
+            reader.getFloat(component_spec, 'length_t'));
       }
       break;
     case 'children':
@@ -495,6 +571,9 @@ function dispatchComponent(
   }
 }
 
+/**
+ * Generates a random ID with length 5
+ */
 function makeid() {
   var text = '';
   var possible =

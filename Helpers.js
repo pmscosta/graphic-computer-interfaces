@@ -23,6 +23,14 @@ var perspective_default = [0.1, 500, 0.4];
 var ortho_comp = ['near', 'far', 'left', 'right', 'top', 'bottom'];
 var ortho_default = [0.1, 500, -5, 5, 5, -5];
 
+/**
+ * Reads an ID from the XML file and if it is a repeated one generates 
+ * a random one until it's not and stores it.
+ * @param {XML Reader} reader 
+ * @param {XML Child} element 
+ * @param {ID Storage} storage 
+ * @param {string} description 
+ */
 function getID(reader, element, storage, description) {
   var ID = reader.getString(element, 'id');
 
@@ -43,7 +51,16 @@ function getID(reader, element, storage, description) {
 
   return ID;
 }
-
+ /**
+  * Reads some values from the XML as defined in [components] and outputs them in [values].
+  * If some or all values are not defined, returns default ones.
+  * @param {XML Reader} reader 
+  * @param {Default Values} components 
+  * @param {string} phase 
+  * @param {output array} values 
+  * @param {XML Child} element 
+  * @param {Default Values} def 
+  */
 function getValuesOrDefault(reader, components, phase, values, element, def) {
   if (element == null) {
     console.warn(
@@ -77,6 +94,14 @@ function getSpaceComponents(reader, components, phase, values, element) {
   }
 }
 
+/**
+ * Reads RGB components from a child in the XML. If such values are not defined,
+ * sets 0 as default.
+ * @param {XML Reader} reader 
+ * @param {string} phase 
+ * @param {Output array} values 
+ * @param {XML child} element 
+ */
 function getRGBComponents(reader, phase, values, element) {
   for (var i = 0; i < 4; i++) {
     var temp = reader.getFloat(element, rgb_comp[i]);
@@ -91,6 +116,15 @@ function getRGBComponents(reader, phase, values, element) {
   }
 }
 
+/**
+ * Reads he rotation values from the XML file, 
+ * if the angle is not defined, the default is 0,
+ * 'x' for the axis.
+ * @param {XML Reader} reader 
+ * @param {string} phase 
+ * @param {Output array} values 
+ * @param {XML child} element 
+ */
 function getRotationComponents(reader, phase, values, element) {
   var axis = reader.getString(element, 'axis');
 
@@ -114,7 +148,12 @@ function getRotationComponents(reader, phase, values, element) {
   values['angle'] = angle;
 }
 
-
+/**
+ * Parses a perspective form the XML file
+ * @param {Scene Graph} graph - to store the perspectives
+ * @param {XML Reader} reader 
+ * @param {XML perspective} element 
+ */
 function parsePerspective(graph, reader, element) {
   var perspectiveId = getID(reader, element, graph.views, 'perspective view');
 
@@ -173,6 +212,12 @@ function parsePerspective(graph, reader, element) {
   graph.views[perspectiveId]['to_values'] = to_values;
 }
 
+/**
+ * Parses an ortho view from the XML file.
+ * @param {Scene Graph} graph - to store the ortho view
+ * @param {XML Reader} reader 
+ * @param {XML orth} element 
+ */
 function parseOrtho(graph, reader, element) {
   var orthoID = getID(reader, element, graph.views, 'ortho view');
 
@@ -217,7 +262,14 @@ function parseOrtho(graph, reader, element) {
   graph.views[orthoID]['target'] = to_values;
 }
 
-
+/**
+ * Parses and store a transformation form the XML file. 
+ * It calculates all the transformations and store the final/resulting matrix.
+ * @param {XML Reader} reader 
+ * @param {XML transformation} element 
+ * @param {Transformation object} curr_transformation 
+ * @param {Transformation ID} ID 
+ */
 function parseTransformation(reader, element, curr_transformation, ID) {
   switch (element.nodeName) {
     case 'translate':
@@ -242,6 +294,12 @@ function parseTransformation(reader, element, curr_transformation, ID) {
   }
 }
 
+/**
+ * Parses and creates a light from the XML file
+ * @param {Scene Graph} graph 
+ * @param {XML light} light_element 
+ * @param {XML reader} reader 
+ */
 function createLight(graph, light_element, reader) {
   // Get id of the current
   var lightID = getID(reader, light_element, graph.lights, 'light');
@@ -319,6 +377,13 @@ function createLight(graph, light_element, reader) {
   }
 }
 
+/**
+ * Parses and creates a material from the XML
+ * @param {XMLScene} scene  - material constructor requeries the scene
+ * @param {XML material} material_element 
+ * @param {XML Reader} reader 
+ * @param {string} materialID 
+ */
 function createMaterial(scene, material_element, reader, materialID) {
   // Get shininess status
   var shininess = reader.getFloat(material_element, 'shininess');
@@ -386,6 +451,13 @@ function createMaterial(scene, material_element, reader, materialID) {
   return new_material;
 }
 
+/**
+ * Parses and creates a CGFTexture Object from the XML file
+ * @param {XMLScene} scene - CGFtexture constructor requires scene
+ * @param {XML texture} texture_element 
+ * @param {XML reader} reader 
+ * @param {string} textureID 
+ */
 function createTexture(scene, texture_element, reader, textureID) {
   var texturePath = reader.getString(texture_element, 'file');
   if (texturePath == null) {
@@ -435,6 +507,14 @@ function parsePrimitive(scene, reader, children, ID) {
   }
 }
 
+/**
+ * Parses and creates a component and all of it's children in one.
+ * @param {XMLScene} scene 
+ * @param {XMLreader} reader 
+ * @param {XML component} component_spec 
+ * @param {string} componentId 
+ * @param {Component Object} component - object created by us to store all the transformatios/texture/materials
+ */
 function dispatchComponent(
     scene, reader, component_spec, componentId, component) {
   switch (component_spec.nodeName) {
@@ -495,6 +575,9 @@ function dispatchComponent(
   }
 }
 
+/**
+ * Generates a random ID with length 5
+ */
 function makeid() {
   var text = '';
   var possible =

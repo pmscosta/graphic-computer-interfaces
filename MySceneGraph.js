@@ -89,6 +89,11 @@ class MySceneGraph {
 
 
   validateIds() {
+    if(this.idRoot==null || this.idRoot==""){
+      var k = Object.keys(this.components)[0];
+      this.idRoot = k;
+      this.onXMLMinorError("Root node not defined assuming node " + k);
+    }
 
     for (var key in this.components) {
       this.containsListComponent(this.components[key].componentChildren, this.components);
@@ -200,13 +205,13 @@ class MySceneGraph {
   parseScene(sceneNode) {
     this.idRoot = this.reader.getString(sceneNode, 'root');
 
-    if (this.idRoot == null)
+    if (this.idRoot == null || this.idRoot=="")
       this.onXMLMinorError('root node missing; assuming initial node');
 
     this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
 
-    if (this.axis_length == null || this.axis_length < 0) {
-      this.onXMLMinorError(
+    if (this.axisgth < 0) {
+      this.onXMLM_length == null || this.axis_leninorError(
         'axis_length not specified or invalid; assuming \'axis_length = 5\'');
       this.axis_length = 5;
     }

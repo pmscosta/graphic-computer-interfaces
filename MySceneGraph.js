@@ -98,8 +98,8 @@ class MySceneGraph {
     for (var key in this.components) {
       this.containsListComponent(this.components[key].componentChildren, this.components);
       this.containsListPrimitive(this.components[key].primitiveChildren, this.primitives);
-      this.containsListTexture(this.components[key].texture,this.textures);
-      this.containsListMaterial(this.components[key].materials,this.materials);
+      this.containsListTexture(this.components[key].texture, this.textures);
+      this.containsListMaterial(this.components[key].materials, this.materials);
     }
   }
 
@@ -121,8 +121,8 @@ class MySceneGraph {
   }
 
   containsListTexture(componentList, globalList) {
-    for (var i = 0; i < componentList.length; i+=3) {
-      if(componentList[i] == "inherit" || componentList[i] == "none") continue;
+    for (var i = 0; i < componentList.length; i += 3) {
+      if (componentList[i] == "inherit" || componentList[i] == "none") continue;
       if (globalList[componentList[i]] == undefined) {
         this.onXMLMinorError("Reference to non existent Texture, using default");
         componentList[i] = "leather";
@@ -132,8 +132,8 @@ class MySceneGraph {
 
   containsListMaterial(componentList, globalList) {
 
-    for (var i = 0; i < componentList.length; i+=3) {
-      if(componentList[i] == "inherit" || componentList[i] == "none") continue;
+    for (var i = 0; i < componentList.length; i += 3) {
+      if (componentList[i] == "inherit" || componentList[i] == "none") continue;
       if (globalList[componentList[i]] == undefined) {
         this.onXMLMinorError("Reference to non existent Material, using default");
         componentList[i] = "m1";
@@ -210,8 +210,8 @@ class MySceneGraph {
 
     this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
 
-    if (this.axisgth < 0) {
-      this.onXMLM_length == null || this.axis_leninorError(
+    if (this.axis_length == null || this.axis_length < 0 || isNaN(this.axis_length)) {
+      this.onXMLMinorError(
         'axis_length not specified or invalid; assuming \'axis_length = 5\'');
       this.axis_length = 5;
     }
@@ -324,12 +324,10 @@ class MySceneGraph {
 
   parseViews(viewsNode) {
     this.defaultPerspectiveId = this.reader.getString(viewsNode, 'default');
-
-    if (this.defaultPerspectiveId == null) {
+    if (this.defaultPerspectiveId == null || this.defaultPerspectiveId.length == 0) {
       this.onXMLMinorError(
         'no default perspective specified; assuming first one');
     }
-
     this.views = [];
     var children = viewsNode.children;
     var counter = 0;
@@ -350,6 +348,15 @@ class MySceneGraph {
 
     if (counter == 0) {
       return 'at least one perspective must be defined';
+    }
+
+    if (this.views[this.defaultPerspectiveId] == undefined) {
+
+      var key = Object.keys(this.views)[0];
+
+      this.onXMLMinorError("Default view specified, " + this.defaultPerspectiveId + ", does not match any of the specified. Assuming " + key + ".");
+      
+      this.defaultPerspectiveId = key;
     }
 
     this.log('parsed perspectives');
@@ -551,7 +558,7 @@ class MySceneGraph {
       this.materialsPile.push(this.materialsPile[last_mat]);
     else if (component.materials[component.materialPos] != 'inherit')
       this.materialsPile.push(component.materials[component.materialPos]);
-      
+
     this.applyAddOns();
 
 

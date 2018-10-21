@@ -174,7 +174,28 @@ class MySceneGraph {
       }
     }
 
+    this.generateDefaults();
     this.validateIds();
+  }
+
+  generateDefaults() {
+    var def_mat = new CGFappearance(this.scene);
+
+    def_mat.setAmbient(1, 1, 1, 1, 1);
+    def_mat.setDiffuse(1, 1, 1, 1);
+    def_mat.setSpecular(1, 1, 1, 1);
+    def_mat.setEmission(0, 0, 0, 0);
+    def_mat.setShininess(0.1);
+    def_mat.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.materials['__def__mat__'] = def_mat;
+    this.materialsPile.push('__def__mat__');
+
+    var new_texture = new CGFtexture(this.scene, 'scenes/images/signal.png');
+
+    this.textures['__def__tex__'] = new_texture;
+    this.texturesPile.push('__def__tex__');
+
   }
 
   parseDispatcher(nodeName, node) {
@@ -355,7 +376,7 @@ class MySceneGraph {
       var key = Object.keys(this.views)[0];
 
       this.onXMLMinorError("Default view specified, " + this.defaultPerspectiveId + ", does not match any of the specified. Assuming " + key + ".");
-      
+
       this.defaultPerspectiveId = key;
     }
 
@@ -521,7 +542,6 @@ class MySceneGraph {
     // TODO: Render loop starting at root of graph
 
     var rootElement = this.components[this.idRoot];
-    this.materials[rootElement.materials[0]].apply();
     this.iterateChildren(rootElement);
   }
 

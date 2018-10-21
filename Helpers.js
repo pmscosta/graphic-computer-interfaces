@@ -581,9 +581,12 @@ function dispatchComponent(
       var transformations = component_spec.children;
       for (var i = 0; i < transformations.length; i++) {
         if (transformations[i].nodeName == 'transformationref') {
-          component.transformation.multiply(
-            scene.transformations[reader.getString(transformations[i], 'id')]
-            .getMatrix());
+          var transId = reader.getString(transformations[i], 'id');
+          if(scene.transformations[transId]==undefined){
+            scene.onXMLMinorError("Invalid transformation reference ignoring transformation.");
+            continue;
+          }
+          component.transformation.multiply(scene.transformations[transId].getMatrix());
         } else {
           parseTransformation(
             reader, transformations[i], component.transformation,

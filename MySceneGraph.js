@@ -191,7 +191,7 @@ class MySceneGraph {
     this.materials['__def__mat__'] = def_mat;
     this.materialsPile.push('__def__mat__');
 
-    var new_texture = new CGFtexture(this.scene, 'scene/images/signal.png');
+    var new_texture = new CGFtexture(this.scene, 'scenes/images/signal.png');
 
     this.textures['__def__tex__'] = new_texture;
     this.texturesPile.push('__def__tex__');

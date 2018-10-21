@@ -87,6 +87,7 @@
         <texture id="def_text" file="scenes/images/default-texture.png"/>
         <texture id="starry_night" file="scenes/images/starry_night.jpg"/>
         <texture id="wood_grain" file="scenes/images/wood_grain.png"/>
+        <texture id="cara_duarte" file="scenes/images/duarte.jpg"/>
     
     </textures>
 
@@ -172,9 +173,9 @@
             <rectangle x1="0" y1="0" x2="1" y2="1" />
         </primitive>
         <primitive id="triangle">
-            <triangle x1="1" y1="0" z1="0"
-                    x2="-0.5" y2="0.866" z2="0"
-                    x3="-0.5" y3="-0.866" z3="0"/>
+            <triangle x1="0" y1="1" z1="0"
+                    x2="-0.8" y2="0" z2="0"
+                    x3="0.8" y3="0" z3="0"/>
         </primitive>
 
         <primitive id="sphere">
@@ -879,13 +880,31 @@
 
         </component>
 
+        <component id="duarte">
+
+            <transformation>
+
+                <translate x="4" y="2.5" z="0.1"/>
+            </transformation>
+
+            <materials>
+                <material id='inherit'/>
+            </materials>
+
+            <texture id="cara_duarte" length_s="1.7" length_t="1"/>
+            
+            <children>
+                <primitiveref id="triangle"/>
+            </children>
+        </component>
+
         
         <component id="living_room">
             <transformation>
             </transformation>
 
             <materials>
-                <material id ="m1"/>
+                <material id ="inherit"/>
             </materials>
 
             <texture id="none"/>
@@ -901,6 +920,7 @@
                 <componentref id="chair"/>
                 <componentref id="flowers"/>
                 <componentref id="starry_night"/>
+                <componentref id="duarte"/>
             </children>
         </component>
 

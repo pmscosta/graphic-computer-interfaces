@@ -893,7 +893,7 @@
             </transformation>
 
             <materials>
-                <material id="full_white"/>
+                <material id='full_white'/>
             </materials>
 
             <texture id="cara_duarte" length_s="1.7" length_t="1"/>

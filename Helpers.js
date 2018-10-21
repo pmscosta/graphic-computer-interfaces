@@ -502,16 +502,26 @@ function createMaterial(scene, material_element, reader, materialID) {
  */
 function createTexture(scene, texture_element, reader, textureID) {
   var texturePath = reader.getString(texture_element, 'file');
-  if (texturePath == null) {
+  if (texturePath == null || texturePath==0) {
     console.warn(
       'Warning: no path defined for texture = ' + textureID +
       '. Assuming default path for all');
 
     texturePath = '/scenes/images/default-texture.png';
   }
+  var tex = new XMLHttpRequest();
+  tex.open("HEAD",texturePath,false);
+  tex.send();
 
-  var new_texture = new CGFtexture(scene, texturePath);
-
+  if(tex.status == 404){
+    var new_texture = new CGFtexture(scene,'/scenes/images/signal.png');
+    console.warn(
+      'Warning: Invalid path defined for texture = ' + textureID +
+      '. Assuming signal path for all');
+  }else{
+    var new_texture = new CGFtexture(scene, texturePath);
+  }
+  
   return new_texture;
 }
 

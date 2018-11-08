@@ -67,7 +67,7 @@ class MyTorus extends CGFobject {
             normal.y = vertex.y - center.y;
             normal.z = vertex.z - center.z;
 
-            let comp = Math.sqrt(normal.x * normal.x + normal.y * normal.y + normal.z + normal.z);
+            let comp = Math.sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
 
             normal.x /=  comp; 
             normal.y /=  comp; 

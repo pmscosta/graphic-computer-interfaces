@@ -31,47 +31,39 @@ class MySphere extends CGFobject
 		this.texCoords = [];
 
 
-			for(let j = 0; j <= this.stacks; j++){
+		for (let i = 0; i <= this.stacks; i++) {
 
-			var ang_theta = j * this.theta;
-			var z1 = this.radius * Math.sin(ang_theta);
+            let v = i / this.stacks;
+			let phi = v * Math.PI;
+			
+			var z = this.radius * Math.cos(phi);
 
-			for(let i = 0; i < this.slices; i++){
+            for (let j = 0; j <= this.slices; j++) {
 
-			    var ang_phi = this.phi * i; 
-			    
+                let u = j / this.slices;
+                let teta = u * Math.PI * 2;
 
-				var x1 = this.radius *  Math.cos(ang_theta) * Math.cos(ang_phi);
-				var y1 = this.radius * Math.cos(ang_theta) * Math.sin(ang_phi); 
+                let vertex = [];
+                vertex.x = this.radius * Math.cos(teta) * Math.sin(phi);
+                vertex.y = this.radius * Math.sin(teta) * Math.sin(phi);
+                vertex.z = z;
                 
-                
-				this.vertices.push(x1, y1, z1);
-				this.normals.push(x1, y1, z1);
-				var u = 0.5 + (Math.atan2(z1, x1) /  (2 * Math.PI));
-				var v = 0.5 - (Math.asin(y1) / Math.PI);
-				this.texCoords.push(u, v);
+                this.vertices.push(vertex.x, vertex.y, vertex.z);
 
-
-			}
+				this.normals.push(vertex.x, vertex.y, vertex.z);
+				
+                this.texCoords.push(u, v);
+            }
 		}
-
+		
 		//now we only add 1 vertice in each iteration
-
-		for(let i = 0; i < (this.stacks * this.slices); i++){
-            /* 
-                We didn't need to test this before
-                because the starting point on a full rotation
-                of the prism, aka the vertice on with y = 0, does not 
-                have its value duplicated, so we need to subtract
-            */
-	   	    if( (i +1) % this.slices == 0){
-                this.indices.push(i, i + 1 - this.slices, i + this.slices);
-                this.indices.push(i +1 - this.slices, i +1, i + this.slices);
-		    }
-		    else{
-            this.indices.push(i, i+1, i + this.slices);
-            this.indices.push(i+1, i +1 + this.slices, i + this.slices);
-		    }
+		for (let i = 0; i < this.slices; ++i) {
+			for(let j = 0; j < this.stacks; ++j) {
+				this.indices.push(
+					(i+1)*(this.stacks+1) + j, i*(this.stacks+1) + j+1, i*(this.stacks+1) + j,
+					i*(this.stacks+1) + j+1, (i+1)*(this.stacks+1) + j, (i+1)*(this.stacks+1) + j+1
+				);
+			}
 		}
 
 		this.originalTex = this.texCoords.slice();
@@ -89,10 +81,5 @@ class MySphere extends CGFobject
 		this.updateTexCoordsGLBuffers();
 	  };
 
-	display(){
-		this.scene.pushMatrix();
-		this.scene.rotate(Math.PI / 2, 1, 0, 0); 
-		super.display();
-		this.scene.popMatrix();
-	}
+
 };

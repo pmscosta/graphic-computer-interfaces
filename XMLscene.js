@@ -144,7 +144,7 @@ class XMLscene extends CGFscene {
 
         this.lights[i].setSpotCutOff(angle);
         this.lights[i].setSpotExponent(exponent);
-        this.lights[i].setSpotDirection(target[0], target[1], target[2]);
+        this.lights[i].setSpotDirection(target[0] - location[0], target[1] - location[1], target[2] - location[2]);
       }
 
       this.lights[i].setVisible(true);

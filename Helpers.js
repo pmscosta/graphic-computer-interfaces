@@ -690,17 +690,18 @@ function dispatchComponent(
           component.primitiveChildren.push(id);
         }
       }
+      break;
     case 'animations':
     var childs = component_spec.children;
-    component.animations=[];
     for (var i = 0; i < childs.length; i++) {
       var id = reader.getString(childs[i], 'id');
-      component.animations.push(id);
+      component.animation.push(id);
+      console.log("heehheheheheh"+ id);
     }
   }
 }
 
-function createAnimation(graph,animation_element,reader,animationID){
+function createAnimation(scene,animation_element,reader,animationID){
   
   var values = [];
   var span = reader.getFloat(animation_element, 'span');
@@ -712,15 +713,14 @@ function createAnimation(graph,animation_element,reader,animationID){
         for(var i = 0; i < animation_element.children.length;i++){
             var controlPoint= [];
             getValuesOrDefault(reader,control_comp,'control: ', controlPoint,animation_element.children[i],control_def);
-            controlPoint.push(controlPoint);
+            controlPoints.push(controlPoint);
         }
-       return [span,controlPoints];
+       return new LinearAnimation(scene,controlPoints,span);
 
       case 'circular':
-        var center = reader.getFloat(animation_element, 'center');
         getValuesOrDefault(
           reader, circular_comp, 'circular: ', values, animation_element, circular_def);
-        return [span,center,controlPoints];
+          return new CircularAnimation(scene,values[2],values[3],values[4],values[5],values[1]);
   }
       
 

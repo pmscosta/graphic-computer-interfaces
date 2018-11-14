@@ -940,6 +940,10 @@
                 <translate x="4" y="2.5" z="0.05"/>
             </transformation>
 
+            <animations>
+                <animationref id="lin" />
+            </animations>
+
             <materials>
                 <material id="full_white"/>
             </materials>

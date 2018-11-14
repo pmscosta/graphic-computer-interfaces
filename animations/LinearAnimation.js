@@ -22,7 +22,7 @@ class LinearAnimation extends Animation {
         let totalDistance = 0;
 
         for (let i = 0; i < this.numberOfPoints - 1; i++)
-            totalDistance += distanceBetweenTwoPoints(this.controlPoints[i], this.controlPoints[i + 1]);
+            totalDistance += this.distanceBetweenTwoPoints(this.controlPoints[i], this.controlPoints[i + 1]);
 
         return totalDistance;
     }
@@ -48,8 +48,8 @@ class LinearAnimation extends Animation {
 
     update(time) {
 
-        let distanceToRun = time * this.velocity;
-
+        let distanceToRun = time*this.velocity/1000;
+        
         let dirVector = [this.controlPoints[this.endPoint][0] - this.controlPoints[this.startPoint][0],
             this.controlPoints[this.endPoint][1] - this.controlPoints[this.startPoint][1],
             this.controlPoints[this.endPoint][2] - this.controlPoints[this.startPoint][2]
@@ -66,16 +66,24 @@ class LinearAnimation extends Animation {
         this.position[0] += x_dist;
         this.position[1] += y_dist;
         this.position[2] += z_dist;
-
-        this.transformation.translate(this.position[0], this.position[1], this.position[2]);
-
+       // console.log(this.transformation);
+        this.transformation.translate(this.position);
+        //console.log(this.transformation);
         if (this.position[0] >= this.controlPoints[this.endPoint][0] &&
             this.position[1] >= this.controlPoints[this.endPoint][1] &&
             this.position[2] >= this.controlPoints[this.endPoint][2]) {
-            this.startPoint++;
-            this.endPoint++;
-        }
+            
+            if(this.startPoint<this.numberOfPoints-1)
+                this.startPoint++;
+            else 
+                this.startPoint = 0;
 
+            if(this.endPoint <this.numberOfPoints -1)
+                this.endPoint++;
+            else 
+                this.endPoint=0;
+        }
+    
 
     }
 

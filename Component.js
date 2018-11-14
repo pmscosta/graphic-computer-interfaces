@@ -9,6 +9,10 @@ class Component {
       this.materials = [];
       this.id;
       this.materialPos=0;
+      this.animation=[];
   }
+
+
+
 
 }

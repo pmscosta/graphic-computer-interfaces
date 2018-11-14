@@ -502,6 +502,7 @@ class MySceneGraph {
           this, this.reader, children[i].children[j], componentId, component);
       }
       this.components[componentId] = component;
+
     }
 
     this.log('parsed components');
@@ -527,6 +528,7 @@ class MySceneGraph {
       var animationID = getID(this.reader,children[i],this.animations,' animation ');
       
       this.animations[animationID] =createAnimation(this.scene, children[i], this.reader, animationID);
+
     }
   }
 
@@ -564,26 +566,19 @@ class MySceneGraph {
   displayScene() {
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
-    console.log(this.components);
     
     var rootElement = this.components[this.idRoot];
     this.iterateChildren(rootElement);
   }
 
-  iterateChildren(component) {
-
-
-    this.scene.pushMatrix();
-
-    this.scene.multMatrix(component.transformation.getMatrix());
+  managePile(component){
 
     let last_tex = this.texturesPile.length - 1;
     let last_mat = this.materialsPile.length - 1;
     let last_length = this.lengthPile.length - 1;
 
-
-    // Insert into pile
-    if (component.texture[0] == 'inherit') {
+     // Insert into pile
+     if (component.texture[0] == 'inherit') {
 
       if (this.texturesPile.length > 0)
         this.texturesPile.push(this.texturesPile[last_tex]);
@@ -603,8 +598,28 @@ class MySceneGraph {
       this.materialsPile.push(this.materialsPile[last_mat]);
     else if (component.materials[component.materialPos] != 'inherit')
       this.materialsPile.push(component.materials[component.materialPos]);
+  }
+
+  iterateChildren(component) {
+
+
+    this.scene.pushMatrix();
+
+    this.scene.multMatrix(component.transformation.getMatrix());
+    if(component.animation.length>0)
+    {
+      //console.log(this.scene.getMatrix());
+      //this.animations[component.animation[0]].apply();
+      this.scene.multMatrix(this.animations[component.animation[0]].transformation.getMatrix());
+      //console.log(this.scene.getMatrix());
+    }
+
+
+    this.managePile(component);
 
     this.applyAddOns();
+
+    
 
 
     for (var i = 0; i < component.componentChildren.length; i++) {
@@ -653,6 +668,18 @@ class MySceneGraph {
   updateMaterials() {
     for (var key in this.components) {
       this.components[key].materialPos = ++this.components[key].materialPos % this.components[key].materials.length;
+    }
+  }
+
+  update(currTime){
+
+    for (var key in this.components){
+      var component = this.components[key];
+      if(component.animation.length>0)
+      {
+        this.animations[component.animation[0]].update(currTime);
+      }
+      
     }
   }
 }

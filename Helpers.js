@@ -587,10 +587,21 @@ function parsePrimitive(scene, reader, children, ID) {
       var values = [];
       getValuesOrDefault(
         reader,patch_comp, 'patch: '+ ID, values,children,patch_def);
-      var controlPoint=[];
-      getValuesOrDefault(
-        reader,control_comp, 'control point: ', controlPoint,children.children[0],control_def);
-      return new Patch(scene, values[0], values[1], values[2], values[3],controlPoint);
+      
+      let grandChildren = children.children;
+      //let grandpaSize = grandChildren.length;
+      //let totalPoints = values[0] * values[1];
+      let controlPoints = [];
+
+      for(let i = 0; i < grandChildren.length; i++){
+        var controlPoint=[];
+        getValuesOrDefault(
+          reader,control_comp, 'control point: ', controlPoint,grandChildren[i],control_def);
+        controlPoints.push(controlPoint);
+
+      }
+        
+      return new Patch(scene, values[0], values[1], values[2], values[3],controlPoints);
     
     case 'plane':
       var values = [];

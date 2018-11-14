@@ -9,8 +9,8 @@ class Plane extends CGFobject {
 		this.plane = this.makeSurface(1, 1,
 			[
 				[	
-					[-0.5, 0, -0.5, 1],
-					[-0.5, 0, 0.5, 1]
+					[-0.5, 0, 0.5, 1],
+					[-0.5, 0, -0.5, 1]
 				],
 				[
 					[0.5, 0, 0.5, 1],

@@ -564,7 +564,6 @@ class MySceneGraph {
   displayScene() {
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
-    console.log(this.components);
     
     var rootElement = this.components[this.idRoot];
     this.iterateChildren(rootElement);

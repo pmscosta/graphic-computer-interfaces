@@ -4,7 +4,7 @@ class Cylinder2 extends CGFobject {
 	{
 		super(scene);
 
-		/*this.slices = slices;
+		this.slices = slices;
 		this.stacks = stacks;
 		this.base = base;
 		this.radius = 1;
@@ -12,7 +12,7 @@ class Cylinder2 extends CGFobject {
 		this.heigth = heigth;
         this.ang = (Math.PI * 2) / slices;
         this.npartsU = slices;
-		this.npartsV = npartsV;
+		this.npartsV = stacks;
 
 		this.stack_divider = this.heigth / stacks;
 

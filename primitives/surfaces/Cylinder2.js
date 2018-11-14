@@ -3,7 +3,7 @@ class Cylinder2 extends CGFobject {
 	constructor(scene, npartsU, npartsV) {
 		super(scene);
 
-		this.slices = slices;
+		/*this.slices = slices;
 		this.stacks = stacks;
 		this.base = base;
 		this.radius = 1;
@@ -26,7 +26,7 @@ class Cylinder2 extends CGFobject {
 		this.spacer = 1.0 / slices;
 		this.spacer_y = 1.0 / this.stacks;
 
-		this.initBuffers();
+		this.initBuffers();*/
 	};
     
 }

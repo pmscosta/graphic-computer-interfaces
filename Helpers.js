@@ -35,6 +35,7 @@ var exponent_comp = ['exponent'];
 var exponent_def = 0;
 
 var linear_comp = ['id, span'];
+var linear_def = [1,5];
 
 var control_comp = ['xx', 'yy', 'zz'];
 var control_def = [1, 1, 1];
@@ -49,6 +50,8 @@ var patch_comp = ['npointsU', 'npointsV', 'npartsU', 'npartsV'];
 var patch_def = [1, 1, 1, 1];
 
 var terrain_comp = ['idTexture', 'idheightmap', 'parts', 'heightscale'];
+
+var water_comp = ['idTexture', 'idwavemap', 'parts', 'heightscale','texscale'];
 
 var from_def = [10, 10, 10];
 var to_def = [0, 0, 0];
@@ -579,6 +582,44 @@ function parsePrimitive(scene, reader, children, ID) {
       getValuesOrDefault(
         reader, torus_comp, 'torus: ' + ID, values, children, torus_def);
       return new MyTorus(scene, values[0], values[1], values[2], values[3]);
+    
+    case 'patch':
+      var values = [];
+      getValuesOrDefault(
+        reader,patch_comp, 'patch: '+ ID, values,children,patch_def);
+      var controlPoint=[];
+      getValuesOrDefault(
+        reader,control_comp, 'control point: ', controlPoint,children.children[0],control_def);
+      return new Patch(scene, values[0], values[1], values[2], values[3],controlPoint);
+    
+    case 'plane':
+      var values = [];
+      getValuesOrDefault(
+        reader,plane_comp, 'plane: '+ ID, values,children,plane_def);
+      return new Plane(scene,values[0],values[1]);
+    
+    case 'vehicle':
+        return new Vehicle(scene);
+    
+    case 'cylinder2':
+      var values = [];
+      getValuesOrDefault(
+        reader, cylinder_comp, 'cylinder: ' + ID, values, children,
+        cylinder_def);
+      return new Cylinder2(
+        scene, values[0], values[1], values[2], values[3], values[4]);
+
+    case 'terrain':
+      var values = [];
+      getValuesOrDefault(
+        reader,terrain_comp, 'terrain: '+ ID, values,children,[]);
+      return new Terrain(scene,values[0],values[1], values[2], values[3]);
+
+    case 'water':
+      var values = [];
+      getValuesOrDefault(
+        reader,water_comp, 'water: '+ ID, values,children,[]);
+      return new Water(scene,values[0],values[1], values[2], values[3], values[4]);
   }
 }
 
@@ -649,7 +690,40 @@ function dispatchComponent(
           component.primitiveChildren.push(id);
         }
       }
+    case 'animations':
+    var childs = component_spec.children;
+    component.animations=[];
+    for (var i = 0; i < childs.length; i++) {
+      var id = reader.getString(childs[i], 'id');
+      component.animations.push(id);
+    }
   }
+}
+
+function createAnimation(graph,animation_element,reader,animationID){
+  
+  var values = [];
+  var span = reader.getFloat(animation_element, 'span');
+
+  switch(animation_element.nodeName){
+      case 'linear':
+
+        var controlPoints=[];
+        for(var i = 0; i < animation_element.children.length;i++){
+            var controlPoint= [];
+            getValuesOrDefault(reader,control_comp,'control: ', controlPoint,animation_element.children[i],control_def);
+            controlPoint.push(controlPoint);
+        }
+       return [span,controlPoints];
+
+      case 'circular':
+        var center = reader.getFloat(animation_element, 'center');
+        getValuesOrDefault(
+          reader, circular_comp, 'circular: ', values, animation_element, circular_def);
+        return [span,center,controlPoints];
+  }
+      
+
 }
 
 /**

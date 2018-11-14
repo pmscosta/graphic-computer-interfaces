@@ -10,13 +10,14 @@ var indexes = {
   TEXTURES_INDEX: 4,
   MATERIALS_INDEX: 5,
   TRANSFORMATIONS_INDEX: 6,
-  PRIMITIVES_INDEX: 7,
-  COMPONENTS_INDEX: 8
+  ANIMATIONS_INDEX:7,
+  PRIMITIVES_INDEX: 8,
+  COMPONENTS_INDEX: 9
 };
 
 var tags = [
   'scene', 'views', 'ambient', 'lights', 'textures', 'materials',
-  'transformations', 'primitives', 'components'
+  'transformations','animations', 'primitives', 'components'
 ];
 
 
@@ -218,6 +219,8 @@ class MySceneGraph {
         return this.parsePrimitives(node);
       case 'components':
         return this.parseComponents(node);
+      case 'animations':
+        return this.parseAnimations(node);
       default:
         return null;
     }
@@ -506,6 +509,27 @@ class MySceneGraph {
     return null;
   }
 
+  /**
+   * Parses the <animations> node.
+   * @param {components block element} animationsNode
+   */
+  parseAnimations(animationsNode){
+    var children = animationsNode.children;
+    this.animations = [];
+    
+    for(var i=0; i < children.length;i++){
+
+      if(children[i].nodeName != 'linear' &&children[i].nodeName !='circular'){
+        this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
+        continue;
+      }
+
+      var animationID = getID(this.reader,children[i],this.animations,' animation ');
+      
+      this.animations[animationID] =createAnimation(this.scene, children[i], this.reader, animationID);
+    }
+  }
+
   /*
    * Callback to be executed on any read error, showing an error on the
    * console.
@@ -540,7 +564,8 @@ class MySceneGraph {
   displayScene() {
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
-
+    console.log(this.components);
+    
     var rootElement = this.components[this.idRoot];
     this.iterateChildren(rootElement);
   }

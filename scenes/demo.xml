@@ -1,5 +1,5 @@
 <yas>
-    <scene root="living_room" axis_length="5"/>
+    <scene root="plane" axis_length="5"/>
     <views default="far_view">
         <perspective id="far_view" near="0.1" far="40" angle="45">
             <from x="15" y="10" z="15"/>
@@ -219,8 +219,11 @@
         </primitive>
 
         <primitive id = "patch">
-            <patch npointsU="1" npointsV="1" npartsU="5" npartsV="5">
-                <controlpoint xx="1" yy="1" zz="1" />
+            <patch npointsU="2" npointsV="2" npartsU="5" npartsV="5">
+                <controlpoint xx="-0.5" yy="0" zz="0.5" />
+                <controlpoint xx="-0.5" yy="0" zz="-0.5"/>
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+                <controlpoint xx="0.5" yy="0" zz="-0.5"/>
             </patch>
         </primitive>
 
@@ -955,6 +958,21 @@
             </children>
         </component>
 
+
+        <component id="plane">
+          <transformation>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="patch"/>
+            </children>
+        </component>
         
         <component id="living_room">
             <transformation>

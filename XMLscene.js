@@ -1,5 +1,7 @@
 var DEGREE_TO_RAD = Math.PI / 180;
 
+var FPS = 60;
+
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -39,6 +41,7 @@ class XMLscene extends CGFscene {
     this.cameras = [];
 
     this.axis = new CGFaxis(this);
+
   }
 
   /**
@@ -107,7 +110,24 @@ class XMLscene extends CGFscene {
     this.updateLights();
 
     this.sceneInited = true;
+
+    this.t0 = Date.now();
+
+    this.oldTime = this.t0;
+    
+		this.setUpdatePeriod(1000/FPS);
+
   }
+
+  update(timestamp){
+
+		let currTime = timestamp - this.oldTime;
+
+    let delta = timestamp-this.t0;
+
+		this.oldTime = timestamp; 
+		
+	};
 
   initLights() {
     var i = 0;

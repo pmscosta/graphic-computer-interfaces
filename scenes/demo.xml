@@ -169,6 +169,21 @@
         </transformation>
     </transformations>
 
+
+    <animations>
+
+        <linear id="lin" span="5">
+            <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="1" yy="1" zz="1" />
+        </linear>
+
+
+        <circular id = "cir" span = "2" center = "1 1 1" 
+            radius ="5" startang = "0" rotang = "90" />
+
+
+    </animations>
+
     <primitives>
         <primitive id="square">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
@@ -197,6 +212,33 @@
 
         <primitive id="torus">
             <torus inner="0.1" outer="0.3" slices="20" loops="20"/>
+        </primitive>
+
+        <primitive id ="nurb">
+            <plane npartsU="20" npartsV="ii"/>
+        </primitive>
+
+        <primitive id = "patch">
+            <patch npointsU="1" npointsV="1" npartsU="5" npartsV="5">
+                <controlpoint xx="1" yy="1" zz="1" />
+            </patch>
+        </primitive>
+
+        <primitive id = "vehicle">
+            <vehicle />
+        </primitive>
+
+        <primitive id = "cylinder2">
+            <cylinder2 base="1" top="1" height="5" slices="20" stacks="20"/>
+         </primitive>
+
+        <primitive id = "terrain">
+            <terrain idTexture="terrain" idheightmap="terranheight" parts="5" heightscale="1"/>
+        </primitive>
+
+        <primitive id = "water">
+            <water idTexture="water" idwavemap="waves" parts="5" heightscale="1" texscale="1" />
+            
         </primitive>
 
     </primitives>
@@ -577,6 +619,12 @@
                 <translate x="7" y="0" z="1"/>
             </transformation>
 
+            <animations>
+
+                <animationsref id="lin"/>
+
+            </animations>
+
             <materials>
                 <material id ="m1"/>
             </materials>
@@ -928,8 +976,6 @@
                 <componentref id="duarte"/>
             </children>
         </component>
-
-        
 
     </components>
 

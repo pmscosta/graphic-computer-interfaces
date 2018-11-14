@@ -34,6 +34,22 @@ var angle_def = 0;
 var exponent_comp = ['exponent'];
 var exponent_def = 0;
 
+var linear_comp = ['id, span'];
+
+var control_comp = ['xx', 'yy', 'zz'];
+var control_def = [1, 1, 1];
+
+var circular_comp = ['id', 'span', 'center', 'radius', 'startang', 'rotang'];
+var circular_def = [1, 1, "1 1 1", 1, 0, 90];
+
+var plane_comp = ['npartsU', 'npartsV'];
+var plane_def = [1, 1];
+
+var patch_comp = ['npointsU', 'npointsV', 'npartsU', 'npartsV'];
+var patch_def = [1, 1, 1, 1];
+
+var terrain_comp = ['idTexture', 'idheightmap', 'parts', 'heightscale'];
+
 var from_def = [10, 10, 10];
 var to_def = [0, 0, 0];
 

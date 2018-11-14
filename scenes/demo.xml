@@ -175,6 +175,9 @@
         <linear id="lin" span="5">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="1" yy="1" zz="1" />
+            <controlpoint xx="3" yy="1" zz="1" />
+            <controlpoint xx="3" yy="1" zz="5" />
+            <controlpoint xx="0" yy="0" zz="0" />
         </linear>
 
 
@@ -958,10 +961,14 @@
             </children>
         </component>
 
-
-        <component id="plane">
+        <component id="plane2">
           <transformation>
+                <translate x="1" y="1" z="1"/>
             </transformation>
+
+            <animations>
+                <animationref id="lin" />
+            </animations>
 
             <materials>
                 <material id ="m1"/>
@@ -971,6 +978,27 @@
 
             <children>
                 <primitiveref id="patch"/>
+            </children>
+        </component>
+
+
+        <component id="plane">
+          <transformation>
+            </transformation>
+
+            <animations>
+                <animationref id="lin" />
+            </animations>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="patch"/>
+                <componentref id="plane2"/>
             </children>
         </component>
         

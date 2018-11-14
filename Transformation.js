@@ -9,6 +9,13 @@ class Transformation {
     this.scene.popMatrix();
   }
 
+  resetMatrix(){
+    this.scene.pushMatrix();
+    this.scene.loadIdentity();
+    this.matrix = this.scene.getMatrix();
+    this.scene.popMatrix();
+  }
+
   getMatrix() {
     return this.matrix;
   }

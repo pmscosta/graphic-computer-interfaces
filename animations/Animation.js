@@ -8,12 +8,11 @@ class Animation {
 
     apply(){
         this.scene.pushMatrix(); 
-            console.log(this.scene.getMatrix());
             this.scene.multMatrix(this.transformation.getMatrix());
-            console.log(this.scene.getMatrix());
         this.scene.popMatrix();
     }
 
-    update(time) {};
+    update(time) {
+    };
 
 }

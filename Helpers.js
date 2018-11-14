@@ -707,7 +707,6 @@ function dispatchComponent(
     for (var i = 0; i < childs.length; i++) {
       var id = reader.getString(childs[i], 'id');
       component.animation.push(id);
-      console.log("heehheheheheh"+ id);
     }
   }
 }

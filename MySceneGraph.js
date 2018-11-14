@@ -608,10 +608,7 @@ class MySceneGraph {
     this.scene.multMatrix(component.transformation.getMatrix());
     if(component.animation.length>0)
     {
-      //console.log(this.scene.getMatrix());
-      //this.animations[component.animation[0]].apply();
-      this.scene.multMatrix(this.animations[component.animation[0]].transformation.getMatrix());
-      //console.log(this.scene.getMatrix());
+      this.animations[component.animation[0]].apply();
     }
 
 

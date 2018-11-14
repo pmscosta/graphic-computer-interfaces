@@ -111,9 +111,7 @@ class XMLscene extends CGFscene {
 
     this.sceneInited = true;
 
-    this.t0 = Date.now();
-
-    this.oldTime = this.t0;
+    this.oldTime = Date.now();
     
 		this.setUpdatePeriod(1000/FPS);
 

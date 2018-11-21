@@ -3,83 +3,83 @@ class Cylinder2 extends CGFobject {
 	constructor(scene, base, top, heigth, slices, stacks) {
 		super(scene);
 
-		this.slices = slices;
-		this.stacks = stacks;
 		this.base = base;
-		this.radius = 1;
 		this.top = top;
 		this.heigth = heigth;
-		this.ang = (Math.PI * 2) / slices;
 		this.npartsU = slices;
 		this.npartsV = stacks;
 
-		this.stack_divider = this.heigth / stacks;
+		this.weight = 1;
 
-		this.spacer = 1.0 / slices;
-		this.spacer_y = 1.0 / this.stacks;
+		this.controlPoints = this.makeTopControlPoints();
 
-		this.weight = Math.sin(Math.PI / 4)
-		this.half_radius = this.radius / 2.0;
+		this.cylinderUp = this.makeSurface(3, 1, this.controlPoints);
 
-		this.controlPoints = this.makeControlPoints();
+		this.controlPoints = this.makeBotControlPoints();
 
-		this.cylinder = this.makeSurface(8, 1, this.controlPoints);
-
-
+		this.cylinderBot = this.makeSurface(3, 1, this.controlPoints);
 	};
 
-	makeControlPoints() {
+	makeTopControlPoints() {
 
-		let B5 = [-this.half_radius, 0, this.half_radius, this.weight];
-		let B5_z = [-this.half_radius, this.heigth, this.half_radius, this.weight];
-		let B6 = [0, 0, this.half_radius, 1];
-		let B6_z = [0, this.heigth, this.half_radius, 1];
+		let P1 = [this.base, 0, 0, 1];
+		let P1_z = [this.top, 0, this.heigth, 1];
+
+		let P2 = [this.base, 4/3 * this.base, 0, 1];
+		let P2_z = [this.top, 4/3 * this.top, this.heigth, 1];
+
+		let P3 = [-this.base, 4/3 * this.base, 0, 1];
+		let P3_z = [-this.top, 4/3 * this.top, this.heigth, 1];
+
+		let P4 = [-this.base, 0, 0, 1];
+		let P4_z = [-this.top, 0, this.heigth, 1];
 		
-		let B4 = [-this.half_radius, 0, 0, 1];
-		let B4_z = [-this.half_radius, this.heigth, 0, 1];
-		let B3 = [-this.half_radius, 0, -this.half_radius, this.weight];
-		let B3_z = [-this.half_radius, this.heigth, -this.half_radius, this.weight];
-		
-		let B2 = [0, 0, -this.half_radius, 1];
-		let B2_z = [0, this.heigth, -this.half_radius, 1];
-		let B1 = [this.half_radius, 0, -this.half_radius, this.weight];
-		let B1_z = [this.half_radius, this.heigth, -this.half_radius, this.weight];
-		
-		let B0 = [this.half_radius, 0, 0, 1];
-		let B0_z = [this.half_radius, this.heigth, 0, 1];
-		let B8 = B1;
-		let B7 = [this.half_radius, 0, this.half_radius, this.weight];
-		let B7_z = [this.half_radius, this.heigth, this.half_radius, this.weight];
 
 		return [
 			[
-				B6, B6_z
+				P1, P1_z
 			],
 			[
-				B7, B7_z
+				P2, P2_z
 			],
 			[
-				B0, B0_z
+				P3, P3_z
 			],
 			[
-				B1, B1_z
-			],
-			[
-				B2, B2_z
-			],
-			[
-				B3, B3_z
-			],
-			[
-				B4, B4_z
-			],
-			[
-				B5, B5_z
-			],
-			[
-				B6, B6_z
+				P4, P4_z
 			]
+		];
 
+	}
+
+	makeBotControlPoints() {
+
+		let P1 = [-this.base, 0, 0, 1];
+		let P1_z = [-this.top, 0, this.heigth, 1];
+
+		let P2 = [-this.base, -4/3 * this.base, 0, 1];
+		let P2_z = -[this.top, -4/3 * this.top, this.heigth, 1];
+
+		let P3 = [this.base, -4/3 * this.base, 0, 1];
+		let P3_z = [this.top, -4/3 * this.top, this.heigth, 1];
+
+		let P4 = [this.base, 0, 0, 1];
+		let P4_z = [this.top, 0, this.heigth, 1];
+		
+
+		return [
+			[
+				P1, P1_z
+			],
+			[
+				P2, P2_z
+			],
+			[
+				P3, P3_z
+			],
+			[
+				P4, P4_z
+			]
 		];
 
 	}
@@ -97,10 +97,8 @@ class Cylinder2 extends CGFobject {
 
 	display() {
 
-		this.scene.pushMatrix();
-			this.scene.rotate(Math.PI / 2.0, 1,0, 0);
-			this.cylinder.display();
-		this.scene.popMatrix();
+		this.cylinderUp.display(); 
+		this.cylinderBot.display();
 	}
 
 

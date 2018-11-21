@@ -26,7 +26,7 @@ class Patch extends CGFobject {
 			let innerV = [];
 
 			for (let v = 0; v < this.npointsV; v++) {
-				let point = this.controlPoint[2 * u + v].concat(1);
+				let point = this.controlPoint[this.npointsV * u + v].concat(1);
 				innerV.push(point);
 			}
 
@@ -34,6 +34,8 @@ class Patch extends CGFobject {
 
 
 		}
+
+		console.log(vertexes);
 
 		return vertexes;
 

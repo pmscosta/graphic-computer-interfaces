@@ -1,5 +1,5 @@
 <yas>
-    <scene root="plane" axis_length="5"/>
+    <scene root="fighter_jet" axis_length="5"/>
     <views default="far_view">
         <perspective id="far_view" near="0.1" far="40" angle="45">
             <from x="15" y="10" z="15"/>
@@ -221,12 +221,50 @@
             <plane npartsU="20" npartsV="ii"/>
         </primitive>
 
-        <primitive id = "patch">
+        <primitive id = "patch2">
             <patch npointsU="2" npointsV="2" npartsU="5" npartsV="5">
                 <controlpoint xx="-0.5" yy="0" zz="0.5" />
                 <controlpoint xx="-0.5" yy="0" zz="-0.5"/>
                 <controlpoint xx="0.5" yy="0" zz="0.5" />
                 <controlpoint xx="0.5" yy="0" zz="-0.5"/>
+            </patch>
+        </primitive>
+
+
+        <primitive id = "wing">
+            <patch npointsU="2" npointsV="2" npartsU="5" npartsV="5">
+                <controlpoint xx="-0.5" yy="0" zz="0.5" />
+                <controlpoint xx="-0.5" yy="0" zz="0.4"/>
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+                <controlpoint xx="0.5" yy="0" zz="-0.3"/>
+            </patch>
+        </primitive>
+
+        <primitive id = "cockpit">
+            <patch npointsU="3" npointsV="2" npartsU="5" npartsV="5">
+                <controlpoint xx="-1.5" yy="-1.5" zz="0.0" />
+                <controlpoint xx="-1.5" yy="1.5" zz="0.0"/>
+                <controlpoint xx="0" yy="1.5" zz="3.0" />
+                <controlpoint xx="0" yy="1.5" zz="3.0"/>
+                <controlpoint xx="1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="1.5" yy="1.5" zz="0.0"/>
+            </patch>
+        </primitive>
+
+         <primitive id = "patch">
+            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20">
+                <controlpoint xx="-2.0" yy="-2.0" zz="1.0" />
+                <controlpoint xx="-2.0" yy="-1.0" zz="-2.0"/>
+                <controlpoint xx="-2.0" yy="1.0" zz="5.0" />
+                <controlpoint xx="-2.0" yy="2.0" zz="-1.0"/>
+                <controlpoint xx="0" yy="-2.0" zz="0" />
+                <controlpoint xx="0" yy="-1.0" zz="-1.0"/>
+                <controlpoint xx="0" yy="1.0" zz="1.5" />
+                <controlpoint xx="0" yy="2.0" zz="0"/>
+                <controlpoint xx="2.0" yy="-2.0" zz="-1.0" />
+                <controlpoint xx="2.0" yy="-1.0" zz="2.0"/>
+                <controlpoint xx="2.0" yy="1.0" zz="-5.0" />
+                <controlpoint xx="2.0" yy="2.0" zz="1.0"/>
             </patch>
         </primitive>
 
@@ -961,28 +999,7 @@
             </children>
         </component>
 
-        <component id="plane2">
-          <transformation>
-                <translate x="1" y="1" z="1"/>
-            </transformation>
-
-            <animations>
-                <animationref id="lin" />
-            </animations>
-
-            <materials>
-                <material id ="m1"/>
-            </materials>
-
-            <texture id="none"/>
-
-            <children>
-                <primitiveref id="patch"/>
-            </children>
-        </component>
-
-
-        <component id="plane">
+        <component id="fighter_jet">
           <transformation>
             </transformation>
 
@@ -997,8 +1014,7 @@
             <texture id="none"/>
 
             <children>
-                <primitiveref id="patch"/>
-                <componentref id="plane2"/>
+                <primitiveref id="vehicle"/>
             </children>
         </component>
         

@@ -93,6 +93,8 @@
         <texture id="starry_night" file="scenes/images/starry_night.jpg"/>
         <texture id="wood_grain" file="scenes/images/wood_grain.png"/>
         <texture id="cara_duarte" file="scenes/images/duarte.jpg"/>
+        <texture id="island" file="scenes/images/island.jpg"/>
+        <texture id="island-height" file="scenes/images/island-height.jpg"/>
     
     </textures>
 

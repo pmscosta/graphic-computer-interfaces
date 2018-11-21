@@ -95,7 +95,6 @@
         <texture id="cara_duarte" file="scenes/images/duarte.jpg"/>
         <texture id="island" file="scenes/images/island.jpg"/>
         <texture id="island-height" file="scenes/images/island-height.jpg"/>
-    
     </textures>
 
     <materials>
@@ -279,11 +278,11 @@
          </primitive>
 
         <primitive id = "terrain">
-            <terrain idTexture="terrain" idheightmap="terranheight" parts="5" heightscale="1"/>
+            <terrain idtexture="island" idheightmap="island-height" parts="50" heightscale="1"/>
         </primitive>
 
         <primitive id = "water">
-            <water idTexture="water" idwavemap="waves" parts="5" heightscale="1" texscale="1" />
+            <water idtexture="water" idwavemap="waves" parts="5" heightscale="1" texscale="1" />
             
         </primitive>
 
@@ -1016,7 +1015,7 @@
             <texture id="none"/>
 
             <children>
-                <primitiveref id="vehicle"/>
+                <primitiveref id="terrain"/>
             </children>
         </component>
         

@@ -49,15 +49,26 @@ var plane_def = [1, 1];
 var patch_comp = ['npointsU', 'npointsV', 'npartsU', 'npartsV'];
 var patch_def = [1, 1, 1, 1];
 
-var terrain_comp = ['idTexture', 'idheightmap', 'parts', 'heightscale'];
+var terrain_comp = ['idtexture', 'idheightmap', 'parts', 'heightscale'];
 
-var water_comp = ['idTexture', 'idwavemap', 'parts', 'heightscale','texscale'];
+var water_comp = ['idtexture', 'idwavemap', 'parts', 'heightscale','texscale'];
 
 var from_def = [10, 10, 10];
 var to_def = [0, 0, 0];
 
 var scale_def = [1, 1, 1];
 var trans_def = [1, 1, 1];
+
+
+function getTerrainValues(reader, components, values, element) {
+ 
+  var idtexture = reader.getString(element, components[0]);
+  var idheightmap = reader.getString(element, components[1]);
+  var parts = reader.getFloat(element, components[2]);
+  var heightscale = reader.getFloat(element, components[3]);
+
+  values.push(idtexture, idheightmap, parts, heightscale);
+}
 
 
 /**
@@ -622,8 +633,11 @@ function parsePrimitive(scene, reader, children, ID) {
 
     case 'terrain':
       var values = [];
-      getValuesOrDefault(
-        reader,terrain_comp, 'terrain: '+ ID, values,children,[]);
+      getTerrainValues(
+        reader,terrain_comp, values,children);
+      
+        console.log(values);
+
       return new Terrain(scene,values[0],values[1], values[2], values[3]);
 
     case 'water':

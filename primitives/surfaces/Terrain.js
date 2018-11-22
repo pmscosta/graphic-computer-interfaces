@@ -22,6 +22,10 @@ class Terrain extends CGFobject {
 
 		this.shader.setUniformsValues( {uSampler2: 1});
 
+		console.log(this.heightscale);
+
+		this.shader.setUniformsValues( {hScale: this.heightscale});
+
 	}
 
 	display() {
@@ -33,10 +37,6 @@ class Terrain extends CGFobject {
 		this.texture.bind(0);
 
 		this.scene.pushMatrix();
-
-		this.scene.scale(20, 1, 20);
-
-		this.scene.scale(20, 1, 20);
 
 		this.plane.display();
 

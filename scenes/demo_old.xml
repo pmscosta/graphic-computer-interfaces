@@ -2,8 +2,8 @@
     <scene root="island" axis_length="5"/>
     <views default="far_view">
         <perspective id="far_view" near="0.1" far="400" angle="45">
-            <from x="5" y="9" z="20"/>
-            <to x="5" y="0" z="0"/>
+            <from x="20" y="8" z="20"/>
+            <to x="0" y="0" z="0"/>
         </perspective>
 
         <perspective id="close_up" near="0.1" far="50" angle="30">
@@ -11,6 +11,20 @@
             <to x="0" y="0" z="0"/>
         </perspective>
 
+        <ortho id="ortho_view" near="0.1" far="5" left="-2" right="2" top="2" bottom="-2">
+            <from x="4.1" y="3" z="1.8"/>
+            <to x="4.1" y="4" z="50"/>
+        </ortho>
+
+        <ortho id="painting_view" near="0.1" far="5" left="-3" right="3" top="2" bottom="-2">
+            <from x="2" y="3" z="4"/>
+            <to x="0" y="3" z="4"/>
+        </ortho>
+
+        <ortho id="cara_duarte" near="0.1" far="5" left="-2" right="2" top="1" bottom="-1">
+            <from x="4" y="3.45" z="2"/>
+            <to x="4" y="3.45" z="0"/>
+        </ortho>
     </views>
 
     <ambient>
@@ -19,13 +33,49 @@
     </ambient>
 
     <lights>
-
-        <omni id="sun" enabled="1">
-            <location x="5" y="10" z="5" w="0" />
-            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
-            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
-            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+        <omni id="back_1" enabled="0">
+            <location x="1" y="12" z="1" w="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
         </omni>
+
+        <omni id="back_2" enabled="0">
+            <location x="7" y="12" z="1" w="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
+        </omni>
+
+        <omni id="front_1" enabled="0">
+            <location x="1" y="12" z="7" w="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
+        </omni>
+
+        <omni id="front_2" enabled="0">
+            <location x="7" y="12" z="7" w="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.3" g="0.3" b="0.3" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
+        </omni>
+
+        <spot id="center" enabled="1" angle="0" exponent="10">
+            <location x="4" y="10" z="4" w="0" />
+            <target x="4" y="0" z="4" />
+            <ambient r="0.3" g="0.3" b="0.3" a="0.3"/>
+            <diffuse r="0.5" g="0.5" b="0.5" a="0"/>
+            <specular r="0.5" g="0.5" b="0.5" a="0"/>
+        </spot>
+
+        <spot id="spot_light" enabled="0" angle="14" exponent="1">
+            <location x="15" y="5" z="15" w="0" />
+            <target x="0" y="0" z="0" />
+            <ambient r="0" g="0" b="0" a="0"/>
+            <diffuse r="0.5" g="0.5" b="0.5" a="0"/>
+            <specular r="0.5" g="0.5" b="0.5" a="0"/>
+        </spot>
 
     </lights>
 

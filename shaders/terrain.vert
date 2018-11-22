@@ -9,9 +9,10 @@ uniform mat4 uNMatrix;
 
 varying vec2 vTextureCoord;
 
+uniform float hScale;
+
 uniform sampler2D uSampler2;
 
-uniform bool uUseTexture;
 
 struct lightProperties {
     vec4 position;                  // Default: (0, 0, 1, 0)
@@ -112,23 +113,32 @@ vec4 lighting(vec4 vertex, vec3 E, vec3 N) {
 
 vec3 getNormal(vec2 centralPoint){
 
-	float offset = 50. / 1024.;
+  float NORMAL_OFF = (50.0 / 256.0);
+  vec3 off = vec3(-NORMAL_OFF, 0, NORMAL_OFF);
 
-	float T = texture2D(uSampler2, vec2(vTextureCoord.x, vTextureCoord.y + offset)).x;
+  // s11 = Current
+  float s11 = texture2D(uSampler2, vTextureCoord).x;
 
-	float B = texture2D(uSampler2, vec2(vTextureCoord.x, vTextureCoord.y - offset)).x;
+  // s01 = Left
+  float s01 = texture2D(uSampler2, vec2(vTextureCoord.xy + off.xy)).x;
 
-	float L = texture2D(uSampler2, vec2(vTextureCoord.x - offset, vTextureCoord.y)).x;
+  // s21 = Right
+  float s21 = texture2D(uSampler2, vec2(vTextureCoord.xy + off.zy)).x;
 
-	float R = texture2D(uSampler2,  vec2(vTextureCoord.x + offset, vTextureCoord.y)).x;
+  // s10 = Below
+  float s10 = texture2D(uSampler2, vec2(vTextureCoord.xy + off.yx)).x;
 
-	float horizontal = R - L;
+  // s12 = Above
+  float s12 = texture2D(uSampler2, vec2(vTextureCoord.xy + off.yz)).x;
 
-	float vertical   = B - T;
+  vec3 va = normalize( vec3(off.z, 0.0, s21 - s11) );
+  vec3 vb = normalize( vec3(0.0, off.z, s12 - s11) );
 
-	vec3 Res = normalize(vec3( 2.* horizontal, 2.* vertical, -4.));
+  vec3 normal = normalize( cross(va, vb) );
 
-  return Res;
+  return normal;
+
+
 }
 
 
@@ -136,7 +146,7 @@ void main() {
 
 	vTextureCoord = aTextureCoord;
 
-	float height = texture2D(uSampler2, vTextureCoord).x * 7.0;
+	float height = texture2D(uSampler2, vTextureCoord).x * hScale;
 
 	vec3 temp_vertex = aVertexPosition + vec3(0, height, 0);
 

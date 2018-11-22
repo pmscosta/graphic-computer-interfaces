@@ -41,7 +41,6 @@ class XMLscene extends CGFscene {
     this.cameras = [];
 
     this.axis = new CGFaxis(this);
-
   }
 
   /**
@@ -112,19 +111,21 @@ class XMLscene extends CGFscene {
     this.sceneInited = true;
 
     this.oldTime = Date.now();
-    
+
 		this.setUpdatePeriod(1000/FPS);
 
   }
 
   update(timestamp){
 
+    this.graph.primitives["water"].update(timestamp);
+
 		let currTime = timestamp - this.oldTime;
 
-    this.oldTime = timestamp; 
-    
+    this.oldTime = timestamp;
+
     this.graph.update(currTime);
-		
+
 	};
 
   initLights() {
@@ -225,6 +226,7 @@ class XMLscene extends CGFscene {
       // Draw axis
       this.axis.display();
     }
+
 
     this.popMatrix();
     // ---- END Background, camera and axis setup

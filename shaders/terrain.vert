@@ -136,7 +136,7 @@ void main() {
 
 	vTextureCoord = aTextureCoord;
 
-	float height = texture2D(uSampler2, vTextureCoord).x * 5.;
+	float height = texture2D(uSampler2, vTextureCoord).x * 7.0;
 
 	vec3 temp_vertex = aVertexPosition + vec3(0, height, 0);
 

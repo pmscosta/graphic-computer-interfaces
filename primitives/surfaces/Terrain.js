@@ -34,7 +34,7 @@ class Terrain extends CGFobject {
 
 		this.scene.pushMatrix();
 
-		this.scene.translate(5, 0, 5);
+		this.scene.scale(20, 1, 20);
 
 		this.scene.scale(20, 1, 20);
 

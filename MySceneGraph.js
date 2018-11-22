@@ -454,7 +454,7 @@ class MySceneGraph {
    * Parses the <primitives> node.
    * @param {primitives block element} primitivesNode
    */
-  parsePrimitives(primitivesNode) {
+    parsePrimitives(primitivesNode) {
     var children = primitivesNode.children;
     this.primitives = [];
 
@@ -517,7 +517,7 @@ class MySceneGraph {
   parseAnimations(animationsNode){
     var children = animationsNode.children;
     this.animations = [];
-    
+
     for(var i=0; i < children.length;i++){
 
       if(children[i].nodeName != 'linear' &&children[i].nodeName !='circular'){
@@ -526,7 +526,7 @@ class MySceneGraph {
       }
 
       var animationID = getID(this.reader,children[i],this.animations,' animation ');
-      
+
       this.animations[animationID] =createAnimation(this.scene, children[i], this.reader, animationID);
 
     }
@@ -566,7 +566,7 @@ class MySceneGraph {
   displayScene() {
     // entry point for graph rendering
     // TODO: Render loop starting at root of graph
-    
+
     var rootElement = this.components[this.idRoot];
     this.iterateChildren(rootElement);
   }
@@ -616,7 +616,7 @@ class MySceneGraph {
 
     this.applyAddOns();
 
-    
+
 
 
     for (var i = 0; i < component.componentChildren.length; i++) {
@@ -669,6 +669,7 @@ class MySceneGraph {
   }
 
   update(currTime){
+  
 
     for (var key in this.components){
       var component = this.components[key];
@@ -676,7 +677,7 @@ class MySceneGraph {
       {
         this.animations[component.animation[0]].update(currTime);
       }
-      
+
     }
   }
 }

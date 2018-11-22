@@ -61,13 +61,24 @@ var trans_def = [1, 1, 1];
 
 
 function getTerrainValues(reader, components, values, element) {
- 
+
   var idtexture = reader.getString(element, components[0]);
   var idheightmap = reader.getString(element, components[1]);
   var parts = reader.getFloat(element, components[2]);
   var heightscale = reader.getFloat(element, components[3]);
 
   values.push(idtexture, idheightmap, parts, heightscale);
+}
+
+function getWaterValues(reader, components, values, element) {
+
+  var idtexture = reader.getString(element, components[0]);
+  var idwavemap = reader.getString(element, components[1]);
+  var parts = reader.getFloat(element, components[2]);
+  var heightscale = reader.getFloat(element, components[3]);
+  var texscale = reader.getFloat(element, components[4]);
+
+  values.push(idtexture, idwavemap, parts, heightscale,texscale);
 }
 
 
@@ -96,10 +107,10 @@ function getID(reader, element, storage, description) {
       '). Generating a new one');
     ID = makeid();
 
-    
+
   }
 
-  
+
 
   return ID;
 }
@@ -137,7 +148,7 @@ function getValuesOrDefault(reader, components, phase, values, element, def) {
 
 function getValueOrDefault(reader, component, phase, element, def) {
 
-  var result = 0; 
+  var result = 0;
 
   if (element == null) {
     console.warn(
@@ -428,7 +439,7 @@ function createLight(graph, light_element, reader) {
       light_element, angle_def);
 
    var exponent =  getValueOrDefault(
-      reader, exponent_comp, 'light: ' + lightID + ' exponent ', 
+      reader, exponent_comp, 'light: ' + lightID + ' exponent ',
       light_element, exponent_def);
 
 
@@ -551,7 +562,7 @@ function createTexture(scene, texture_element, reader, textureID) {
   }else{
     var new_texture = new CGFtexture(scene, texturePath);
   }
-  
+
   return new_texture;
 }
 
@@ -593,12 +604,12 @@ function parsePrimitive(scene, reader, children, ID) {
       getValuesOrDefault(
         reader, torus_comp, 'torus: ' + ID, values, children, torus_def);
       return new MyTorus(scene, values[0], values[1], values[2], values[3]);
-    
+
     case 'patch':
       var values = [];
       getValuesOrDefault(
         reader,patch_comp, 'patch: '+ ID, values,children,patch_def);
-      
+
       let grandChildren = children.children;
       //let grandpaSize = grandChildren.length;
       //let totalPoints = values[0] * values[1];
@@ -611,18 +622,18 @@ function parsePrimitive(scene, reader, children, ID) {
         controlPoints.push(controlPoint);
 
       }
-        
+
       return new Patch(scene, values[0], values[1], values[2], values[3],controlPoints);
-    
+
     case 'plane':
       var values = [];
       getValuesOrDefault(
         reader,plane_comp, 'plane: '+ ID, values,children,plane_def);
       return new Plane(scene,values[0],values[1]);
-    
+
     case 'vehicle':
         return new Vehicle(scene);
-    
+
     case 'cylinder2':
       var values = [];
       getValuesOrDefault(
@@ -635,15 +646,14 @@ function parsePrimitive(scene, reader, children, ID) {
       var values = [];
       getTerrainValues(
         reader,terrain_comp, values,children);
-      
-        console.log(values);
+
 
       return new Terrain(scene,values[0],values[1], values[2], values[3]);
 
     case 'water':
       var values = [];
-      getValuesOrDefault(
-        reader,water_comp, 'water: '+ ID, values,children,[]);
+      getWaterValues(
+        reader,water_comp, values,children);
       return new Water(scene,values[0],values[1], values[2], values[3], values[4]);
   }
 }
@@ -726,7 +736,7 @@ function dispatchComponent(
 }
 
 function createAnimation(scene,animation_element,reader,animationID){
-  
+
   var values = [];
   var span = reader.getFloat(animation_element, 'span');
 
@@ -746,7 +756,7 @@ function createAnimation(scene,animation_element,reader,animationID){
           reader, circular_comp, 'circular: ', values, animation_element, circular_def);
           return new CircularAnimation(scene,values[2],values[3],values[4],values[5],values[1]);
   }
-      
+
 
 }
 

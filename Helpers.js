@@ -81,6 +81,18 @@ function getWaterValues(reader, components, values, element) {
   values.push(idtexture, idwavemap, parts, heightscale,texscale);
 }
 
+var circular_comp = ['id', 'span', 'center', 'radius', 'startang', 'rotang'];
+function getCircularAnimationValues(reader, components, values, element) {
+  var id = reader.getFloat(element, components[0]);
+  var span = reader.getFloat(element, components[1]);
+  var center = reader.getString(element, components[2]);
+  var radius = reader.getFloat(element, components[3]);
+  var startang = reader.getFloat(element, components[4]);
+  var rotang = reader.getFloat(element, components[5]);
+
+  values.push(id, span, center, radius,startang,rotang);
+}
+
 
 /**
  * Reads an ID from the XML file and if it is a repeated one generates
@@ -752,9 +764,10 @@ function createAnimation(scene,animation_element,reader,animationID){
        return new LinearAnimation(scene,controlPoints,span);
 
       case 'circular':
-        getValuesOrDefault(
-          reader, circular_comp, 'circular: ', values, animation_element, circular_def);
-          return new CircularAnimation(scene,values[2],values[3],values[4],values[5],values[1]);
+      var values = [];
+      getCircularAnimationValues(
+        reader, circular_comp, values, animation_element);
+      return new CircularAnimation(scene,values[2],values[3],values[4],values[5],values[1]);
   }
 
 

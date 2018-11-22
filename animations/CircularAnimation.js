@@ -19,7 +19,7 @@ class CircularAnimation extends Animation{
     initialConfig() {
         this.elapsedTime = 0;
 
-        this.currentAngle =0;
+        this.currentAngle = this.initialAngle;
 
         this.finished = false;
     }
@@ -46,14 +46,5 @@ class CircularAnimation extends Animation{
         if(this.elapsedTime>=this.totalTime)
             this.finished = true;
      
-    }
-
-    isOver(){
-        return this.finished;
-    }
-
-    initialConfig(){
-        this.currentAngle = this.initialAngle;
-        
     }
 }

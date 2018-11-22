@@ -181,8 +181,13 @@ class Vehicle extends CGFobject {
 		this.bottom_cover = new Patch(this.scene, 3, 2, 20, 10, bottom_cover);
 	};
 
+
 	display() {
 		this.scene.pushMatrix();
+
+
+		this.scene.graph.materials['silver'].setTexture(this.scene.graph.textures['aircraft']);
+		this.scene.graph.materials['silver'].apply();
 
 		this.scene.gl.disable(this.scene.gl.CULL_FACE);
 

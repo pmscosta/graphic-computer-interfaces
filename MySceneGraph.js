@@ -609,7 +609,7 @@ class MySceneGraph {
 
     this.scene.multMatrix(component.transformation.getMatrix());
     if (component.animation.length > 0) {
-      this.animations[component.animation[0]].apply();
+      this.animations[component.animation[component.animationPos]].apply();
     }
 
 
@@ -672,7 +672,15 @@ class MySceneGraph {
     for (var key in this.components) {
       var component = this.components[key];
 
+      console.log(this.animations);
+
       if (component.hasAnimations()) {
+
+        console.log('AQUI: ' + component.animationPos);
+        console.log(component.animation);
+
+        console.log(component.animation[component.animationPos]);
+
         let currentAnimation =
             this.animations[component.animation[component.animationPos]];
 
@@ -680,7 +688,9 @@ class MySceneGraph {
 
         if (currentAnimation.isOver()) {
           component.animationPos =
-              component.animationPos + 1 % component.animation.length;
+              (component.animationPos + 1) % component.animation.length;
+
+          console.log(component.animationPos);
 
           this.animations[component.animation[component.animationPos]]
               .initialConfig();

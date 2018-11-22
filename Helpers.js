@@ -623,8 +623,6 @@ function parsePrimitive(scene, reader, children, ID) {
         reader,patch_comp, 'patch: '+ ID, values,children,patch_def);
 
       let grandChildren = children.children;
-      //let grandpaSize = grandChildren.length;
-      //let totalPoints = values[0] * values[1];
       let controlPoints = [];
 
       for(let i = 0; i < grandChildren.length; i++){

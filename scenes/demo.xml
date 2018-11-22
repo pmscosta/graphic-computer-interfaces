@@ -47,6 +47,7 @@
         <texture id="island-height" file="scenes/images/island-height.jpg"/>
         <texture id="water" file="scenes/images/water.jpg"/>
         <texture id="water-height" file="scenes/images/water-height.jpg"/>
+        <texture id="aircraft" file="scenes/images/aircraft.jpg"/>
 
     </textures>
 
@@ -126,17 +127,17 @@
 
     <animations>
 
-        <linear id="lin" span="5">
+        <linear id="lin" span="3">
             <controlpoint xx="0" yy="0" zz="0" />
+            <controlpoint xx="6" yy="3" zz="2" />
+            <controlpoint xx="6" yy="4" zz="6" />
+            <controlpoint xx="3" yy="5" zz="10" />
             <controlpoint xx="1" yy="1" zz="1" />
-            <controlpoint xx="3" yy="1" zz="1" />
-            <controlpoint xx="3" yy="1" zz="5" />
-            <controlpoint xx="0" yy="0" zz="0" />
         </linear>
 
 
-        <circular id = "cir" span = "10" center = "1 1 1"
-            radius ="0.01" startang = "0" rotang = "360" />
+        <circular id = "cir" span = "3" center = "0 1 0"
+            radius ="1" startang = "0" rotang = "360" />
 
 
     </animations>
@@ -263,6 +264,8 @@
 
         <component id="fighter_jet">
           <animations>
+              <!-- <animationref id="lin" /> -->
+              <animationref id="cir" />
               <animationref id="lin" />
           </animations>
 

@@ -14,6 +14,20 @@ class CircularAnimation extends Animation{
         this.finished = false;
     }   
 
+
+
+    initialConfig() {
+        this.elapsedTime = 0;
+
+        this.currentAngle =0;
+
+        this.finished = false;
+    }
+
+    isOver(){
+        return this.finished;
+      }
+
     apply(){
         this.scene.translate(this.center[0],this.center[1],this.center[2]);
         this.scene.translate(

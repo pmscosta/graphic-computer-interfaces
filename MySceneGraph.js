@@ -10,14 +10,14 @@ var indexes = {
   TEXTURES_INDEX: 4,
   MATERIALS_INDEX: 5,
   TRANSFORMATIONS_INDEX: 6,
-  ANIMATIONS_INDEX:7,
+  ANIMATIONS_INDEX: 7,
   PRIMITIVES_INDEX: 8,
   COMPONENTS_INDEX: 9
 };
 
 var tags = [
   'scene', 'views', 'ambient', 'lights', 'textures', 'materials',
-  'transformations','animations', 'primitives', 'components'
+  'transformations', 'animations', 'primitives', 'components'
 ];
 
 
@@ -40,7 +40,7 @@ class MySceneGraph {
 
     this.nodes = [];
 
-    this.idRoot = null; // The id of the root element.
+    this.idRoot = null;  // The id of the root element.
 
     this.axisCoords = [];
     this.axisCoords['x'] = [1, 0, 0];
@@ -90,54 +90,55 @@ class MySceneGraph {
 
 
   validateIds() {
-    if(this.idRoot==null || this.idRoot==""){
+    if (this.idRoot == null || this.idRoot == '') {
       var k = Object.keys(this.components)[0];
       this.idRoot = k;
-      this.onXMLMinorError("Root node not defined assuming node " + k);
+      this.onXMLMinorError('Root node not defined assuming node ' + k);
     }
 
     for (var key in this.components) {
-      this.containsListComponent(this.components[key].componentChildren, this.components);
-      this.containsListPrimitive(this.components[key].primitiveChildren, this.primitives);
+      this.containsListComponent(
+          this.components[key].componentChildren, this.components);
+      this.containsListPrimitive(
+          this.components[key].primitiveChildren, this.primitives);
       this.containsListTexture(this.components[key].texture, this.textures);
       this.containsListMaterial(this.components[key].materials, this.materials);
     }
   }
 
   containsListComponent(componentList, globalList) {
-
     for (var i = 0; i < componentList.length; i++) {
       if (globalList[componentList[i]] === undefined) {
-        this.onXMLMinorError("Reference to non existent Component");
+        this.onXMLMinorError('Reference to non existent Component');
       }
     }
   }
   containsListPrimitive(componentList, globalList) {
-
     for (var i = 0; i < componentList.length; i++) {
       if (globalList[componentList[i]] === undefined) {
-        this.onXMLMinorError("Reference to non existent Primitive");
+        this.onXMLMinorError('Reference to non existent Primitive');
       }
     }
   }
 
   containsListTexture(componentList, globalList) {
     for (var i = 0; i < componentList.length; i += 3) {
-      if (componentList[i] == "inherit" || componentList[i] == "none") continue;
+      if (componentList[i] == 'inherit' || componentList[i] == 'none') continue;
       if (globalList[componentList[i]] == undefined) {
-        this.onXMLMinorError("Reference to non existent Texture, using default");
-        componentList[i] = "leather";
+        this.onXMLMinorError(
+            'Reference to non existent Texture, using default');
+        componentList[i] = 'leather';
       }
     }
   }
 
   containsListMaterial(componentList, globalList) {
-
     for (var i = 0; i < componentList.length; i += 3) {
-      if (componentList[i] == "inherit" || componentList[i] == "none") continue;
+      if (componentList[i] == 'inherit' || componentList[i] == 'none') continue;
       if (globalList[componentList[i]] == undefined) {
-        this.onXMLMinorError("Reference to non existent Material, using default");
-        componentList[i] = "m1";
+        this.onXMLMinorError(
+            'Reference to non existent Material, using default');
+        componentList[i] = 'm1';
       }
     }
   }
@@ -169,7 +170,7 @@ class MySceneGraph {
       if (nodeNames[key] != tags[key])
         return 'tag <' + tags[key] + '> missing';
       else if (
-        (error = this.parseDispatcher(nodeNames[key], nodes[key])) != null) {
+          (error = this.parseDispatcher(nodeNames[key], nodes[key])) != null) {
         onXMLError(error);
         return error;
       }
@@ -196,7 +197,6 @@ class MySceneGraph {
 
     this.textures['__def__tex__'] = new_texture;
     this.texturesPile.push('__def__tex__');
-
   }
 
   parseDispatcher(nodeName, node) {
@@ -229,14 +229,15 @@ class MySceneGraph {
   parseScene(sceneNode) {
     this.idRoot = this.reader.getString(sceneNode, 'root');
 
-    if (this.idRoot == null || this.idRoot=="")
+    if (this.idRoot == null || this.idRoot == '')
       this.onXMLMinorError('root node missing; assuming initial node');
 
     this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
 
-    if (this.axis_length == null || this.axis_length < 0 || isNaN(this.axis_length)) {
+    if (this.axis_length == null || this.axis_length < 0 ||
+        isNaN(this.axis_length)) {
       this.onXMLMinorError(
-        'axis_length not specified or invalid; assuming \'axis_length = 5\'');
+          'axis_length not specified or invalid; assuming \'axis_length = 5\'');
       this.axis_length = 5;
     }
 
@@ -266,14 +267,14 @@ class MySceneGraph {
 
     var ambientValues = [];
     getValuesOrDefault(
-      this.reader, rgb_comp, 'ambient of ambient block', ambientValues,
-      children[ambientIndex], rgb_default);
+        this.reader, rgb_comp, 'ambient of ambient block', ambientValues,
+        children[ambientIndex], rgb_default);
 
 
     var backgroundValues = [];
     getValuesOrDefault(
-      this.reader, rgb_comp, 'background of ambient block', backgroundValues,
-      children[backgroundIndex], [0.53, 0.81, 0.92, 1]);
+        this.reader, rgb_comp, 'background of ambient block', backgroundValues,
+        children[backgroundIndex], [0.53, 0.81, 0.92, 1]);
 
     this.ambient = [];
     this.ambient['ambient'] = ambientValues;
@@ -299,10 +300,10 @@ class MySceneGraph {
       }
 
       var textureId =
-        getID(this.reader, children[i], this.textures, ' texture ');
+          getID(this.reader, children[i], this.textures, ' texture ');
 
       this.textures[textureId] =
-        createTexture(this.scene, children[i], this.reader, textureId);
+          createTexture(this.scene, children[i], this.reader, textureId);
     }
 
     this.log('parsed textures');
@@ -326,7 +327,7 @@ class MySceneGraph {
       }
 
       var transformationID = getID(
-        this.reader, children[i], this.transformations, ' transformation ');
+          this.reader, children[i], this.transformations, ' transformation ');
 
       grandChildren = children[i].children;
 
@@ -334,8 +335,8 @@ class MySceneGraph {
 
       for (var j = 0; j < grandChildren.length; j++) {
         parseTransformation(
-          this.reader, grandChildren[j], curr_transformation,
-          transformationID);
+            this.reader, grandChildren[j], curr_transformation,
+            transformationID);
       }
 
       this.transformations[transformationID] = curr_transformation;
@@ -348,9 +349,10 @@ class MySceneGraph {
 
   parseViews(viewsNode) {
     this.defaultPerspectiveId = this.reader.getString(viewsNode, 'default');
-    if (this.defaultPerspectiveId == null || this.defaultPerspectiveId.length == 0) {
+    if (this.defaultPerspectiveId == null ||
+        this.defaultPerspectiveId.length == 0) {
       this.onXMLMinorError(
-        'no default perspective specified; assuming first one');
+          'no default perspective specified; assuming first one');
     }
     this.views = [];
     var children = viewsNode.children;
@@ -358,14 +360,14 @@ class MySceneGraph {
 
     for (var i = 0; i < children.length; i++) {
       if (children[i].nodeName != 'perspective' &&
-        children[i].nodeName != 'ortho') {
+          children[i].nodeName != 'ortho') {
         this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
         continue;
       }
 
       if (children[i].nodeName == 'perspective')
         parsePerspective(this, this.reader, children[i])
-      else parseOrtho(this, this.reader, children[i]);
+        else parseOrtho(this, this.reader, children[i]);
 
       counter++;
     }
@@ -375,10 +377,11 @@ class MySceneGraph {
     }
 
     if (this.views[this.defaultPerspectiveId] == undefined) {
-
       var key = Object.keys(this.views)[0];
 
-      this.onXMLMinorError("Default view specified, " + this.defaultPerspectiveId + ", does not match any of the specified. Assuming " + key + ".");
+      this.onXMLMinorError(
+          'Default view specified, ' + this.defaultPerspectiveId +
+          ', does not match any of the specified. Assuming ' + key + '.');
 
       this.defaultPerspectiveId = key;
     }
@@ -404,10 +407,10 @@ class MySceneGraph {
 
       // Get id of the current
       var materialID =
-        getID(this.reader, children[i], this.materials, ' material ');
+          getID(this.reader, children[i], this.materials, ' material ');
 
       this.materials[materialID] =
-        createMaterial(this.scene, children[i], this.reader, materialID);
+          createMaterial(this.scene, children[i], this.reader, materialID);
     }
 
     this.log('parsed materials');
@@ -433,7 +436,7 @@ class MySceneGraph {
     for (var i = 0; i < children.length; i++) {
       if (i >= 8) {
         this.onXMLMinorError(
-          'too many lights defined; WebGL imposes a limit of 8 lights');
+            'too many lights defined; WebGL imposes a limit of 8 lights');
         break;
       }
 
@@ -454,7 +457,7 @@ class MySceneGraph {
    * Parses the <primitives> node.
    * @param {primitives block element} primitivesNode
    */
-    parsePrimitives(primitivesNode) {
+  parsePrimitives(primitivesNode) {
     var children = primitivesNode.children;
     this.primitives = [];
 
@@ -465,11 +468,11 @@ class MySceneGraph {
       }
 
       var primitiveId =
-        getID(this.reader, children[i], this.primitives, ' primitive ');
+          getID(this.reader, children[i], this.primitives, ' primitive ');
 
       grandChildren = children[i].children;
       var curr_primitive = parsePrimitive(
-        this.scene, this.reader, children[i].children[0], primitiveId);
+          this.scene, this.reader, children[i].children[0], primitiveId);
 
       if (curr_primitive != null) this.primitives[primitiveId] = curr_primitive;
     }
@@ -495,14 +498,13 @@ class MySceneGraph {
       }
 
       var componentId =
-        getID(this.reader, children[i], this.components, ' component ');
+          getID(this.reader, children[i], this.components, ' component ');
 
       for (var j = 0; j < children[i].children.length; j++) {
         dispatchComponent(
-          this, this.reader, children[i].children[j], componentId, component);
+            this, this.reader, children[i].children[j], componentId, component);
       }
       this.components[componentId] = component;
-
     }
 
     this.log('parsed components');
@@ -514,21 +516,22 @@ class MySceneGraph {
    * Parses the <animations> node.
    * @param {components block element} animationsNode
    */
-  parseAnimations(animationsNode){
+  parseAnimations(animationsNode) {
     var children = animationsNode.children;
     this.animations = [];
 
-    for(var i=0; i < children.length;i++){
-
-      if(children[i].nodeName != 'linear' &&children[i].nodeName !='circular'){
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].nodeName != 'linear' &&
+          children[i].nodeName != 'circular') {
         this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
         continue;
       }
 
-      var animationID = getID(this.reader,children[i],this.animations,' animation ');
+      var animationID =
+          getID(this.reader, children[i], this.animations, ' animation ');
 
-      this.animations[animationID] =createAnimation(this.scene, children[i], this.reader, animationID);
-
+      this.animations[animationID] =
+          createAnimation(this.scene, children[i], this.reader, animationID);
     }
   }
 
@@ -571,20 +574,20 @@ class MySceneGraph {
     this.iterateChildren(rootElement);
   }
 
-  managePile(component){
-
+  managePile(component) {
     let last_tex = this.texturesPile.length - 1;
     let last_mat = this.materialsPile.length - 1;
     let last_length = this.lengthPile.length - 1;
 
-     // Insert into pile
-     if (component.texture[0] == 'inherit') {
-
+    // Insert into pile
+    if (component.texture[0] == 'inherit') {
       if (this.texturesPile.length > 0)
         this.texturesPile.push(this.texturesPile[last_tex]);
 
-      if (component.texture[1] === undefined && component.texture[2] === undefined && this.lengthPile.length > 0)
-        this.lengthPile.push(this.lengthPile[last_length - 1], this.lengthPile[last_length]);
+      if (component.texture[1] === undefined &&
+          component.texture[2] === undefined && this.lengthPile.length > 0)
+        this.lengthPile.push(
+            this.lengthPile[last_length - 1], this.lengthPile[last_length]);
       else
         this.lengthPile.push(component.texture[1], component.texture[2]);
     } else if (component.texture[0] != 'inherit') {
@@ -594,20 +597,18 @@ class MySceneGraph {
         this.lengthPile.push(component.texture[1], component.texture[2]);
     }
 
-    if (component.materials[component.materialPos] == 'inherit' && this.materialsPile.length > 0)
+    if (component.materials[component.materialPos] == 'inherit' &&
+        this.materialsPile.length > 0)
       this.materialsPile.push(this.materialsPile[last_mat]);
     else if (component.materials[component.materialPos] != 'inherit')
       this.materialsPile.push(component.materials[component.materialPos]);
   }
 
   iterateChildren(component) {
-
-
     this.scene.pushMatrix();
 
     this.scene.multMatrix(component.transformation.getMatrix());
-    if(component.animation.length>0)
-    {
+    if (component.animation.length > 0) {
       this.animations[component.animation[0]].apply();
     }
 
@@ -615,9 +616,6 @@ class MySceneGraph {
     this.managePile(component);
 
     this.applyAddOns();
-
-
-
 
     for (var i = 0; i < component.componentChildren.length; i++) {
       this.iterateChildren(this.components[component.componentChildren[i]]);
@@ -629,7 +627,8 @@ class MySceneGraph {
       var prim_name = component.primitiveChildren[i];
 
       if (component.texture[0] != 'none') {
-        this.primitives[prim_name].updateTexCoords(this.lengthPile[l_pile - 1], this.lengthPile[l_pile]);
+        this.primitives[prim_name].updateTexCoords(
+            this.lengthPile[l_pile - 1], this.lengthPile[l_pile]);
       }
       this.primitives[prim_name].display();
     }
@@ -654,7 +653,7 @@ class MySceneGraph {
 
     if (this.texturesPile.length > 0 && this.texturesPile[last_tex] != 'none') {
       this.materials[this.materialsPile[last_mat]].setTexture(
-        this.textures[this.texturesPile[last_tex]]);
+          this.textures[this.texturesPile[last_tex]]);
       this.materials[this.materialsPile[last_mat]].apply();
     } else {
       this.materials[this.materialsPile[last_mat]].setTexture(null);
@@ -664,20 +663,29 @@ class MySceneGraph {
 
   updateMaterials() {
     for (var key in this.components) {
-      this.components[key].materialPos = ++this.components[key].materialPos % this.components[key].materials.length;
+      this.components[key].materialPos = ++this.components[key].materialPos %
+          this.components[key].materials.length;
     }
   }
 
-  update(currTime){
-  
-
-    for (var key in this.components){
+  update(currTime) {
+    for (var key in this.components) {
       var component = this.components[key];
-      if(component.animation.length>0)
-      {
-        this.animations[component.animation[0]].update(currTime);
-      }
 
+      if (component.hasAnimations()) {
+        let currentAnimation =
+            this.animations[component.animation[component.animationPos]];
+
+        currentAnimation.update(currTime);
+
+        if (currentAnimation.isOver()) {
+          component.animationPos =
+              component.animationPos + 1 % component.animation.length;
+
+          this.animations[component.animation[component.animationPos]]
+              .initialConfig();
+        }
+      }
     }
   }
 }

@@ -15,9 +15,12 @@ class LinearAnimation extends Animation {
         this.initialConfig();
     }
 
-    getTimeBetweenPonts(point1, point2) {
-        return this.distanceBetweenTwoPoints(point1, point2) / this.velocity;
+
+    isOver(){
+      return this.finished;
     }
+
+
 
     initialConfig() {
         this.elapsedTime = 0;
@@ -32,6 +35,15 @@ class LinearAnimation extends Animation {
 
         this.timeBetweenPoints = this.getTimeBetweenPonts(
             this.controlPoints[this.startPoint], this.controlPoints[this.endPoint]);
+
+        this.dirVector = this.createDirectionalVector(
+            this.controlPoints[this.startPoint], this.controlPoints[this.endPoint]);
+
+        this.xyRot = Math.atan2(this.dirVector[0], this.dirVector[2]);
+
+        this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
+
+
     }
 
 
@@ -40,12 +52,9 @@ class LinearAnimation extends Animation {
 
         this.elapsedTime += time / 1000;
 
-        let dirVector = this.createDirectionalVector(
-            this.controlPoints[this.startPoint], this.controlPoints[this.endPoint]);
-
-        this.position[0] += dirVector[0] * this.velocity * time / 1000;
-        this.position[1] += dirVector[1] * this.velocity * time / 1000;
-        this.position[2] += dirVector[2] * this.velocity * time / 1000;
+        this.position[0] += this.dirVector[0] * this.velocity * time / 1000;
+        this.position[1] += this.dirVector[1] * this.velocity * time / 1000;
+        this.position[2] += this.dirVector[2] * this.velocity * time / 1000;
 
         if (this.elapsedTime >= this.timeBetweenPoints) {
             this.updatePoints();
@@ -62,16 +71,31 @@ class LinearAnimation extends Animation {
 
             this.elapsedTime = 0;
             this.timeBetweenPoints = this.getTimeBetweenPonts(
-                this.controlPoints[this.startPoint],
-                this.controlPoints[this.endPoint]);
+            this.controlPoints[this.startPoint],
+            this.controlPoints[this.endPoint]);
+
+            this.dirVector = this.createDirectionalVector(
+                this.controlPoints[this.startPoint], this.controlPoints[this.endPoint]);
+
+            this.xyRot = Math.atan2(this.dirVector[0], this.dirVector[2]);
+            this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
+
+
+
         }
     }
 
     apply() {
         this.scene.translate(this.position[0], this.position[1], this.position[2]);
+        this.scene.rotate(this.xyRot, 0, 1, 0);
+      //  this.scene.rotate(this.yzRot, 1, 0, 0);
     }
 
 
+
+    getTimeBetweenPonts(point1, point2) {
+        return this.distanceBetweenTwoPoints(point1, point2) / this.velocity;
+    }
 
     calculateTotalDistance() {
         let totalDistance = 0;

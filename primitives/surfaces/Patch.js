@@ -35,7 +35,6 @@ class Patch extends CGFobject {
 
 		}
 
-		console.log(vertexes);
 
 		return vertexes;
 

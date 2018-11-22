@@ -31,8 +31,7 @@ class Water extends CGFobject {
 	}
 
 	update(timestamp){
-		this.timeInt += 0.00043;
-
+		this.timeInt += 0.0006;
 
 	  this.shader.setUniformsValues({factor:this.timeInt});
 

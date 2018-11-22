@@ -1,7 +1,7 @@
 <yas>
     <scene root="fighter_jet" axis_length="5"/>
     <views default="far_view">
-        <perspective id="far_view" near="0.1" far="40" angle="45">
+        <perspective id="far_view" near="0.1" far="400" angle="45">
             <from x="15" y="10" z="15"/>
             <to x="0" y="0" z="0"/>
         </perspective>
@@ -79,8 +79,8 @@
 
     </lights>
 
-    <textures> 
-        <texture id="vidral" file="scenes/images/vidral.jpg"/>    
+    <textures>
+        <texture id="vidral" file="scenes/images/vidral.jpg"/>
         <texture id="big_lamp" file="scenes/images/lamp.jpeg"/>
         <texture id="small_lamp" file="scenes/images/small_lamp.jpg"/>
         <texture id="white_wall" file="scenes/images/white_wall.jpg"/>
@@ -88,7 +88,7 @@
         <texture id="brick_wall" file="scenes/images/brick_wall.jpg"/>
         <texture id="desk" file="scenes/images/desk.jpg"/>
         <texture id="metal" file="scenes/images/metal.jpeg"/>
-        <texture id="leather" file="scenes/images/leather.jpeg"/>    
+        <texture id="leather" file="scenes/images/leather.jpeg"/>
         <texture id="def_text" file="scenes/images/default-texture.png"/>
         <texture id="starry_night" file="scenes/images/starry_night.jpg"/>
         <texture id="wood_grain" file="scenes/images/wood_grain.png"/>
@@ -137,7 +137,7 @@
             <ambient r="0.98" g="0.98" b="0.87" a="1"/>
             <diffuse r="0.98" g="0.98" b="0.87" a="1"/>
             <specular r="0" g="0" b="0" a="1"/>
-        </material>   
+        </material>
 
         <material id="table_wood" shininess="1">
             <emission r="0" g="0" b="0" a="0"/>
@@ -182,7 +182,7 @@
         </linear>
 
 
-        <circular id = "cir" span = "2" center = "1 1 1" 
+        <circular id = "cir" span = "2" center = "1 1 1"
             radius ="5" startang = "0" rotang = "90" />
 
 
@@ -283,7 +283,7 @@
 
         <primitive id = "water">
             <water idtexture="water" idwavemap="waves" parts="5" heightscale="1" texscale="1" />
-            
+
         </primitive>
 
     </primitives>
@@ -567,12 +567,12 @@
                 <componentref id="back_right_leg"/>
             </children>
         </component>
-        
+
 
         <component id="table">
             <transformation>
-                
-                
+
+
             </transformation>
 
             <materials>
@@ -584,7 +584,7 @@
             <children>
                 <componentref id="legs"/>
                 <componentref id="table_top"/>
-                
+
             </children>
         </component>
 
@@ -811,7 +811,7 @@
                 <componentref id="chair_top"/>
             </children>
         </component>
-        
+
         <component id="flowers">
             <transformation>
                 <translate x="4" y="4" z="0.1"/>
@@ -830,7 +830,7 @@
 
         <component id="ball">
             <transformation>
-                
+
                 <translate x="3.2" y="2.3" z="4.4"/>
                 <scale x="0.4" y="0.4" z="0.4"/>
             </transformation>
@@ -839,7 +839,7 @@
                 <material id ="fuschia"/>
                 <material id="light_orange"/>
             </materials>
-            
+
 
             <texture id="vidral" length_s="1" length_t="1"/>
 
@@ -870,7 +870,7 @@
             <transformation>
                 <translate x="-1.5" y="0" z="0"/>
                 <scale x="0.2" y="2.4" z="0.3"/>
-                
+
             </transformation>
 
             <materials>
@@ -994,7 +994,7 @@
             </materials>
 
             <texture id="cara_duarte" length_s="1.7" length_t="1"/>
-            
+
             <children>
                 <primitiveref id="triangle"/>
             </children>
@@ -1004,9 +1004,6 @@
           <transformation>
             </transformation>
 
-            <animations>
-                <animationref id="lin" />
-            </animations>
 
             <materials>
                 <material id ="m1"/>
@@ -1018,7 +1015,7 @@
                 <primitiveref id="terrain"/>
             </children>
         </component>
-        
+
         <component id="living_room">
             <transformation>
             </transformation>
@@ -1046,5 +1043,5 @@
 
     </components>
 
-    
+
 </yas>

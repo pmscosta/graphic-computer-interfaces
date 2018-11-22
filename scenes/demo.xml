@@ -136,7 +136,7 @@
 
 
         <circular id = "cir" span = "10" center = "1 1 1"
-            radius ="0.01" startang = "0" rotang = "360" />
+            radius ="1" startang = "0" rotang = "360" />
 
 
     </animations>
@@ -263,7 +263,7 @@
 
         <component id="fighter_jet">
           <animations>
-              <animationref id="lin" />
+              <animationref id="cir" />
           </animations>
 
             <materials>

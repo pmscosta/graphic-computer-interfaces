@@ -7,7 +7,7 @@ class CircularAnimation extends Animation{
         this.center = center.split(" ").map(Number);
         this.radius = radius;
         this.initialAngle = initialAngle*DEGREE_TO_RAD;
-        this.currentAngle =0;
+        this.currentAngle =this.initialAngle;
         this.rotAngle = rotAngle*DEGREE_TO_RAD; 
         this.totalTime = totalTime;
         this.intervalAngle = this.rotAngle/this.totalTime;
@@ -34,4 +34,12 @@ class CircularAnimation extends Animation{
      
     }
 
+    isOver(){
+        return this.finished;
+    }
+
+    initialConfig(){
+        this.currentAngle = this.initialAngle;
+        
+    }
 }

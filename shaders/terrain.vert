@@ -13,10 +13,10 @@ uniform sampler2D uSampler2;
 
 void main() {
 	vec3 offset=vec3(0.0,0.0,0.0);
-	
+
 	vTextureCoord = aTextureCoord;
 
-	float height = texture2D(uSampler2, vTextureCoord).x * 0.2;
+	float height = texture2D(uSampler2, vTextureCoord).x * 7.0;
 
 	vec3 vertex = aVertexPosition + vec3(0, height, 0);
 

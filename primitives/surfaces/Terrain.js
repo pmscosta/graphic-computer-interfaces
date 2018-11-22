@@ -7,7 +7,7 @@ class Terrain extends CGFobject {
         this.idheightmap = idheightmap;
         this.heightscale = heightscale;
 		this.parts = parts;
-		
+
 		this.plane = new Plane(this.scene, this.parts, this.parts);
 
 		this.createShaders();
@@ -30,11 +30,11 @@ class Terrain extends CGFobject {
 
 		this.heightMap.bind(1);
 
-		this.texture.bind(0); 
+		this.texture.bind(0);
 
 		this.scene.pushMatrix();
 
-		this.scene.scale(5, 5, 5);
+		this.scene.scale(20, 1, 20);
 
 		this.plane.display();
 

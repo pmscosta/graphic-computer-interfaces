@@ -1,9 +1,9 @@
 <yas>
     <scene root="scene" axis_length="5"/>
     <views default="far_view">
-        <perspective id="far_view" near="0.1" far="400" angle="45">
-            <from x="10" y="20" z="10"/>
-            <to x="0" y="0" z="0"/>
+        <perspective id="far_view" near="0.1" far="500" angle="45">
+            <from x="20" y="6" z="20"/>
+            <to x="1" y="0" z="1"/>
         </perspective>
 
         <perspective id="close_up" near="0.1" far="50" angle="30">
@@ -22,9 +22,9 @@
 
         <omni id="sun" enabled="1">
             <location x="5" y="20" z="5" w="0" />
-            <ambient r="1" g="1" b="0.983" a="1"/>
-            <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
-            <specular r="0.7" g="0.7" b="0.7" a="1"/>
+            <ambient r="0.63" g="0.63" b="0.63" a="1"/>
+            <diffuse r="0.63" g="0.63" b="0.63" a="1"/>
+            <specular r="0.63" g="0.63" b="0.63" a="1"/>
         </omni>
 
     </lights>
@@ -248,7 +248,7 @@
         </primitive>
 
         <primitive id = "water">
-            <water idtexture="water" idwavemap="water-height" parts="20" heightscale="0.4" texscale="5" />
+            <water idtexture="water" idwavemap="water-height" parts="100" heightscale="0.3" texscale="4" />
 
         </primitive>
 

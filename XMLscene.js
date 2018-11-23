@@ -118,13 +118,14 @@ class XMLscene extends CGFscene {
 
   update(timestamp){
 
-    this.graph.primitives["water"].update(timestamp);
-
 		let currTime = timestamp - this.oldTime;
 
     this.oldTime = timestamp;
 
+    this.graph.primitives["water"].update(currTime);
+
     this.graph.update(currTime);
+  
 
 	};
 
@@ -213,7 +214,6 @@ class XMLscene extends CGFscene {
     this.pushMatrix();
 
     if (this.sceneInited) {
-      this.updateMaterials();
 
       // Draw axis
       this.axis.display();
@@ -232,10 +232,5 @@ class XMLscene extends CGFscene {
     // ---- END Background, camera and axis setup
   }
 
-  updateMaterials(){
-    if(this.interface.isKeyPressed("KeyM") || this.interface.isKeyPressed("Keym"))
-    {
-      this.graph.updateMaterials();
-    }
-  }
+
 }

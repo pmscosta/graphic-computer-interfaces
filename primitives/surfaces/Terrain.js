@@ -11,8 +11,6 @@ class Terrain extends CGFobject {
 		this.plane = new Plane(this.scene, this.parts, this.parts);
 
 		this.createShaders();
-
-		console.log(this);
 	};
 
 	createShaders(){
@@ -21,8 +19,6 @@ class Terrain extends CGFobject {
 		this.heightMap = this.scene.graph.textures[this.idheightmap];
 
 		this.shader.setUniformsValues( {uSampler2: 1});
-
-		console.log(this.heightscale);
 
 		this.shader.setUniformsValues( {hScale: this.heightscale});
 

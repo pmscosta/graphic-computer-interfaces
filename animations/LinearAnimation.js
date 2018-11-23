@@ -8,6 +8,8 @@ class LinearAnimation extends Animation {
 
         this.totalTime = totalTime;
 
+        this.position = [];
+
         this.totalDistance = this.calculateTotalDistance();
 
         this.velocity = this.totalDistance / this.totalTime;
@@ -16,22 +18,25 @@ class LinearAnimation extends Animation {
     }
 
 
-    isOver(){
-      return this.finished;
+    isOver() {
+        return this.finished;
     }
 
 
 
     initialConfig() {
+
         this.elapsedTime = 0;
 
         this.startPoint = 0;
 
-        this.position = this.controlPoints[this.startPoint];
+        this.position = [...this.controlPoints[this.startPoint]];
 
         this.endPoint = this.startPoint + 1;
 
         this.finished = false;
+
+        this.totalDistance = this.calculateTotalDistance();
 
         this.timeBetweenPoints = this.getTimeBetweenPonts(
             this.controlPoints[this.startPoint], this.controlPoints[this.endPoint]);
@@ -41,13 +46,14 @@ class LinearAnimation extends Animation {
 
         this.xyRot = Math.atan2(this.dirVector[0], this.dirVector[2]);
 
-        this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
-
-
     }
 
 
     update(time) {
+
+        
+       
+
         if (this.finished) return;
 
         this.elapsedTime += time / 1000;
@@ -55,7 +61,8 @@ class LinearAnimation extends Animation {
         this.position[0] += this.dirVector[0] * this.velocity * time / 1000;
         this.position[1] += this.dirVector[1] * this.velocity * time / 1000;
         this.position[2] += this.dirVector[2] * this.velocity * time / 1000;
-
+        
+        
         if (this.elapsedTime >= this.timeBetweenPoints) {
             this.updatePoints();
         }
@@ -64,34 +71,27 @@ class LinearAnimation extends Animation {
     updatePoints() {
         if (this.endPoint == this.numberOfPoints - 1) {
             this.finished = true;
-            this.transformation.resetMatrix();
         } else {
             this.startPoint++;
             this.endPoint++;
 
             this.elapsedTime = 0;
             this.timeBetweenPoints = this.getTimeBetweenPonts(
-            this.controlPoints[this.startPoint],
-            this.controlPoints[this.endPoint]);
+                this.controlPoints[this.startPoint],
+                this.controlPoints[this.endPoint]);
 
             this.dirVector = this.createDirectionalVector(
                 this.controlPoints[this.startPoint], this.controlPoints[this.endPoint]);
 
             this.xyRot = Math.atan2(this.dirVector[0], this.dirVector[2]);
             this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
-
-
-
         }
     }
 
     apply() {
 
-        console.log(this);
-
         this.scene.translate(this.position[0], this.position[1], this.position[2]);
         this.scene.rotate(this.xyRot, 0, 1, 0);
-      //  this.scene.rotate(this.yzRot, 1, 0, 0);
     }
 
 
@@ -139,12 +139,12 @@ class LinearAnimation extends Animation {
 
     createDirectionalVector(startPoint, endPoint) {
         let dirVector = [
-            this.controlPoints[this.endPoint][0] -
-            this.controlPoints[this.startPoint][0],
-            this.controlPoints[this.endPoint][1] -
-            this.controlPoints[this.startPoint][1],
-            this.controlPoints[this.endPoint][2] -
-            this.controlPoints[this.startPoint][2]
+            endPoint[0] -
+            startPoint[0],
+            endPoint[1] -
+            startPoint[1],
+            endPoint[2] -
+            startPoint[2]
         ];
 
         this.normalizeVector(dirVector);

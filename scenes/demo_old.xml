@@ -1,5 +1,5 @@
 <yas>
-    <scene root="island" axis_length="5"/>
+    <scene root="living_room" axis_length="5"/>
     <views default="far_view">
         <perspective id="far_view" near="0.1" far="400" angle="45">
             <from x="20" y="8" z="20"/>

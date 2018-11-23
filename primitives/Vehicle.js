@@ -164,6 +164,14 @@ const wingLeft = [
 	[7, 0, -1]
 ];
 
+
+const upWing = [
+	[0, 0, 0],
+	[0, 0, -3],
+	[0, 2, -2],
+	[0, 2, -3]
+];
+
 class Vehicle extends CGFobject {
 	constructor(scene) {
 		super(scene);
@@ -175,32 +183,55 @@ class Vehicle extends CGFobject {
 		this.base = new Patch(this.scene, 2, 2, 20, 10, base);
 		this.wingLeft = new Patch(this.scene, 2, 2, 20, 10, wingLeft);
 		this.wingRight = new Patch(this.scene, 2, 2, 20, 10, wingRight);
+		this.upWing = new Patch(this.scene, 2, 2, 20, 10, upWing);
 		this.body = new Patch(this.scene, 3, 8, 20, 10, body);
 		this.thrusters = new Patch(this.scene, 3, 2, 20, 10, thrusters);
 		this.bot = new Patch(this.scene, 3, 7, 20, 10, bottom_body);
 		this.bottom_cover = new Patch(this.scene, 3, 2, 20, 10, bottom_cover);
+		this.arms = new MyCylinder(this.scene, 0.3,0.3,4,20,20); 
+
+		this.createMaterials();
 	};
+
+	createMaterials(){
+		this.scene.graph.materials['silver'].setTexture(this.scene.graph.textures['aircraft']);
+		
+
+		this.scene.graph.materials['beige'].setTexture(this.scene.graph.textures['guns_tubes']);
+		
+
+	}
 
 
 	display() {
 		this.scene.pushMatrix();
 
 
-		this.scene.graph.materials['silver'].setTexture(this.scene.graph.textures['aircraft']);
 		this.scene.graph.materials['silver'].apply();
 
 		this.scene.gl.disable(this.scene.gl.CULL_FACE);
 
-		this.scene.scale(0.1, 0.1, 0.1);
+		//this.scene.scale(0.1, 0.1, 0.1);
 		this.body.display();
 		this.wingLeft.display();
 		this.wingRight.display();
+		this.upWing.display();
 		this.thrusters.display();
 		this.cockPit.display();
 		this.cockPitWindown.display();
 		this.bottom_cover.display();
 		this.scene.rotate(Math.PI, 0, 0, 1);
 		this.bot.display();
+
+
+		this.scene.graph.materials['beige'].apply();
+	
+
+			this.scene.translate(4, 0.3, 1); 
+			this.arms.display();
+
+			this.scene.translate(-8, 0, 0); 
+			this.arms.display();
 
 		this.scene.gl.enable(this.scene.gl.CULL_FACE);
 

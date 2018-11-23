@@ -34,8 +34,8 @@ var angle_def = 0;
 var exponent_comp = ['exponent'];
 var exponent_def = 0;
 
-var linear_comp = ['id, span'];
-var linear_def = [1,5];
+var linear_comp = ['id', 'span'];
+var linear_def = [1, 5];
 
 var control_comp = ['xx', 'yy', 'zz'];
 var control_def = [1, 1, 1];
@@ -51,7 +51,7 @@ var patch_def = [1, 1, 1, 1];
 
 var terrain_comp = ['idtexture', 'idheightmap', 'parts', 'heightscale'];
 
-var water_comp = ['idtexture', 'idwavemap', 'parts', 'heightscale','texscale'];
+var water_comp = ['idtexture', 'idwavemap', 'parts', 'heightscale', 'texscale'];
 
 var from_def = [10, 10, 10];
 var to_def = [0, 0, 0];
@@ -78,10 +78,11 @@ function getWaterValues(reader, components, values, element) {
   var heightscale = reader.getFloat(element, components[3]);
   var texscale = reader.getFloat(element, components[4]);
 
-  values.push(idtexture, idwavemap, parts, heightscale,texscale);
+  values.push(idtexture, idwavemap, parts, heightscale, texscale);
 }
 
 var circular_comp = ['id', 'span', 'center', 'radius', 'startang', 'rotang'];
+
 function getCircularAnimationValues(reader, components, values, element) {
   var id = reader.getFloat(element, components[0]);
   var span = reader.getFloat(element, components[1]);
@@ -90,7 +91,7 @@ function getCircularAnimationValues(reader, components, values, element) {
   var startang = reader.getFloat(element, components[4]);
   var rotang = reader.getFloat(element, components[5]);
 
-  values.push(id, span, center, radius,startang,rotang);
+  values.push(id, span, center, radius, startang, rotang);
 }
 
 
@@ -165,7 +166,7 @@ function getValueOrDefault(reader, component, phase, element, def) {
   if (element == null) {
     console.warn(
       'Warning: ' + phase + ' component undefined. Assuming ' + def);
-      result = def;
+    result = def;
     return;
   }
 
@@ -176,9 +177,9 @@ function getValueOrDefault(reader, component, phase, element, def) {
     console.warn(
       'Warning: ' + component[0] + ' not specified or invalid in ' +
       phase + ' assuming ' + component[0] + ' = ' + def)
-      result = def;
+    result = def;
   } else
-  result = temp;
+    result = temp;
 
   return result;
 
@@ -450,7 +451,7 @@ function createLight(graph, light_element, reader) {
       reader, angle_comp, 'light: ' + lightID + ' angle ',
       light_element, angle_def);
 
-   var exponent =  getValueOrDefault(
+    var exponent = getValueOrDefault(
       reader, exponent_comp, 'light: ' + lightID + ' exponent ',
       light_element, exponent_def);
 
@@ -555,7 +556,7 @@ function createMaterial(scene, material_element, reader, materialID) {
  */
 function createTexture(scene, texture_element, reader, textureID) {
   var texturePath = reader.getString(texture_element, 'file');
-  if (texturePath == null || texturePath==0) {
+  if (texturePath == null || texturePath == 0) {
     console.warn(
       'Warning: no path defined for texture = ' + textureID +
       '. Assuming default path for all');
@@ -563,15 +564,15 @@ function createTexture(scene, texture_element, reader, textureID) {
     texturePath = '/scenes/images/default-texture.png';
   }
   var tex = new XMLHttpRequest();
-  tex.open("HEAD",texturePath,false);
+  tex.open("HEAD", texturePath, false);
   tex.send();
 
-  if(tex.status == 404){
-    var new_texture = new CGFtexture(scene,'/scenes/images/signal.png');
+  if (tex.status == 404) {
+    var new_texture = new CGFtexture(scene, '/scenes/images/signal.png');
     console.warn(
       'Warning: Invalid path defined for texture = ' + textureID +
       '. Assuming signal path for all');
-  }else{
+  } else {
     var new_texture = new CGFtexture(scene, texturePath);
   }
 
@@ -620,29 +621,28 @@ function parsePrimitive(scene, reader, children, ID) {
     case 'patch':
       var values = [];
       getValuesOrDefault(
-        reader,patch_comp, 'patch: '+ ID, values,children,patch_def);
+        reader, patch_comp, 'patch: ' + ID, values, children, patch_def);
 
       let grandChildren = children.children;
       let controlPoints = [];
 
-      for(let i = 0; i < grandChildren.length; i++){
-        var controlPoint=[];
+      for (let i = 0; i < grandChildren.length; i++) {
+        var controlPoint = [];
         getValuesOrDefault(
-          reader,control_comp, 'control point: ', controlPoint,grandChildren[i],control_def);
+          reader, control_comp, 'control point: ', controlPoint, grandChildren[i], control_def);
         controlPoints.push(controlPoint);
 
       }
-
-      return new Patch(scene, values[0], values[1], values[2], values[3],controlPoints);
+      return new Patch(scene, values[0], values[1], values[2], values[3], controlPoints);
 
     case 'plane':
       var values = [];
       getValuesOrDefault(
-        reader,plane_comp, 'plane: '+ ID, values,children,plane_def);
-      return new Plane(scene,values[0],values[1]);
+        reader, plane_comp, 'plane: ' + ID, values, children, plane_def);
+      return new Plane(scene, values[0], values[1]);
 
     case 'vehicle':
-        return new Vehicle(scene);
+      return new Vehicle(scene);
 
     case 'cylinder2':
       var values = [];
@@ -655,16 +655,16 @@ function parsePrimitive(scene, reader, children, ID) {
     case 'terrain':
       var values = [];
       getTerrainValues(
-        reader,terrain_comp, values,children);
+        reader, terrain_comp, values, children);
 
 
-      return new Terrain(scene,values[0],values[1], values[2], values[3]);
+      return new Terrain(scene, values[0], values[1], values[2], values[3]);
 
     case 'water':
       var values = [];
       getWaterValues(
-        reader,water_comp, values,children);
-      return new Water(scene,values[0],values[1], values[2], values[3], values[4]);
+        reader, water_comp, values, children);
+      return new Water(scene, values[0], values[1], values[2], values[3], values[4]);
   }
 }
 
@@ -684,7 +684,7 @@ function dispatchComponent(
       for (var i = 0; i < transformations.length; i++) {
         if (transformations[i].nodeName == 'transformationref') {
           var transId = reader.getString(transformations[i], 'id');
-          if(scene.transformations[transId]==undefined){
+          if (scene.transformations[transId] == undefined) {
             scene.onXMLMinorError("Invalid transformation reference ignoring transformation.");
             continue;
           }
@@ -737,35 +737,42 @@ function dispatchComponent(
       }
       break;
     case 'animations':
-    var childs = component_spec.children;
-    for (var i = 0; i < childs.length; i++) {
-      var id = reader.getString(childs[i], 'id');
-      component.animation.push(id);
-    }
+      var childs = component_spec.children;
+      for (var i = 0; i < childs.length; i++) {
+        var id = reader.getString(childs[i], 'id');
+        component.animation.push(id);
+      }
   }
 }
 
-function createAnimation(scene,animation_element,reader,animationID){
+function createAnimation(scene, animation_element, reader, animationID) {
 
-  var values = [];
   var span = reader.getFloat(animation_element, 'span');
 
-  switch(animation_element.nodeName){
-      case 'linear':
+  switch (animation_element.nodeName) {
+    case 'linear':
+      
+      var points = [];
 
-        var controlPoints=[];
-        for(var i = 0; i < animation_element.children.length;i++){
-            var controlPoint= [];
-            getValuesOrDefault(reader,control_comp,'control: ', controlPoint,animation_element.children[i],control_def);
-            controlPoints.push(controlPoint);
-        }
-       return new LinearAnimation(scene,controlPoints,span);
+      for (var i = 0; i < animation_element.children.length; i++) {
+        var values = [];
 
-      case 'circular':
+        getValuesOrDefault(reader, control_comp, 'control: ', values, 
+          animation_element.children[i], control_def);
+
+        points.push(values);
+      }
+
+      return new LinearAnimation(scene, points, span);
+
+    case 'circular':
+
       var values = [];
+
       getCircularAnimationValues(
         reader, circular_comp, values, animation_element);
-      return new CircularAnimation(scene,values[2],values[3],values[4],values[5],values[1]);
+
+      return new CircularAnimation(scene, values[2], values[3], values[4], values[5], values[1]);
   }
 
 
@@ -782,7 +789,7 @@ function makeid() {
   for (var i = 0; i < 5; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    console.warn("New ID is " + text);
+  console.warn("New ID is " + text);
 
   return text;
 }

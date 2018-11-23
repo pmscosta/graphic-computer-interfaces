@@ -1,5 +1,5 @@
 <yas>
-    <scene root="scene" axis_length="5"/>
+    <scene root="fighter_jet" axis_length="5"/>
     <views default="far_view">
         <perspective id="far_view" near="0.1" far="400" angle="45">
             <from x="10" y="20" z="10"/>
@@ -48,6 +48,7 @@
         <texture id="water" file="scenes/images/water.jpg"/>
         <texture id="water-height" file="scenes/images/water-height.png"/>
         <texture id="aircraft" file="scenes/images/aircraft.jpg"/>
+        <texture id="guns_tubes" file="scenes/images/guns_tubes.jpeg"/>
 
     </textures>
 
@@ -127,31 +128,20 @@
 
     <animations>
 
-        <linear id="l1" span="9">
+        <linear id="l1" span="2">
             <controlpoint xx="1" yy="2" zz="1"/>
-            <controlpoint xx="0.5" yy="2" zz="2"/>
-            <controlpoint xx="1" yy="2" zz="3"/>
-            <controlpoint xx="1" yy="2" zz="4"/>
+            <controlpoint xx="1" yy="4" zz="4"/>
+            <controlpoint xx="2" yy="4" zz="6"/>
+            <controlpoint xx="2" yy="4" zz="8"/>
         </linear>
 
-         <circular id = "c1" span = "3" center = "1 0.2 3"
-            radius ="1" startang = "0" rotang = "90" />
+         <circular id = "c1" span = "1" center = "2 4 6"
+            radius ="2" startang = "0" rotang = "90" />
 
-        <linear id="l2" span="3">
+        <linear id="l2" span="1">
+            <controlpoint xx="4" yy="4" zz="6"/>
             <controlpoint xx="2" yy="2" zz="3"/>
-            <controlpoint xx="1" yy="2" zz="1"/>
         </linear>
-
-        <linear id="lin" span="5">
-            <controlpoint xx="0" yy="1" zz="0" />
-            <controlpoint xx="0" yy="6" zz="8" />
-            <controlpoint xx="3" yy="7" zz="10" />
-        </linear>
-
-
-        <circular id = "cir" span = "5" center = "2 7 5"
-            radius ="5" startang = "0" rotang = "360" />
-
 
     </animations>
 
@@ -278,9 +268,9 @@
         <component id="fighter_jet">
 
           <animations>
-             <animationref id="l1" />
+<!--              <animationref id="l1" />
             <animationref id="c1" />
-            <animationref id="l2" />
+            <animationref id="l2" /> -->
             
           </animations>
 

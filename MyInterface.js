@@ -74,6 +74,13 @@ class MyInterface extends CGFinterface {
 	};
 
 	processKeyUp(event) {
+
+    switch(event.keyCode){
+      case(77):
+        this.scene.graph.updateMaterials();
+    }
+
+
 		this.activeKeys[event.code]=false;
 	};
 

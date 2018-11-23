@@ -62,7 +62,7 @@ class LinearAnimation extends Animation {
     }
 
     updatePoints() {
-        if (this.startPoint == this.numberOfPoints - 2) {
+        if (this.endPoint == this.numberOfPoints - 1) {
             this.finished = true;
             this.transformation.resetMatrix();
         } else {

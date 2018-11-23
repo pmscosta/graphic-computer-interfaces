@@ -2,8 +2,8 @@
     <scene root="scene" axis_length="5"/>
     <views default="far_view">
         <perspective id="far_view" near="0.1" far="400" angle="45">
-            <from x="5" y="10" z="25"/>
-            <to x="5" y="0" z="0"/>
+            <from x="10" y="20" z="10"/>
+            <to x="0" y="0" z="0"/>
         </perspective>
 
         <perspective id="close_up" near="0.1" far="50" angle="30">
@@ -143,14 +143,14 @@
         </linear>
 
         <linear id="lin" span="5">
-            <controlpoint xx="8" yy="3" zz="5" />
-            <controlpoint xx="4" yy="5" zz="8" />
-            <controlpoint xx="0" yy="5" zz="8" />
+            <controlpoint xx="0" yy="1" zz="0" />
+            <controlpoint xx="0" yy="6" zz="8" />
+            <controlpoint xx="3" yy="7" zz="10" />
         </linear>
 
 
-        <circular id = "cir" span = "3" center = "0 0 0"
-            radius ="1" startang = "0" rotang = "-360" />
+        <circular id = "cir" span = "5" center = "2 7 5"
+            radius ="5" startang = "0" rotang = "360" />
 
 
     </animations>

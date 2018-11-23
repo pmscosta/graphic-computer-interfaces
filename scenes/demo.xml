@@ -127,6 +127,21 @@
 
     <animations>
 
+        <linear id="l1" span="9">
+            <controlpoint xx="1" yy="2" zz="1"/>
+            <controlpoint xx="0.5" yy="2" zz="2"/>
+            <controlpoint xx="1" yy="2" zz="3"/>
+            <controlpoint xx="1" yy="2" zz="4"/>
+        </linear>
+
+         <circular id = "c1" span = "3" center = "1 0.2 3"
+            radius ="1" startang = "0" rotang = "90" />
+
+        <linear id="l2" span="3">
+            <controlpoint xx="2" yy="2" zz="3"/>
+            <controlpoint xx="1" yy="2" zz="1"/>
+        </linear>
+
         <linear id="lin" span="5">
             <controlpoint xx="8" yy="3" zz="5" />
             <controlpoint xx="4" yy="5" zz="8" />
@@ -263,8 +278,10 @@
         <component id="fighter_jet">
 
           <animations>
-             <animationref id="lin" />
-              <animationref id="cir" />
+             <animationref id="l1" />
+            <animationref id="c1" />
+            <animationref id="l2" />
+            
           </animations>
 
             <materials>

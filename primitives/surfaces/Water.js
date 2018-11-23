@@ -12,7 +12,8 @@ class Water extends CGFobject {
 		this.plane = new Plane(this.scene,this.parts,this.parts);
 
 		this.createShaders();
-		this.shader.setUniformsValues({normScale:this.heightscale})
+		this.shader.setUniformsValues({normScale:this.heightscale});
+		this.shader.setUniformsValues({texScale:this.texscale});
 
 		this.fac = 5.0;
 		this.timeInt=0;
@@ -31,7 +32,7 @@ class Water extends CGFobject {
 	}
 
 	update(timestamp){
-		this.timeInt += 0.0006;
+		this.timeInt += 0.0004;
 
 	  this.shader.setUniformsValues({factor:this.timeInt});
 
@@ -45,6 +46,8 @@ class Water extends CGFobject {
 		this.texture.bind(0);
 
 		this.scene.pushMatrix();
+
+		this.scene.scale(2, 1, 2);
 
 		this.plane.display();
 

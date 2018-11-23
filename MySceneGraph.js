@@ -567,9 +567,6 @@ class MySceneGraph {
    * Displays the scene, processing each node, starting in the root node.
    */
   displayScene() {
-    // entry point for graph rendering
-    // TODO: Render loop starting at root of graph
-
     var rootElement = this.components[this.idRoot];
     this.iterateChildren(rootElement);
   }
@@ -608,10 +605,9 @@ class MySceneGraph {
     this.scene.pushMatrix();
 
     this.scene.multMatrix(component.transformation.getMatrix());
-    if (component.animation.length > 0) {
+    if (component.hasAnimations()) {
       this.animations[component.animation[component.animationPos]].apply();
     }
-
 
     this.managePile(component);
 
@@ -672,14 +668,7 @@ class MySceneGraph {
     for (var key in this.components) {
       var component = this.components[key];
 
-      console.log(this.animations);
-
       if (component.hasAnimations()) {
-
-        console.log('AQUI: ' + component.animationPos);
-        console.log(component.animation);
-
-        console.log(component.animation[component.animationPos]);
 
         let currentAnimation =
             this.animations[component.animation[component.animationPos]];
@@ -690,7 +679,7 @@ class MySceneGraph {
           component.animationPos =
               (component.animationPos + 1) % component.animation.length;
 
-          console.log(component.animationPos);
+              console.log(component.animationPos);
 
           this.animations[component.animation[component.animationPos]]
               .initialConfig();

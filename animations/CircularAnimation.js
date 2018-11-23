@@ -30,11 +30,13 @@ class CircularAnimation extends Animation{
 
     apply(){
         this.scene.translate(this.center[0],this.center[1],this.center[2]);
-        this.scene.translate(
+  /*       this.scene.translate(
         this.radius*Math.sin(this.currentAngle+ this.initialAngle),
         0,
-        this.radius*Math.cos(this.currentAngle+ this.initialAngle));
+        this.radius*Math.cos(this.currentAngle+ this.initialAngle)); */
         this.scene.rotate( this.initialAngle + this.currentAngle,0,1,0);
+        this.scene.translate(this.radius, 0, 0);
+        this.scene.translate(-this.center[0],-this.center[1],-this.center[2]);
 
     }
 

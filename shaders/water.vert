@@ -9,6 +9,7 @@ uniform mat4 uNMatrix;
 
 uniform float normScale;
 uniform float factor;
+uniform float texScale;
 
 varying vec2 vTextureCoord;
 varying vec4 coords;
@@ -147,7 +148,7 @@ vec3 getNormal(vec2 centralPoint){
 void main(){
 		vTextureCoord = aTextureCoord;
 
-		float height = texture2D(uSampler2, factor + vTextureCoord).x * normScale;
+		float height = texture2D(uSampler2, factor + vTextureCoord * texScale).x * normScale;
 
 		vec3 temp_vertex = aVertexPosition + vec3(0, height, 0);
 

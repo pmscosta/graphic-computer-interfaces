@@ -48,8 +48,13 @@ class LinearAnimation extends Animation {
 
         this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
 
-        if(this.yzRot > 0)  
-            this.yzRot+=Math.PI;
+        console.log(this.dirVector);
+
+        if(this.yzRot > 0 )
+        this.yzRot +=  Math.PI;
+
+        console.log(this.yzRot);
+
     }
 
 
@@ -89,18 +94,22 @@ class LinearAnimation extends Animation {
 
             this.xyRot = Math.atan2(this.dirVector[0], this.dirVector[2]);
             this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
-            
+
+                console.log(this.dirVector);
+
+            if(this.yzRot > 0 )
+            this.yzRot +=  Math.PI;
+
             console.log(this.yzRot);
-             if(this.yzRot > 0)  
-                this.yzRot+=Math.PI;
         }
     }
 
     apply() {
 
         this.scene.translate(this.position[0], this.position[1], this.position[2]);
-        this.scene.rotate(this.yzRot,1,0,0);
+        this.scene.rotate(this.yzRot, 1, 0, 0);
         this.scene.rotate(this.xyRot, 0, 1, 0);
+        
     }
 
 

@@ -47,9 +47,9 @@
         <texture id="island-height" file="scenes/images/island-height.jpg"/>
         <texture id="water" file="scenes/images/water.jpg"/>
         <texture id="water-height" file="scenes/images/water-height.png"/>
-        <texture id="aircraft" file="scenes/images/aircraft.jpg"/>
-        <texture id="guns_tubes" file="scenes/images/guns_tubes.jpeg"/>
-
+        <texture id="fuselage" file="scenes/images/fuselage.png"/>
+        <texture id="fuselage_window" file="scenes/images/fuselage_window.png"/>
+         <texture id="guns_tubes" file="scenes/images/guns_tubes.jpeg"/>
     </textures>
 
     <materials>
@@ -87,6 +87,13 @@
             <specular r="1" g="0" b="0.3" a="1"/>
         </material>
 
+        <material id="glass" shininess="100">
+           <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0.83" g="0.83" b="0.83" a="1"/>
+            <diffuse r="0.83" g="0.83" b="0.83" a="1"/>
+            <specular r="0.83" g="0.83" b="0.83" a="1"/>
+        </material>
+
         <material id="beige" shininess="10">
             <emission r="0" g="0" b="0" a="0"/>
             <ambient r="0.98" g="0.98" b="0.87" a="1"/>
@@ -108,7 +115,7 @@
             <specular r="1" g="1" b="1" a="1"/>
         </material>
 
-        <material id="silver" shininess="1000">
+        <material id="silver" shininess="10">
             <emission r="0" g="0" b="0" a="0"/>
             <ambient r="0.83" g="0.83" b="0.83" a="1"/>
             <diffuse r="0.83" g="0.83" b="0.83" a="1"/>

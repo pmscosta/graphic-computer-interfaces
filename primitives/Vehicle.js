@@ -195,8 +195,6 @@ class Vehicle extends CGFobject {
 
 	createMaterials() {
 
-		console.log(this.scene.graph.textures);
-
 		this.scene.graph.materials['silver'].setTexture(this.scene.graph.textures['fuselage']);
 
 		this.scene.graph.materials['beige'].setTexture(this.scene.graph.textures['guns_tubes']);
@@ -217,7 +215,6 @@ class Vehicle extends CGFobject {
 
 		this.scene.gl.disable(this.scene.gl.CULL_FACE);
 
-		this.scene.scale(0.1, 0.1, 0.1);
 		this.body.display();
 		this.wingLeft.display();
 		this.wingRight.display();
@@ -226,7 +223,7 @@ class Vehicle extends CGFobject {
 		this.cockPit.display();
 		this.bottom_cover.display();
 
-		
+
 
 		this.scene.graph.materials['silver'].apply();
 

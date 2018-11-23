@@ -48,20 +48,15 @@ class LinearAnimation extends Animation {
 
         this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
 
-        console.log(this.dirVector);
 
         if(this.yzRot > 0 )
         this.yzRot +=  Math.PI;
 
-        console.log(this.yzRot);
 
     }
 
 
     update(time) {
-
-        
-        console.log(this.yzRot);
 
         if (this.finished) return;
 
@@ -95,12 +90,9 @@ class LinearAnimation extends Animation {
             this.xyRot = Math.atan2(this.dirVector[0], this.dirVector[2]);
             this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
 
-                console.log(this.dirVector);
-
             if(this.yzRot > 0 )
             this.yzRot +=  Math.PI;
 
-            console.log(this.yzRot);
         }
     }
 

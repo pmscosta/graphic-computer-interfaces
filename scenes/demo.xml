@@ -144,7 +144,7 @@
          <circular id = "c1" span = "2" center = "4 4 8"
             radius ="4" startang = "138" rotang = "180" />
 
-        <linear id="l2" span="20">
+        <linear id="l2" span="2">
             <controlpoint xx="8" yy="4" zz="8"/>          
             <controlpoint xx="8" yy="2" zz="1"/>            
         </linear>

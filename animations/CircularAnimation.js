@@ -38,6 +38,7 @@ class CircularAnimation extends Animation{
                 this.radius*Math.cos(this.currentAngle+ this.initialAngle));
 
         this.scene.rotate(Math.PI / 2 + this.initialAngle + this.currentAngle, 0, 1, 0);
+        
     }
 
     update(time){

@@ -217,7 +217,7 @@ class Vehicle extends CGFobject {
 
 		this.scene.gl.disable(this.scene.gl.CULL_FACE);
 
-		
+		this.scene.scale(0.1, 0.1, 0.1);
 		this.body.display();
 		this.wingLeft.display();
 		this.wingRight.display();

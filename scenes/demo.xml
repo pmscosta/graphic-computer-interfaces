@@ -1,5 +1,5 @@
 <yas>
-    <scene root="fighter_jet" axis_length="5"/>
+    <scene root="scene" axis_length="5"/>
     <views default="far_view">
         <perspective id="far_view" near="0.1" far="400" angle="45">
             <from x="10" y="20" z="10"/>
@@ -129,19 +129,21 @@
     <animations>
 
         <linear id="l1" span="2">
-            <controlpoint xx="1" yy="2" zz="1"/>
-            <controlpoint xx="1" yy="4" zz="4"/>
-            <controlpoint xx="2" yy="4" zz="6"/>
-            <controlpoint xx="2" yy="4" zz="8"/>
+            <controlpoint xx="0" yy="2" zz="1"/>
+            <controlpoint xx="0" yy="4" zz="4"/>
+            <controlpoint xx="0" yy="4" zz="8"/>
         </linear>
 
-         <circular id = "c1" span = "1" center = "2 4 6"
-            radius ="2" startang = "0" rotang = "90" />
+         <circular id = "c1" span = "2" center = "4 4 8"
+            radius ="4" startang = "138" rotang = "180" />
 
-        <linear id="l2" span="1">
-            <controlpoint xx="4" yy="4" zz="6"/>
-            <controlpoint xx="2" yy="2" zz="3"/>
+        <linear id="l2" span="20">
+            <controlpoint xx="8" yy="4" zz="8"/>          
+            <controlpoint xx="8" yy="2" zz="1"/>            
         </linear>
+
+        <circular id = "c2" span = "2" center = "4 2 1"
+            radius ="4" startang = "45" rotang = "180" />
 
     </animations>
 
@@ -268,9 +270,10 @@
         <component id="fighter_jet">
 
           <animations>
-<!--              <animationref id="l1" />
+            <animationref id="l1" />
             <animationref id="c1" />
-            <animationref id="l2" /> -->
+            <animationref id="l2" />
+            <animationref id="c2" /> 
             
           </animations>
 

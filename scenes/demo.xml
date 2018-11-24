@@ -2,7 +2,7 @@
     <scene root="scene" axis_length="5"/>
     <views default="far_view">
         <perspective id="far_view" near="0.1" far="500" angle="45">
-            <from x="20" y="6" z="20"/>
+            <from x="7" y="6" z="17"/>
             <to x="1" y="0" z="1"/>
         </perspective>
 
@@ -49,8 +49,10 @@
         <texture id="water-height" file="scenes/images/water-height.png"/>
         <texture id="fuselage" file="scenes/images/fuselage.png"/>
         <texture id="fuselage_window" file="scenes/images/fuselage_window.png"/>
-         <texture id="guns_tubes" file="scenes/images/guns_tubes.jpeg"/>
-    </textures>
+        <texture id="guns_tubes" file="scenes/images/guns_tubes.jpeg"/>
+        <texture id="fire" file="scenes/images/fire.jpg"/>
+ 
+  </textures>
 
     <materials>
         <material id="m1" shininess="0.1">
@@ -120,6 +122,14 @@
             <ambient r="0.83" g="0.83" b="0.83" a="1"/>
             <diffuse r="0.83" g="0.83" b="0.83" a="1"/>
             <specular r="0.83" g="0.83" b="0.83" a="1"/>
+        </material>
+
+
+        <material id="fire_mat" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0.95" g="0.48" b="0.05" a="1"/>
+            <diffuse r="0.95" g="0.48" b="0.05" a="1"/>
+            <specular r="0.95" g="0.48" b="0.05" a="1"/>
         </material>
     </materials>
 
@@ -278,7 +288,7 @@
         <component id="fighter_jet">
 
           <animations>
-            <animationref id="l1" />
+           <animationref id="l1" />
             <animationref id="c1" />
             <animationref id="l2" />
             <animationref id="c2" /> 

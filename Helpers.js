@@ -178,13 +178,14 @@ function getValuesOrDefault(reader, components, phase, values, element, def) {
   }
 }
 
-
 /**
- * @param  {} reader
- * @param  {} component
- * @param  {} phase
- * @param  {} element
- * @param  {} def
+ * Reads value from the XML as defined in [component] and returns it. If some or all values are not defined, returns default ones.
+ * @param {XML Reader} reader
+ * @param {Default Values} components
+ * @param {string} phase
+ * @param {output array} values
+ * @param {XML Child} element
+ * @param {Default Values} def
  */
 function getValueOrDefault(reader, component, phase, element, def) {
 

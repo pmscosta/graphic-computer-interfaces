@@ -1,6 +1,14 @@
 var DEGREE_TO_RAD = Math.PI / 180;
 class CircularAnimation extends Animation{
-
+    /**
+     * @param  {} scene 
+     * @param  {} center Center of the circular animation
+     * @param  {} radius Radius of the animation
+     * @param  {} initialAngle Initial angle for the element
+     * @param  {} rotAngle Total angle to rotate
+     * @param  {} totalTime Total time of the animation
+     * 
+     */
     constructor(scene, center, radius, initialAngle, rotAngle, totalTime){
 
         super(scene);
@@ -15,7 +23,10 @@ class CircularAnimation extends Animation{
     }   
 
 
-
+    
+    /**
+     * Resets initial configurations of the animation
+     */
     initialConfig() {
         this.elapsedTime = 0;
 
@@ -24,10 +35,16 @@ class CircularAnimation extends Animation{
         this.finished = false;
     }
 
+    /*
+    Checks if the animation is finished
+    */
     isOver(){
         return this.finished;
       }
 
+    /**
+     * Applies transformation to the element
+     */
     apply(){
 
         this.scene.translate(this.center[0], this.center[1], this.center[2]);
@@ -40,7 +57,10 @@ class CircularAnimation extends Animation{
         this.scene.rotate(Math.PI / 2 + this.initialAngle + this.currentAngle, 0, 1, 0);
         
     }
-
+    /**
+     * Updates angle to rotate on next iteration of apply()
+     * @param  {} time Current time
+     */
     update(time){
         if(this.finished) return;
 

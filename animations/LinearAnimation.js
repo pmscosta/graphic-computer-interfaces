@@ -1,4 +1,8 @@
-class LinearAnimation extends Animation {
+    /**
+     * @param  {} scene 
+     * @param  {} controlPoints Control points in which the animation has to pass
+     * @param  {} totalTime Total time for the animation
+     */class LinearAnimation extends Animation {
     constructor(scene, controlPoints, totalTime) {
         super(scene);
 
@@ -17,13 +21,17 @@ class LinearAnimation extends Animation {
         this.initialConfig();
     }
 
-
+    /*
+    Checks if the animation is finished
+    */
     isOver() {
         return this.finished;
     }
 
 
-
+    /**
+     * Resets initial configurations of the animation
+     */
     initialConfig() {
 
         this.elapsedTime = 0;
@@ -54,8 +62,12 @@ class LinearAnimation extends Animation {
 
     }
 
-
+    /**
+     * Updates angle to rotate on next iteration of apply()
+     * @param  {} time Current time
+     */
     update(time) {
+
 
         if (this.finished) return;
 
@@ -73,6 +85,10 @@ class LinearAnimation extends Animation {
 
     }
 
+    
+    /**
+     * Updates animation, checks if it ended
+     */
     updatePoints() {
         if (this.endPoint == this.numberOfPoints - 1) {
             this.finished = true;
@@ -98,20 +114,30 @@ class LinearAnimation extends Animation {
         }
     }
 
+     /**
+     * Applies transformation to the element
+     */
     apply() {
 
         this.scene.translate(this.position[0], this.position[1], this.position[2]);
-        this.scene.rotate(this.yzRot, 1, 0, 0);
+        this.scene.rotate(this.yzRot,1,0,0);
         this.scene.rotate(this.xyRot, 0, 1, 0);
 
     }
 
 
 
+    /*
+    Time between two points
+    */
     getTimeBetweenPonts(point1, point2) {
         return this.distanceBetweenTwoPoints(point1, point2) / this.velocity;
     }
 
+    
+    /**
+     * Returns total distance of the animation
+     */
     calculateTotalDistance() {
         let totalDistance = 0;
 
@@ -122,6 +148,14 @@ class LinearAnimation extends Animation {
         return totalDistance;
     }
 
+    
+    /**
+     * Distance between two control points
+     * 
+     * @param  {} point1
+     * @param  {} point2
+     * 
+     */
     distanceBetweenTwoPoints(point1, point2) {
         let dx = point2[0] - point1[0];
         let dy = point2[1] - point1[1];
@@ -133,6 +167,11 @@ class LinearAnimation extends Animation {
         return distance;
     }
 
+    
+    /**
+     * Gets normal of a vector
+     * @param  {} vector
+     */
     vectorNorm(vector) {
         let norm = Math.sqrt(
             Math.pow(vector[0], 2) + Math.pow(vector[1], 2) +
@@ -141,6 +180,11 @@ class LinearAnimation extends Animation {
         return norm;
     }
 
+    
+    /**
+     * Normalizes vector
+     * @param  {} vector
+     */
     normalizeVector(vector) {
         let norm = this.vectorNorm(vector);
 
@@ -148,7 +192,11 @@ class LinearAnimation extends Animation {
         vector[1] /= norm;
         vector[2] /= norm;
     }
-
+    /**
+     * Creates direction vector
+     * @param  {} startPoint
+     * @param  {} endPoint
+     */
     createDirectionalVector(startPoint, endPoint) {
         let dirVector = [
             endPoint[0] -

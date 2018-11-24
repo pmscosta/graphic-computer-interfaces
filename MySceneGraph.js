@@ -694,12 +694,4 @@ class MySceneGraph {
       this.materialsPile.push(component.materials[component.materialPos]);
   }
 
-
-
-
-
-
-
-
-
 }

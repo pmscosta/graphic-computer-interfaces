@@ -1,5 +1,11 @@
 class Terrain extends CGFobject {
-
+	/**
+	 * @param  {XMl Scene} scene
+	 * @param  {Colored texture id} idtexture
+	 * @param  {HeightMap texture id} idheightmap
+	 * @param  {Number of divisons (in both dimension)} parts
+	 * @param  {Height scale factor} heightscale
+	 */
 	constructor(scene, idtexture, idheightmap,parts,heightscale) {
 		super(scene);
 		this.scene = scene;
@@ -12,8 +18,11 @@ class Terrain extends CGFobject {
 
 		this.createShaders();
 	};
-
-	createShaders(){
+	
+	/**
+	 * Creates the two needed shaders and loads the textures
+	 */
+	createShaders() {
 		this.shader = new CGFshader(this.scene.gl, "../../shaders/terrain.vert","../../shaders/terrain.frag");
 		this.texture = this.scene.graph.textures[this.idtexture];
 		this.heightMap = this.scene.graph.textures[this.idheightmap];

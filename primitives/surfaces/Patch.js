@@ -1,5 +1,12 @@
 class Patch extends CGFobject {
-
+	/**
+	 * @param  {XML Scene} scene
+	 * @param  {Number of U points} npointsU
+	 * @param  {Number of V points} npointsV
+	 * @param  {Number of divisions in U} npartsU
+	 * @param  {Number of divisions in V} npartsV
+	 * @param  {Single Array with all the control points} controlPoint
+	 */
 	constructor(scene, npointsU, npointsV, npartsU, npartsV, controlPoint) {
 		super(scene);
 		this.scene = scene;
@@ -15,7 +22,9 @@ class Patch extends CGFobject {
 		this.patch = this.makeSurface(this.npointsU - 1, this.npointsV - 1, this.vertexes);
 	};
 
-
+	/**
+	 * Formats the input controlpoints array to match the input of the nurbs surface
+	 */
 	cleanUpControlPoint() {
 
 		let vertexes = [];
@@ -40,6 +49,11 @@ class Patch extends CGFobject {
 
 	}
 
+	/**
+	 * @param  {U Degree} degree1
+	 * @param  {V Degree} degree2
+	 * @param  {Number of control points} controlvertexes
+	 */
 	makeSurface(degree1, degree2, controlvertexes) {
 
 		var nurbsSurface = new CGFnurbsSurface(degree1, degree2, controlvertexes);

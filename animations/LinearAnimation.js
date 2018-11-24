@@ -48,9 +48,8 @@ class LinearAnimation extends Animation {
 
         this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
 
-
-        if(this.yzRot > 0 )
-        this.yzRot +=  Math.PI;
+        if (this.dirVector[2] < 0)
+            this.yzRot += Math.PI;
 
 
     }
@@ -62,14 +61,16 @@ class LinearAnimation extends Animation {
 
         this.elapsedTime += time / 1000;
 
+        if (this.elapsedTime >= this.timeBetweenPoints) {
+            this.updatePoints();
+            return;
+        }
+
         this.position[0] += this.dirVector[0] * this.velocity * time / 1000;
         this.position[1] += this.dirVector[1] * this.velocity * time / 1000;
         this.position[2] += this.dirVector[2] * this.velocity * time / 1000;
-        
-        
-        if (this.elapsedTime >= this.timeBetweenPoints) {
-            this.updatePoints();
-        }
+
+
     }
 
     updatePoints() {
@@ -90,8 +91,9 @@ class LinearAnimation extends Animation {
             this.xyRot = Math.atan2(this.dirVector[0], this.dirVector[2]);
             this.yzRot = -Math.atan2(this.dirVector[1], this.dirVector[2]);
 
-            if(this.yzRot > 0 )
-            this.yzRot +=  Math.PI;
+
+            if (this.dirVector[2] < 0)
+                this.yzRot += Math.PI;
 
         }
     }
@@ -101,7 +103,7 @@ class LinearAnimation extends Animation {
         this.scene.translate(this.position[0], this.position[1], this.position[2]);
         this.scene.rotate(this.yzRot, 1, 0, 0);
         this.scene.rotate(this.xyRot, 0, 1, 0);
-        
+
     }
 
 

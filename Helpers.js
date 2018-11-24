@@ -53,13 +53,20 @@ var terrain_comp = ['idtexture', 'idheightmap', 'parts', 'heightscale'];
 
 var water_comp = ['idtexture', 'idwavemap', 'parts', 'heightscale', 'texscale'];
 
+var circular_comp = ['id', 'span', 'center', 'radius', 'startang', 'rotang'];
+
 var from_def = [10, 10, 10];
 var to_def = [0, 0, 0];
 
 var scale_def = [1, 1, 1];
 var trans_def = [1, 1, 1];
 
-
+/**
+ * @param  {} reader
+ * @param  {} components
+ * @param  {} values
+ * @param  {} element
+ */
 function getTerrainValues(reader, components, values, element) {
 
   var idtexture = reader.getString(element, components[0]);
@@ -70,6 +77,12 @@ function getTerrainValues(reader, components, values, element) {
   values.push(idtexture, idheightmap, parts, heightscale);
 }
 
+/**
+ * @param  {} reader
+ * @param  {} components
+ * @param  {} values
+ * @param  {} element
+ */
 function getWaterValues(reader, components, values, element) {
 
   var idtexture = reader.getString(element, components[0]);
@@ -81,8 +94,14 @@ function getWaterValues(reader, components, values, element) {
   values.push(idtexture, idwavemap, parts, heightscale, texscale);
 }
 
-var circular_comp = ['id', 'span', 'center', 'radius', 'startang', 'rotang'];
 
+
+/**
+ * @param  {} reader
+ * @param  {} components
+ * @param  {} values
+ * @param  {} element
+ */
 function getCircularAnimationValues(reader, components, values, element) {
   var id = reader.getFloat(element, components[0]);
   var span = reader.getFloat(element, components[1]);
@@ -120,13 +139,13 @@ function getID(reader, element, storage, description) {
       '). Generating a new one');
     ID = makeid();
 
-
   }
-
-
 
   return ID;
 }
+
+
+
 /**
  * Reads some values from the XML as defined in [components] and outputs them in
  * [values]. If some or all values are not defined, returns default ones.
@@ -159,6 +178,14 @@ function getValuesOrDefault(reader, components, phase, values, element, def) {
   }
 }
 
+
+/**
+ * @param  {} reader
+ * @param  {} component
+ * @param  {} phase
+ * @param  {} element
+ * @param  {} def
+ */
 function getValueOrDefault(reader, component, phase, element, def) {
 
   var result = 0;
@@ -185,6 +212,7 @@ function getValueOrDefault(reader, component, phase, element, def) {
 
 }
 
+
 /**
  * Reads RGB components from a child in the XML. If such values are not defined,
  * sets 0 as default.
@@ -206,6 +234,8 @@ function getRGBComponents(reader, phase, values, element) {
       values.push(temp);
   }
 }
+
+
 
 /**
  * Reads he rotation values from the XML file,
@@ -238,6 +268,8 @@ function getRotationComponents(reader, phase, values, element) {
   values['axis'] = axis;
   values['angle'] = angle;
 }
+
+
 
 /**
  * Parses a perspective form the XML file
@@ -292,6 +324,8 @@ function parsePerspective(graph, reader, element) {
   graph.views[perspectiveId]['to_values'] = to_values;
 }
 
+
+
 /**
  * Parses an ortho view from the XML file.
  * @param {Scene Graph} graph - to store the ortho view
@@ -344,6 +378,8 @@ function parseOrtho(graph, reader, element) {
   graph.views[orthoID]['target'] = to_values;
 }
 
+
+
 /**
  * Parses and store a transformation form the XML file.
  * It calculates all the transformations and store the final/resulting matrix.
@@ -377,6 +413,8 @@ function parseTransformation(reader, element, curr_transformation, ID) {
       break;
   }
 }
+
+
 
 /**
  * Parses and creates a light from the XML file
@@ -473,6 +511,8 @@ function createLight(graph, light_element, reader) {
   }
 }
 
+
+
 /**
  * Parses and creates a material from the XML
  * @param {XMLScene} scene  - material constructor requeries the scene
@@ -547,6 +587,7 @@ function createMaterial(scene, material_element, reader, materialID) {
   return new_material;
 }
 
+
 /**
  * Parses and creates a CGFTexture Object from the XML file
  * @param {XMLScene} scene - CGFtexture constructor requires scene
@@ -579,6 +620,13 @@ function createTexture(scene, texture_element, reader, textureID) {
   return new_texture;
 }
 
+
+/**
+ * @param  {} scene
+ * @param  {} reader
+ * @param  {} children
+ * @param  {} ID
+ */
 function parsePrimitive(scene, reader, children, ID) {
   switch (children.nodeName) {
     case 'rectangle':
@@ -668,6 +716,7 @@ function parsePrimitive(scene, reader, children, ID) {
   }
 }
 
+
 /**
  * Parses and creates a component and all of it's children in one.
  * @param {XMLScene} scene
@@ -745,19 +794,27 @@ function dispatchComponent(
   }
 }
 
+
+
+/**
+ * @param  {} scene
+ * @param  {} animation_element
+ * @param  {} reader
+ * @param  {} animationID
+ */
 function createAnimation(scene, animation_element, reader, animationID) {
 
   var span = reader.getFloat(animation_element, 'span');
 
   switch (animation_element.nodeName) {
     case 'linear':
-      
+
       var points = [];
 
       for (var i = 0; i < animation_element.children.length; i++) {
         var values = [];
 
-        getValuesOrDefault(reader, control_comp, 'control: ', values, 
+        getValuesOrDefault(reader, control_comp, 'control: ', values,
           animation_element.children[i], control_def);
 
         points.push(values);

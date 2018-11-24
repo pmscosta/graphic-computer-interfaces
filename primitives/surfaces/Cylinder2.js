@@ -1,5 +1,12 @@
 class Cylinder2 extends CGFobject {
-
+	/**
+	 * @param  {XML Scene} scene
+	 * @param  {Base radius} base
+	 * @param  {Top Radius} top
+	 * @param  {Cylinder Height} heigth
+	 * @param  {Number of slices} slices
+	 * @param  {Number of stacks} stacks
+	 */
 	constructor(scene, base, top, heigth, slices, stacks) {
 		super(scene);
 
@@ -19,7 +26,9 @@ class Cylinder2 extends CGFobject {
 
 		this.cylinderBot = this.makeSurface(3, 1, this.controlPoints);
 	};
-
+	/**
+	 * Returns the control points for the half top portion of the cylinder
+	 */
 	makeTopControlPoints() {
 
 		let P1 = [this.base, 0, 0, 1];
@@ -52,6 +61,9 @@ class Cylinder2 extends CGFobject {
 
 	}
 
+	/**
+	 * Returns the control points for the half bot portion of the cylinder
+	 */
 	makeBotControlPoints() {
 
 		let P1 = [-this.base, 0, 0, 1];
@@ -84,7 +96,11 @@ class Cylinder2 extends CGFobject {
 
 	}
 
-
+	/**
+	 * @param  {U Degree} degree1
+	 * @param  {V Degree} degree2
+	 * @param  {Number of control points} controlvertexes
+	 */
 	makeSurface(degree1, degree2, controlvertexes) {
 
 		var nurbsSurface = new CGFnurbsSurface(degree1, degree2, controlvertexes);

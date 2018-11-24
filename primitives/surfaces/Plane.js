@@ -1,5 +1,9 @@
 class Plane extends CGFobject {
-
+	/**
+	 * @param  {XML Scene} scene
+	 * @param  {Number of divisions in U} npartsU
+	 * @param  {Number of divisions in V} npartsV
+	 */
 	constructor(scene, npartsU, npartsV) {
 		super(scene);
 		this.scene = scene;
@@ -20,6 +24,11 @@ class Plane extends CGFobject {
 
 	};
 
+	/**
+	 * @param  {U Degree} degree1
+	 * @param  {V Degree} degree2
+	 * @param  {Number of control points} controlvertexes
+	 */
 	makeSurface(degree1, degree2, controlvertexes) {
 
 		var nurbsSurface = new CGFnurbsSurface(degree1, degree2, controlvertexes);

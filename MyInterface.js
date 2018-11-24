@@ -52,6 +52,19 @@ class MyInterface extends CGFinterface {
     group.close();
   }
 
+  addScaleSlider(){
+
+    this.waterFactor = 1;
+
+    this.gui.add(this, 'waterFactor', 0, 7).onChange((val) =>
+      {
+        this.scene.graph.primitives['water'].updateGuiFactor(val);
+
+      });
+
+
+  }
+
   addCameraGroup() {
     var keys = Object.keys(this.scene.cameras);
 

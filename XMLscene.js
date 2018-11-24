@@ -48,7 +48,7 @@ class XMLscene extends CGFscene {
    */
   initCameras() {
     this.camera = new CGFcamera(
-        0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+      0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
   }
 
   /**
@@ -58,17 +58,17 @@ class XMLscene extends CGFscene {
     for (var key in this.graph.views) {
       if (this.graph.views[key].type == 'perspective') {
         var new_camera = new CGFcamera(
-            this.graph.views[key].angle *DEGREE_TO_RAD, this.graph.views[key].near,
-            this.graph.views[key].far, this.graph.views[key].from_values,
-            this.graph.views[key].to_values);
+          this.graph.views[key].angle * DEGREE_TO_RAD, this.graph.views[key].near,
+          this.graph.views[key].far, this.graph.views[key].from_values,
+          this.graph.views[key].to_values);
         this.cameras[key] = new_camera;
       } else {
         var new_camera = new CGFcameraOrtho(
-            this.graph.views[key].left, this.graph.views[key].right,
-            this.graph.views[key].bottom, this.graph.views[key].top,
-            this.graph.views[key].near, this.graph.views[key].far,
-            this.graph.views[key].position, this.graph.views[key].target,
-            vec3.fromValues(0, 1, 0));
+          this.graph.views[key].left, this.graph.views[key].right,
+          this.graph.views[key].bottom, this.graph.views[key].top,
+          this.graph.views[key].near, this.graph.views[key].far,
+          this.graph.views[key].position, this.graph.views[key].target,
+          vec3.fromValues(0, 1, 0));
         this.cameras[key] = new_camera;
       }
     }
@@ -90,12 +90,12 @@ class XMLscene extends CGFscene {
     this.axis = new CGFaxis(this, this.graph.axis_length);
 
     this.setGlobalAmbientLight(
-        this.graph.ambient.ambient[0], this.graph.ambient.ambient[1],
-        this.graph.ambient.ambient[2], this.graph.ambient.ambient[3]);
+      this.graph.ambient.ambient[0], this.graph.ambient.ambient[1],
+      this.graph.ambient.ambient[2], this.graph.ambient.ambient[3]);
 
     this.gl.clearColor(
-        this.graph.ambient.background[0], this.graph.ambient.background[1],
-        this.graph.ambient.background[2], this.graph.ambient.background[3]);
+      this.graph.ambient.background[0], this.graph.ambient.background[1],
+      this.graph.ambient.background[2], this.graph.ambient.background[3]);
 
     this.getViews();
 
@@ -106,28 +106,30 @@ class XMLscene extends CGFscene {
     // Adds lights group.
     this.interface.addLightsGroup();
 
+    this.interface.addScaleSlider();
+
     this.updateLights();
 
     this.sceneInited = true;
 
     this.oldTime = Date.now();
 
-		this.setUpdatePeriod(1000/FPS);
+    this.setUpdatePeriod(1000 / FPS);
 
   }
 
-  update(timestamp){
+  update(timestamp) {
 
-		let currTime = timestamp - this.oldTime;
+    let currTime = timestamp - this.oldTime;
 
     this.oldTime = timestamp;
 
-    this.graph.primitives["water"].update(currTime);
+    this.graph.primitives['water'].update(currTime);
 
     this.graph.update(currTime);
-  
 
-	};
+
+  };
 
   initLights() {
     var i = 0;
@@ -145,16 +147,16 @@ class XMLscene extends CGFscene {
       var specularIllumination = this.graph.lights[key].specular;
 
       this.lights[i].setPosition(
-          location[0], location[1], location[2], location[3]);
+        location[0], location[1], location[2], location[3]);
       this.lights[i].setAmbient(
-          ambientIllumination[0], ambientIllumination[1],
-          ambientIllumination[2], ambientIllumination[3]);
+        ambientIllumination[0], ambientIllumination[1],
+        ambientIllumination[2], ambientIllumination[3]);
       this.lights[i].setDiffuse(
-          diffuseIllumination[0], diffuseIllumination[1],
-          diffuseIllumination[2], diffuseIllumination[3]);
+        diffuseIllumination[0], diffuseIllumination[1],
+        diffuseIllumination[2], diffuseIllumination[3]);
       this.lights[i].setSpecular(
-          specularIllumination[0], specularIllumination[1],
-          specularIllumination[2], specularIllumination[3]);
+        specularIllumination[0], specularIllumination[1],
+        specularIllumination[2], specularIllumination[3]);
 
 
       if (this.graph.lights[key].type == 'spot') {

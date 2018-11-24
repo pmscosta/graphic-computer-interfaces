@@ -16,7 +16,6 @@ const thrusters = [
 	[0.1, 0.0, -5.5]
 ];
 
-
 const pitWindow = [
 	[-0.2, 0, 10.5],
 	[-1.5, 0, 6.5],
@@ -25,7 +24,6 @@ const pitWindow = [
 	[0.2, 0, 10.5],
 	[1.5, 0, 6.5]
 ];
-
 
 const body = [
 	[-1.5, 0, 3.5],
@@ -56,27 +54,6 @@ const body = [
 	[1.5, 0, 0]
 ];
 
-
-/* const pitShell = [
-		[-1.5, -1.5, 0.0],
-		[-1.5, 1.5, 0.0],
-		[0, -1.5, 3.0],
-		[0, 1.5, 3.0],
-		[1.5, -1.5, 0.0],
-		[1.5, 1.5, 0.0]
-];
- */
-
-
-/* const pitWindow = [
-	[-1.5, 1.5, 0.0],
-	[-0.1, 5.5, 0.0],
-	[0, 1.5, 3.0],
-	[0, 5.5, 0],
-	[1.5, 1.5, 0.0],
-	[0.1, 5.5, 0.0]
-]; */
-
 const pitBack = [
 	[-0.5, -7, 0.0],
 	[-1.5, -1.5, 0.0],
@@ -93,7 +70,6 @@ const base = [
 	[2.5, 1, 0.0]
 ];
 
-
 const bottom_body = [
 
 	[-0.2, 0, 10.5],
@@ -104,8 +80,6 @@ const bottom_body = [
 	[-1.5, 0, 0],
 	[-0.1, 0, -5.5],
 
-
-
 	[0, 0, 10.5],
 	[0, 3.0, 3.5],
 	[0, 3.0, 3.5],
@@ -113,7 +87,6 @@ const bottom_body = [
 	[0, 3, 0],
 	[0, 3, 0],
 	[0, 0, -5.5],
-
 
 	[0.2, 0, 10.5],
 	[1.65, 0, 6.5],
@@ -135,18 +108,6 @@ const bottom_cover = [
 
 ];
 
-/* const wingLeft = [
-	[1, 0.3, 6],
-	[1, 0.3, 0],
-	[1.3, 0.2, 6],
-	[1.3, 0.2, 0],
-	[1.3, 0.1, 6],
-	[1.3, 0.1, 0],
-	[7, 0, 1],
-	[7, 0, -1],
-];
- */
-
 const wingRight = [
 	[-7, 0, 1],
 	[-7, 0, -1],
@@ -155,15 +116,12 @@ const wingRight = [
 
 ];
 
-
-
 const wingLeft = [
 	[1.5, 0, 6],
 	[1.5, 0, 0],
 	[7, 0, 1],
 	[7, 0, -1]
 ];
-
 
 const upWing = [
 	[0, 0, 0],
@@ -173,6 +131,10 @@ const upWing = [
 ];
 
 class Vehicle extends CGFobject {
+	
+	/**
+	 * @param  {XML scene} scene
+	 */
 	constructor(scene) {
 		super(scene);
 		this.scene = scene;
@@ -192,7 +154,9 @@ class Vehicle extends CGFobject {
 
 		this.createMaterials();
 	};
-
+	/**
+	 * Associates the vehicle textures to the materials so later on that can be applied
+	 */
 	createMaterials() {
 
 		this.scene.graph.materials['silver'].setTexture(this.scene.graph.textures['fuselage']);
@@ -202,7 +166,9 @@ class Vehicle extends CGFobject {
 		this.scene.graph.materials['glass'].setTexture(this.scene.graph.textures['fuselage_window']);
 	}
 
-
+	/**
+	 * Vehicle Display
+	 */
 	display() {
 		this.scene.pushMatrix();
 
@@ -212,9 +178,7 @@ class Vehicle extends CGFobject {
 		this.cockPitWindown.display();
 
 		this.scene.graph.materials['silver'].apply();
-
 		this.scene.gl.disable(this.scene.gl.CULL_FACE);
-
 		this.body.display();
 		this.wingLeft.display();
 		this.wingRight.display();
@@ -223,19 +187,13 @@ class Vehicle extends CGFobject {
 		this.cockPit.display();
 		this.bottom_cover.display();
 
-
-
 		this.scene.graph.materials['silver'].apply();
-
 		this.scene.rotate(Math.PI, 0, 0, 1);
 		this.bot.display();
 
 		this.scene.graph.materials['beige'].apply();
-
-
 		this.scene.translate(4, 0.3, 1);
 		this.arms.display();
-
 		this.scene.translate(-8, 0, 0);
 		this.arms.display();
 

@@ -1,0 +1,327 @@
+<yas>
+    <scene root="scene" axis_length="5"/>
+    <views default="far_view">
+        <perspective id="far_view" near="0.1" far="500" angle="45">
+            <from x="7" y="6" z="17"/>
+            <to x="1" y="0" z="1"/>
+        </perspective>
+
+        <perspective id="close_up" near="0.1" far="50" angle="30">
+            <from x="7" y="3.5" z="7"/>
+            <to x="0" y="0" z="0"/>
+        </perspective>
+
+    </views>
+
+    <ambient>
+        <ambient r="0" g="0" b="0" a="1"/>
+        <background r="0.53" g="0.81" b="0.92" a="1" />
+    </ambient>
+
+    <lights>
+
+        <omni id="sun" enabled="1">
+            <location x="5" y="20" z="5" w="0" />
+            <ambient r="0.63" g="0.63" b="0.63" a="1"/>
+            <diffuse r="0.63" g="0.63" b="0.63" a="1"/>
+            <specular r="0.63" g="0.63" b="0.63" a="1"/>
+        </omni>
+
+    </lights>
+
+    <textures>
+        <texture id="vidral" file="scenes/images/vidral.jpg"/>
+        <texture id="big_lamp" file="scenes/images/lamp.jpeg"/>
+        <texture id="small_lamp" file="scenes/images/small_lamp.jpg"/>
+        <texture id="white_wall" file="scenes/images/white_wall.jpg"/>
+        <texture id="floor" file="scenes/images/floor.jpg"/>
+        <texture id="brick_wall" file="scenes/images/brick_wall.jpg"/>
+        <texture id="desk" file="scenes/images/desk.jpg"/>
+        <texture id="metal" file="scenes/images/metal.jpeg"/>
+        <texture id="leather" file="scenes/images/leather.jpeg"/>
+        <texture id="def_text" file="scenes/images/default-texture.png"/>
+        <texture id="starry_night" file="scenes/images/starry_night.jpg"/>
+        <texture id="wood_grain" file="scenes/images/wood_grain.png"/>
+        <texture id="cara_duarte" file="scenes/images/duarte.jpg"/>
+        <texture id="island" file="scenes/images/island.jpg"/>
+        <texture id="island-height" file="scenes/images/island-height.jpg"/>
+        <texture id="water" file="scenes/images/water.jpg"/>
+        <texture id="water-height" file="scenes/images/water-height.png"/>
+        <texture id="fuselage" file="scenes/images/fuselage.png"/>
+        <texture id="fuselage_window" file="scenes/images/fuselage_window.png"/>
+        <texture id="guns_tubes" file="scenes/images/guns_tubes.jpeg"/>
+        <texture id="fire" file="scenes/images/fire.jpg"/>
+ 
+  </textures>
+
+    <materials>
+        <material id="m1" shininess="0.1">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0.3" g="0.3" b="0.3" a="1"/>
+            <diffuse r="0.8" g="0.8" b="0.8" a="1"/>
+            <specular r="0.1" g="0.1" b="0.1" a="1"/>
+        </material>
+
+        <material id="floor" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="0.1" g="0.1" b="0.1" a="1"/>
+        </material>
+
+        <material id="full_white" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
+        </material>
+        <material id="light_orange" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="1" g="0.65" b="0.29" a="1"/>
+            <diffuse r="1" g="0.65" b="0.29" a="1"/>
+            <specular r="1" g="0.65" b="0.29" a="1"/>
+        </material>
+
+        <material id="fuschia" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="1" g="0" b="0.3" a="1"/>
+            <diffuse r="1" g="0" b="0.3" a="1"/>
+            <specular r="1" g="0" b="0.3" a="1"/>
+        </material>
+
+        <material id="glass" shininess="100">
+           <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0.83" g="0.83" b="0.83" a="1"/>
+            <diffuse r="0.83" g="0.83" b="0.83" a="1"/>
+            <specular r="0.83" g="0.83" b="0.83" a="1"/>
+        </material>
+
+        <material id="beige" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0.98" g="0.98" b="0.87" a="1"/>
+            <diffuse r="0.98" g="0.98" b="0.87" a="1"/>
+            <specular r="0" g="0" b="0" a="1"/>
+        </material>
+
+        <material id="table_wood" shininess="1">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
+        </material>
+
+        <material id="lamp" shininess="1">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="1" g="1" b="1" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
+        </material>
+
+        <material id="silver" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0.83" g="0.83" b="0.83" a="1"/>
+            <diffuse r="0.83" g="0.83" b="0.83" a="1"/>
+            <specular r="0.83" g="0.83" b="0.83" a="1"/>
+        </material>
+
+
+        <material id="fire_mat" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0.95" g="0.48" b="0.05" a="1"/>
+            <diffuse r="0.95" g="0.48" b="0.05" a="1"/>
+            <specular r="0.95" g="0.48" b="0.05" a="1"/>
+        </material>
+    </materials>
+
+
+    <transformations >
+        <transformation id="floor_trans">
+            <translate x="0" y="0" z="8"/>
+            <rotate axis="x" angle="-90"/>
+            <scale x="8" y="8" z="1"/>
+        </transformation>
+    </transformations>
+
+
+    <animations>
+
+        <linear id="l1" span="2">
+            <controlpoint xx="0" yy="2" zz="1"/>
+            <controlpoint xx="0" yy="4" zz="4"/>
+            <controlpoint xx="0" yy="3" zz="8"/>
+        </linear>
+
+         <circular id = "c1" span = "2" center = "4 3 8"
+            radius ="4" startang = "135" rotang = "180" />
+
+        <linear id="l2" span="1">
+            <controlpoint xx="8" yy="3" zz="8"/>    
+            <controlpoint xx="8" yy="3" zz="6" />      
+            <controlpoint xx="8" yy="2" zz="1"/>            
+        </linear>
+
+        <circular id = "c2" span = "2" center = "4 2 1"
+            radius ="4" startang = "45" rotang = "180" />
+
+    </animations>
+
+    <primitives>
+        <primitive id="square">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+        </primitive>
+
+        <primitive id="square_at_zero">
+            <rectangle x1="0" y1="0" x2="1" y2="1" />
+        </primitive>
+        <primitive id="triangle">
+            <triangle x1="0" y1="1" z1="0"
+                    x2="-0.8" y2="0" z2="0"
+                    x3="0.8" y3="0" z3="0"/>
+        </primitive>
+
+        <primitive id="sphere">
+            <sphere radius="1" slices="20" stacks="20"/>
+        </primitive>
+
+        <primitive id="cylinder">
+            <cylinder base="1" top="1" height="5" slices="20" stacks="20"/>
+        </primitive>
+
+        <primitive id="cut_cone">
+            <cylinder base="3" top="1" height="5" slices="20" stacks="20"/>
+        </primitive>
+
+        <primitive id="torus">
+            <torus inner="0.1" outer="0.3" slices="20" loops="20"/>
+        </primitive>
+
+        <primitive id ="nurb">
+            <plane npartsU="20" npartsV="20"/>
+        </primitive>
+
+        <primitive id = "patch2">
+            <patch npointsU="2" npointsV="2" npartsU="5" npartsV="5">
+                <controlpoint xx="-0.5" yy="0" zz="0.5" />
+                <controlpoint xx="-0.5" yy="0" zz="-0.5"/>
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+                <controlpoint xx="0.5" yy="0" zz="-0.5"/>
+            </patch>
+        </primitive>
+
+
+        <primitive id = "wing">
+            <patch npointsU="2" npointsV="2" npartsU="5" npartsV="5">
+                <controlpoint xx="-0.5" yy="0" zz="0.5" />
+                <controlpoint xx="-0.5" yy="0" zz="0.4"/>
+                <controlpoint xx="0.5" yy="0" zz="0.5" />
+                <controlpoint xx="0.5" yy="0" zz="-0.3"/>
+            </patch>
+        </primitive>
+
+        <primitive id = "cockpit">
+            <patch npointsU="3" npointsV="2" npartsU="5" npartsV="5">
+                <controlpoint xx="-1.5" yy="-1.5" zz="0.0" />
+                <controlpoint xx="-1.5" yy="1.5" zz="0.0"/>
+                <controlpoint xx="0" yy="1.5" zz="3.0" />
+                <controlpoint xx="0" yy="1.5" zz="3.0"/>
+                <controlpoint xx="1.5" yy="-1.5" zz="0" />
+                <controlpoint xx="1.5" yy="1.5" zz="0.0"/>
+            </patch>
+        </primitive>
+
+         <primitive id = "patch">
+            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20">
+                <controlpoint xx="-2.0" yy="-2.0" zz="1.0" />
+                <controlpoint xx="-2.0" yy="-1.0" zz="-2.0"/>
+                <controlpoint xx="-2.0" yy="1.0" zz="5.0" />
+                <controlpoint xx="-2.0" yy="2.0" zz="-1.0"/>
+                <controlpoint xx="0" yy="-2.0" zz="0" />
+                <controlpoint xx="0" yy="-1.0" zz="-1.0"/>
+                <controlpoint xx="0" yy="1.0" zz="1.5" />
+                <controlpoint xx="0" yy="2.0" zz="0"/>
+                <controlpoint xx="2.0" yy="-2.0" zz="-1.0" />
+                <controlpoint xx="2.0" yy="-1.0" zz="2.0"/>
+                <controlpoint xx="2.0" yy="1.0" zz="-5.0" />
+                <controlpoint xx="2.0" yy="2.0" zz="1.0"/>
+            </patch>
+        </primitive>
+
+        <primitive id = "vehicle">
+            <vehicle />
+        </primitive>
+
+        <primitive id = "cylinder2">
+            <cylinder2 base="1" top="1" height="5" slices="20" stacks="20"/>
+         </primitive>
+
+        <primitive id = "terrain">
+            <terrain idtexture="island" idheightmap="island-height" parts="50" heightscale="2.4"/>
+        </primitive>
+
+        <primitive id = "water">
+            <water idtexture="water" idwavemap="water-height" parts="100" heightscale="0.3" texscale="4" />
+        </primitive>
+
+    </primitives>
+
+    <components>
+
+        <component id="island">
+          <transformation>
+              <scale x="10" y="1" z="10" />
+              <translate x="0.5" y="0" z="0.5" />
+          </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="terrain"/>
+                <primitiveref id="water"/>
+            </children>
+        </component>
+
+        <component id="fighter_jet">
+        
+          <animations>
+           <animationref id="l1" />
+            <animationref id="c1" />
+            <animationref id="l2" />
+            <animationref id="c2" /> 
+            
+          </animations>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <primitiveref id="vehicle"/>
+            </children>
+        </component>
+
+        <component id="scene">
+            <transformation>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="fighter_jet"/>
+                <componentref id="island"/>
+            </children>
+        </component>
+
+    </components>
+
+
+</yas>

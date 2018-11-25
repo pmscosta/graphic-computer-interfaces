@@ -50,8 +50,10 @@ var patch_comp = ['npointsU', 'npointsV', 'npartsU', 'npartsV'];
 var patch_def = [1, 1, 1, 1];
 
 var terrain_comp = ['idtexture', 'idheightmap', 'parts', 'heightscale'];
+var terrain_def =['x', 'x', '20', '0.2', '1'];
 
 var water_comp = ['idtexture', 'idwavemap', 'parts', 'heightscale', 'texscale'];
+var water_def =['x', 'x', '20', '0.2', '1'];
 
 var circular_comp = ['id', 'span', 'center', 'radius', 'startang', 'rotang'];
 
@@ -71,9 +73,11 @@ function getTerrainValues(reader, components, values, element) {
 
   var idtexture = reader.getString(element, components[0]);
   var idheightmap = reader.getString(element, components[1]);
-  var parts = reader.getFloat(element, components[2]);
-  var heightscale = reader.getFloat(element, components[3]);
-
+  
+  var parts = getValueOrDefault(reader, components[2], 'Terrain parts', element, terrain_def[2]);
+  
+  var heightscale = getValueOrDefault(reader, components[3], 'Terrain heighscale', element, terrain_def[3]);
+ 
   values.push(idtexture, idheightmap, parts, heightscale);
 }
 
@@ -86,10 +90,14 @@ function getTerrainValues(reader, components, values, element) {
 function getWaterValues(reader, components, values, element) {
 
   var idtexture = reader.getString(element, components[0]);
+
   var idwavemap = reader.getString(element, components[1]);
-  var parts = reader.getFloat(element, components[2]);
-  var heightscale = reader.getFloat(element, components[3]);
-  var texscale = reader.getFloat(element, components[4]);
+
+  var parts = getValueOrDefault(reader, components[2], 'Water parts', element, water_def[2]);
+
+  var heightscale = getValueOrDefault(reader, components[3], 'Water heighscale', element, water_def[3]);
+
+  var texscale = getValueOrDefault(reader, components[4], 'Water texscale', element, water_def[4]);
 
   values.push(idtexture, idwavemap, parts, heightscale, texscale);
 }
@@ -102,15 +110,20 @@ function getWaterValues(reader, components, values, element) {
  * @param  {} values
  * @param  {} element
  */
-function getCircularAnimationValues(reader, components, values, element) {
-  var id = reader.getFloat(element, components[0]);
-  var span = reader.getFloat(element, components[1]);
-  var center = reader.getString(element, components[2]);
-  var radius = reader.getFloat(element, components[3]);
-  var startang = reader.getFloat(element, components[4]);
-  var rotang = reader.getFloat(element, components[5]);
+function getCircularAnimationValues(reader, components, values, element, id) {
 
-  values.push(id, span, center, radius, startang, rotang);
+  var span = getValueOrDefault(reader, components[1], 'Circular Animation ' + id + ' Span', element, circular_def[1]);
+
+  var center = getStringOrDefault(reader, components[2], 'Circular Animation ' + id + ' Center', element, circular_def[2]);
+
+  var radius = getValueOrDefault(reader, components[3], 'Circular Animation ' + id + ' Radius', element, circular_def[3]);
+
+  var startang = getValueOrDefault(reader, components[4], 'Circular Animation ' + id + ' Startang', element, circular_def[4]);
+
+  var rotang = getValueOrDefault(reader, components[5], 'Circular Animation ' + id + ' Rotang', element, circular_def[5]);
+
+  values.push(span, center, radius, startang, rotang);
+
 }
 
 
@@ -199,18 +212,52 @@ function getValueOrDefault(reader, component, phase, element, def) {
   }
 
 
-  var temp = reader.getFloat(element, component[0]);
+  var temp = reader.getFloat(element, component);
 
   if (!(temp != null && !isNaN(temp))) {
     console.warn(
-      'Warning: ' + component[0] + ' not specified or invalid in ' +
-      phase + ' assuming ' + component[0] + ' = ' + def)
+      'Warning: ' + component + ' not specified or invalid in ' +
+      phase + ' assuming ' + component + ' = ' + def)
     result = def;
   } else
     result = temp;
 
   return result;
 
+}
+
+/**
+ * Reads string from the XML as defined in [component] and returns it. If some or all strings are not defined, returns default ones.
+ * @param {XML Reader} reader
+ * @param {Default Values} components
+ * @param {string} phase
+ * @param {output array} values
+ * @param {XML Child} element
+ * @param {Default Values} def
+ */
+function getStringOrDefault(reader, component, phase, element, def) {
+
+  var result = 0;
+
+  if (element == null) {
+    console.warn(
+      'Warning: ' + phase + ' component undefined. Assuming ' + def);
+    result = def;
+    return;
+  }
+
+
+  var temp = reader.getString(element, component);
+
+  if (temp == null) {
+    console.warn(
+      'Warning: ' + component + ' not specified or invalid in ' +
+      phase + ' assuming ' + component + ' = ' + def)
+    result = def;
+  } else
+    result = temp;
+
+  return result;
 }
 
 
@@ -828,9 +875,9 @@ function createAnimation(scene, animation_element, reader, animationID) {
       var values = [];
 
       getCircularAnimationValues(
-        reader, circular_comp, values, animation_element);
+        reader, circular_comp, values, animation_element, animationID);
 
-      return new CircularAnimation(scene, values[2], values[3], values[4], values[5], values[1]);
+      return new CircularAnimation(scene, values[1], values[2], values[3], values[4], values[0]);
   }
 
 

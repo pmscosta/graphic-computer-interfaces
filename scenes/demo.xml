@@ -196,7 +196,7 @@
         </primitive>
 
         <primitive id ="nurb">
-            <plane npartsU="20" npartsV="ii"/>
+            <plane npartsU="20" npartsV="20"/>
         </primitive>
 
         <primitive id = "patch2">
@@ -260,7 +260,6 @@
 
         <primitive id = "water">
             <water idtexture="water" idwavemap="water-height" parts="100" heightscale="0.3" texscale="4" />
-
         </primitive>
 
     </primitives>
@@ -286,7 +285,7 @@
         </component>
 
         <component id="fighter_jet">
-
+        
           <animations>
            <animationref id="l1" />
             <animationref id="c1" />

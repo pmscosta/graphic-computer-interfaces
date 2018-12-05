@@ -315,9 +315,10 @@
 
             <texture id="none"/>
 
-            <children>
+            <children><!-- 
                 <componentref id="fighter_jet"/>
-                <componentref id="island"/>
+                <componentref id="island"/> -->
+                <primitiveref id="cylinder2"/>
             </children>
         </component>
 

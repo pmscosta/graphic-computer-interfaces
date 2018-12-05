@@ -478,7 +478,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="inherit"/>
+            <texture id="white_wall" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -495,7 +495,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="vidral" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -509,7 +509,7 @@
             </transformation>
 
             <materials>
-                <material id ="inherit"/>
+                <material id ="m1"/>
             </materials>
 
             <texture id="inherit" length_s="1" length_t="1"/>
@@ -526,10 +526,10 @@
             </transformation>
 
             <materials>
-                <material id ="inherit"/>
+                <material id ="m1"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="cara_duarte" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -582,7 +582,7 @@
                 <material id ="table_wood"/>
             </materials>
 
-            <texture id="inherit"/>
+            <texture id="starry_night"/>
 
             <children>
                 <componentref id="legs"/>
@@ -598,10 +598,10 @@
             </transformation>
 
             <materials>
-                <material id ="table_wood"/>
+                <material id ="white"/>
             </materials>
 
-            <texture id="desk" length_s="0.5" length_t="0.5"/>
+            <texture id="desk" length_s="0.5" length_t="0.5" force="true"/>
 
             <children>
                 <componentref id="table"/>
@@ -668,8 +668,6 @@
             </transformation>
 
             <animations>
-
-                <animationsref id="lin"/>
 
             </animations>
 
@@ -989,7 +987,6 @@
             </transformation>
 
             <animations>
-                <animationref id="lin" />
             </animations>
 
             <materials>

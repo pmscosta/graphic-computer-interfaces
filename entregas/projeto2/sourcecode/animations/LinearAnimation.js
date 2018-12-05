@@ -1,11 +1,13 @@
+var DEGREE_TO_RAD = Math.PI / 180;
     /**
      * @param  {} scene 
      * @param  {} controlPoints Control points in which the animation has to pass
      * @param  {} totalTime Total time for the animation
      */class LinearAnimation extends Animation {
-    constructor(scene, controlPoints, totalTime) {
+    constructor(scene, controlPoints, totalTime, ang = 0) {
         super(scene);
 
+        this.totalAng = ang * DEGREE_TO_RAD;
         this.controlPoints = controlPoints;
 
         this.numberOfPoints = this.controlPoints.length;
@@ -37,6 +39,10 @@
         this.elapsedTime = 0;
 
         this.startPoint = 0;
+
+        this.currentAngle = 0;
+
+        this.intervalAngle = this.totalAng/this.totalTime;
 
         this.position = [...this.controlPoints[this.startPoint]];
 
@@ -78,6 +84,7 @@
             return;
         }
 
+        this.currentAngle+= time/1000 * this.intervalAngle;
         this.position[0] += this.dirVector[0] * this.velocity * time / 1000;
         this.position[1] += this.dirVector[1] * this.velocity * time / 1000;
         this.position[2] += this.dirVector[2] * this.velocity * time / 1000;
@@ -119,9 +126,21 @@
      */
     apply() {
 
+        
         this.scene.translate(this.position[0], this.position[1], this.position[2]);
-        this.scene.rotate(this.yzRot,1,0,0);
-        this.scene.rotate(this.xyRot, 0, 1, 0);
+        
+        if(this.dirVector[2] != 0)
+        this.scene.rotate(this.currentAngle, this.dirVector[0], 0, this.dirVector[2]);
+        else
+        this.scene.rotate(this.currentAngle, this.dirVector[0], this.dirVector[1], this.dirVector[2]);
+        
+
+        //this.scene.rotate(this.yzRot,1,0,0);
+
+        console.log('xy:', this.xyRot / DEGREE_TO_RAD);
+        console.log('curr', this.currentAngle / DEGREE_TO_RAD);
+
+        this.scene.rotate(this.xyRot, 0, 1, 0); 
 
     }
 

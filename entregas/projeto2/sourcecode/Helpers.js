@@ -49,11 +49,11 @@ var plane_def = [1, 1];
 var patch_comp = ['npointsU', 'npointsV', 'npartsU', 'npartsV'];
 var patch_def = [1, 1, 1, 1];
 
-var terrain_comp = ['idtexture', 'idheightmap', 'parts', 'heightscale'];
-var terrain_def =['x', 'x', '20', '0.2', '1'];
+var terrain_comp = ['idtexture', 'idheightmap', 'mask', 'parts', 'heightscale'];
+var terrain_def = ['x', 'x', '20', '0.2', '1'];
 
 var water_comp = ['idtexture', 'idwavemap', 'parts', 'heightscale', 'texscale'];
-var water_def =['x', 'x', '20', '0.2', '1'];
+var water_def = ['x', 'x', '20', '0.2', '1'];
 
 var circular_comp = ['id', 'span', 'center', 'radius', 'startang', 'rotang'];
 
@@ -73,12 +73,13 @@ function getTerrainValues(reader, components, values, element) {
 
   var idtexture = reader.getString(element, components[0]);
   var idheightmap = reader.getString(element, components[1]);
-  
-  var parts = getValueOrDefault(reader, components[2], 'Terrain parts', element, terrain_def[2]);
-  
-  var heightscale = getValueOrDefault(reader, components[3], 'Terrain heighscale', element, terrain_def[3]);
- 
-  values.push(idtexture, idheightmap, parts, heightscale);
+  var idMask = reader.getString(element, components[2]);
+
+  var parts = getValueOrDefault(reader, components[3], 'Terrain parts', element, terrain_def[3]);
+
+  var heightscale = getValueOrDefault(reader, components[4], 'Terrain heighscale', element, terrain_def[4]);
+
+  values.push(idtexture, idheightmap, idMask, parts, heightscale);
 }
 
 /**
@@ -677,6 +678,14 @@ function createTexture(scene, texture_element, reader, textureID) {
  */
 function parsePrimitive(scene, reader, children, ID) {
   switch (children.nodeName) {
+
+    case 'square':
+      var texAngle = reader.getFloat(children, 'texAngle');
+      return new MyRectangle(scene, [0, 0, 1, 1], texAngle);
+
+    case 'diamond':
+      var slices = reader.getFloat(children, 'slices');
+      return new Diamond(scene, slices);
     case 'rectangle':
       var values = [];
 
@@ -731,6 +740,25 @@ function parsePrimitive(scene, reader, children, ID) {
       }
       return new Patch(scene, values[0], values[1], values[2], values[3], controlPoints);
 
+      /*       return new Patch(scene, 4, 3, 15, 15, 
+              [
+                  [-1, 0, 2], 
+                  [0, 0, 0],
+                  [1, 0, 2],
+        
+                  [-1, 1, 3], 
+                  [0, 1, 0],
+                  [1, 1, 3],
+
+                  [-1, 2, 1], 
+                  [0,  2, 0],
+                  [1,  2, 1],
+
+                  [-1, 3, 2], 
+                  [0, 3, 0],
+                  [1, 3, 2]
+              ]); */
+
     case 'plane':
       var values = [];
       getValuesOrDefault(
@@ -754,7 +782,7 @@ function parsePrimitive(scene, reader, children, ID) {
         reader, terrain_comp, values, children);
 
 
-      return new Terrain(scene, values[0], values[1], values[2], values[3]);
+      return new Terrain(scene, values[0], values[1], values[2], values[3], values[4]);
 
     case 'water':
       var values = [];
@@ -820,6 +848,20 @@ function dispatchComponent(
           reader.getFloat(component_spec, 'length_s'),
           reader.getFloat(component_spec, 'length_t'));
       }
+
+      let force = reader.getString(component_spec, 'force', false);
+
+     // console.log('here', force);
+
+
+      if(force === null || force == 'false'){
+        console.log('pushing----false');
+        component.force = false;
+      }else{
+        console.log('pushing----true');
+        component.force = true;
+      } 
+
       break;
     case 'children':
       var childs = component_spec.children;
@@ -869,6 +911,24 @@ function createAnimation(scene, animation_element, reader, animationID) {
       }
 
       return new LinearAnimation(scene, points, span);
+
+    case 'linear2':
+
+      var rot = reader.getFloat(animation_element, 'rotation');
+      var points = [];
+
+      for (var i = 0; i < animation_element.children.length; i++) {
+        var values = [];
+
+        getValuesOrDefault(reader, control_comp, 'control: ', values,
+          animation_element.children[i], control_def);
+
+        points.push(values);
+      }
+
+      return new LinearAnimation(scene, points, span, rot);
+
+
 
     case 'circular':
 

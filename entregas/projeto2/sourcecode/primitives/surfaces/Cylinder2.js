@@ -70,7 +70,7 @@ class Cylinder2 extends CGFobject {
 		let P1_z = [-this.top, 0, this.heigth, 1];
 
 		let P2 = [-this.base, -4/3 * this.base, 0, 1];
-		let P2_z = -[this.top, -4/3 * this.top, this.heigth, 1];
+		let P2_z = [-this.top, -4/3 * this.top, this.heigth, 1];
 
 		let P3 = [this.base, -4/3 * this.base, 0, 1];
 		let P3_z = [this.top, -4/3 * this.top, this.heigth, 1];

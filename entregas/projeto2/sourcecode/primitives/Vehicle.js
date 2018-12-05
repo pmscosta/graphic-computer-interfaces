@@ -160,7 +160,7 @@ class Vehicle extends CGFobject {
 
 		this.exhaust = new MyCylinder(this.scene, 0.43, 0.3, 2, 20, 20);
 
-		this.createMaterials();
+		//this.createMaterials();
 	};
 	/**
 	 * Associates the vehicle textures to the materials so later on that can be applied
@@ -184,10 +184,10 @@ class Vehicle extends CGFobject {
 
 		this.scene.scale(0.1, 0.1, 0.1);
 
-		this.scene.graph.materials['glass'].apply();
+		//this.scene.graph.materials['glass'].apply();
 		this.cockPitWindown.display();
 
-		this.scene.graph.materials['silver'].apply();
+		//this.scene.graph.materials['silver'].apply();
 		this.scene.gl.disable(this.scene.gl.CULL_FACE);
 		this.body.display();
 		this.wingLeft.display();
@@ -208,18 +208,18 @@ class Vehicle extends CGFobject {
 		this.cockPit.display();
 		this.bottom_cover.display();
 
-		this.scene.graph.materials['silver'].apply();
+		//this.scene.graph.materials['silver'].apply();
 		this.scene.rotate(Math.PI, 0, 0, 1);
 		this.bot.display();
 
-		this.scene.graph.materials['beige'].apply();
+		//this.scene.graph.materials['beige'].apply();
 		this.scene.translate(4, 0.3, 1);
 		this.arms.display();
 		this.scene.translate(-8, 0, 0);
 		this.arms.display();
 
 
-		this.scene.graph.materials['fire_mat'].apply();
+		//this.scene.graph.materials['fire_mat'].apply();
 		this.scene.translate(3.6, -0.35, -5);
 		this.exhaust.display();
 

@@ -105,9 +105,7 @@ class XMLscene extends CGFscene {
 
     // Adds lights group.
     this.interface.addLightsGroup();
-
-    this.interface.addScaleSlider();
-
+    
     this.updateLights();
 
     this.sceneInited = true;
@@ -124,11 +122,7 @@ class XMLscene extends CGFscene {
 
     this.oldTime = timestamp;
 
-    this.graph.primitives['water'].update(currTime);
-
     this.graph.update(currTime);
-
-
   };
 
   initLights() {

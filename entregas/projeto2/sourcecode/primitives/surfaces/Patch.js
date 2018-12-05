@@ -19,7 +19,10 @@ class Patch extends CGFobject {
 
 		this.vertexes = this.cleanUpControlPoint();
 
+            
+
 		this.patch = this.makeSurface(this.npointsU - 1, this.npointsV - 1, this.vertexes);
+	
 	};
 
 	/**
@@ -67,7 +70,11 @@ class Patch extends CGFobject {
 	display() {
 
 		this.patch.display();
-
 	}
+
+	updateTexCoords(length_s, lenght_t) {
+
+		this.updateTexCoordsGLBuffers();
+	  }
 
 };

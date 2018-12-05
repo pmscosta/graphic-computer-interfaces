@@ -43,4 +43,8 @@ class Plane extends CGFobject {
 		this.plane.display();
 	}
 
+	updateTexCoords(dummy1, dummy2){
+
+	};
+
 };

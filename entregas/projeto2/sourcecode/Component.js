@@ -11,6 +11,7 @@ class Component {
       this.materialPos=0;
       this.animation=[];
       this.animationPos=0;
+      this.force = false;
   }
 
   hasAnimations(){

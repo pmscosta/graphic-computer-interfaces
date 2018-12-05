@@ -124,8 +124,6 @@ class XMLscene extends CGFscene {
 
     this.oldTime = timestamp;
 
-    this.graph.primitives['water'].update(currTime);
-
     this.graph.update(currTime);
 
 

@@ -1,5 +1,9 @@
 var DEGREE_TO_RAD = Math.PI / 180;
 
+var g_force = false;
+
+var canChange = false;
+
 // Order of the groups in the XML document.
 
 var indexes = {
@@ -522,7 +526,7 @@ class MySceneGraph {
 
     for (var i = 0; i < children.length; i++) {
       if (children[i].nodeName != 'linear' &&
-        children[i].nodeName != 'circular') {
+        children[i].nodeName != 'circular' && children[i].nodeName != 'linear2') {
         this.onXMLMinorError('unknown tag <' + children[i].nodeName + '>');
         continue;
       }
@@ -533,6 +537,9 @@ class MySceneGraph {
       this.animations[animationID] =
         createAnimation(this.scene, children[i], this.reader, animationID);
     }
+
+
+		this.scene.gl.disable(this.scene.gl.CULL_FACE);
   }
 
   /*
@@ -669,8 +676,7 @@ class MySceneGraph {
     let last_mat = this.materialsPile.length - 1;
     let last_length = this.lengthPile.length - 1;
 
-    // Insert into pile
-    if (component.texture[0] == 'inherit') {
+   if (component.texture[0] == 'inherit') {
       if (this.texturesPile.length > 0)
         this.texturesPile.push(this.texturesPile[last_tex]);
 

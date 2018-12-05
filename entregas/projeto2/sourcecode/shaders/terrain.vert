@@ -11,6 +11,9 @@ varying vec2 vTextureCoord;
 
 uniform float hScale;
 
+varying float useMask;
+
+uniform sampler2D uSampler1;
 uniform sampler2D uSampler2;
 
 
@@ -117,19 +120,19 @@ vec3 getNormal(vec2 centralPoint){
   vec3 off = vec3(-NORMAL_OFF, 0, NORMAL_OFF);
 
   // s11 = Current
-  float s11 = texture2D(uSampler2, vTextureCoord).x;
+  float s11 = texture2D(uSampler1, vTextureCoord).x;
 
   // s01 = Left
-  float s01 = texture2D(uSampler2, vec2(vTextureCoord.xy + off.xy)).x;
+  float s01 = texture2D(uSampler1, vec2(vTextureCoord.xy + off.xy)).x;
 
   // s21 = Right
-  float s21 = texture2D(uSampler2, vec2(vTextureCoord.xy + off.zy)).x;
+  float s21 = texture2D(uSampler1, vec2(vTextureCoord.xy + off.zy)).x;
 
   // s10 = Below
-  float s10 = texture2D(uSampler2, vec2(vTextureCoord.xy + off.yx)).x;
+  float s10 = texture2D(uSampler1, vec2(vTextureCoord.xy + off.yx)).x;
 
   // s12 = Above
-  float s12 = texture2D(uSampler2, vec2(vTextureCoord.xy + off.yz)).x;
+  float s12 = texture2D(uSampler1, vec2(vTextureCoord.xy + off.yz)).x;
 
   vec3 va = normalize( vec3(off.z, 0.0, s21 - s11) );
   vec3 vb = normalize( vec3(0.0, off.z, s12 - s11) );
@@ -146,20 +149,30 @@ void main() {
 
 	vTextureCoord = aTextureCoord;
 
-	float height = texture2D(uSampler2, vTextureCoord).x * hScale;
+    if(texture2D(uSampler2, vTextureCoord).r < 0.2){
 
-	vec3 temp_vertex = aVertexPosition + vec3(0, height, 0);
+        float height = texture2D(uSampler1, vTextureCoord).x * hScale;
 
-  vec4 vertex = uMVMatrix * vec4(temp_vertex, 1.0);
+	    vec3 temp_vertex = aVertexPosition + vec3(0, height, 0);
 
-  vec3 N = getNormal(vTextureCoord);
+        vec4 vertex = uMVMatrix * vec4(temp_vertex, 1.0);
 
-  vec3 eyeVec = -vec3(vertex.xyz);
+	    gl_Position = uPMatrix * vertex;
 
-  vec3 E = normalize(eyeVec);
+        useMask = 0.0;
+    
+    }else{
+        useMask = 1.0;
 
-  vFinalColor = lighting(vertex, E, N);
+        float height = 1.0 * hScale / 2.0;
 
-	gl_Position = uPMatrix * vertex;
+        vec3 temp_vertex = aVertexPosition + vec3(0, height, 0);
+
+        vec4 vertex = uMVMatrix * vec4(temp_vertex, 1.0);
+
+        gl_Position = uPMatrix * vertex;
+
+        
+    } 
 
 }

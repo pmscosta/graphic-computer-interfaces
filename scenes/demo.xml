@@ -83,6 +83,8 @@
         <texture id="vidral" file="scenes/images/vidral.jpg"/>
         <texture id="big_lamp" file="scenes/images/lamp.jpeg"/>
         <texture id="small_lamp" file="scenes/images/small_lamp.jpg"/>
+        <texture id="white_piece" file="scenes/images/white_piece.jpg"/>
+        <texture id="black_piece" file="scenes/images/black_piece.jpg"/>
         <texture id="white_wall" file="scenes/images/white_wall.jpg"/>
         <texture id="floor" file="scenes/images/floor.jpg"/>
         <texture id="brick_wall" file="scenes/images/brick_wall.jpg"/>
@@ -145,9 +147,9 @@
 
         <material id="table_wood" shininess="1">
             <emission r="0" g="0" b="0" a="0"/>
-            <ambient r="1" g="1" b="1" a="1"/>
-            <diffuse r="1" g="1" b="1" a="1"/>
-            <specular r="0.5" g="0.5" b="0.5" a="1"/>
+            <ambient r="0.7" g="0.7" b="0.7" a="1"/>
+            <diffuse r="0.6" g="0.6" b="0.6" a="1"/>
+            <specular r="0.3" g="0.3" b="0.3" a="1"/>
         </material>
 
         <material id="lamp" shininess="1">

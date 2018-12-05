@@ -17,7 +17,7 @@ serialInclude(['../lib/CGF.js', 'Transformation.js', 'Component.js',
 '/primitives/MyTrapezoid.js', '/primitives/MyTriangle.js', '/primitives/surfaces/Plane.js', 
 '/primitives/MySphere.js','/primitives/MyTorus.js','/primitives/surfaces/Cylinder2.js',
 '/primitives/surfaces/Patch.js','/primitives/surfaces/Terrain.js',
-'/primitives/surfaces/Water.js','/primitives/Vehicle.js',
+'/primitives/surfaces/Water.js','/primitives/Vehicle.js', '/primitives/pieces/WhitePiece.js','/primitives/pieces/BlackPiece.js',
 'Helpers.js','XMLscene.js',  'MySceneGraph.js', 'MyInterface.js', '/primitives/Board.js',
 '/animations/Animation.js', '/animations/CircularAnimation.js', '/animations/LinearAnimation.js',
 

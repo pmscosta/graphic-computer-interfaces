@@ -99,13 +99,15 @@ class XMLscene extends CGFscene {
 
     this.getViews();
 
+    this.setPickEnabled(true);
+
     this.interface.addCameraGroup();
 
     this.initLights();
 
     // Adds lights group.
     this.interface.addLightsGroup();
-    
+
     this.updateLights();
 
     this.sceneInited = true;
@@ -210,6 +212,10 @@ class XMLscene extends CGFscene {
     this.pushMatrix();
 
     if (this.sceneInited) {
+
+      this.graph.logPicking();
+
+      this.clearPickRegistration();
 
       // Draw axis
       this.axis.display();

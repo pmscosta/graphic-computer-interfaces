@@ -694,4 +694,23 @@ class MySceneGraph {
       this.materialsPile.push(component.materials[component.materialPos]);
   }
 
+  logPicking() {
+    if (this.scene.pickMode == false) {
+      if (this.scene.pickResults != null && this.scene.pickResults.length > 0) {
+        for (var i = 0; i < this.scene.pickResults.length; i++) {
+          var obj = this.scene.pickResults[i][0];
+          if (obj) {
+            var customId = this.scene.pickResults[i][1];
+            let row = customId % 10; 
+            let col = Math.floor(customId / 10);
+            let sCol = String.fromCharCode(col + 64);
+            console.log(sCol, row);
+          }
+        }
+        this.scene.pickResults.splice(0, this.scene.pickResults.length);
+      }
+    }
+  }
+
+
 }

@@ -234,6 +234,10 @@
     
  </primitive>
 
+        <primitive id="board1">
+            <board/>
+        </primitive>
+
         <primitive id="square">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
@@ -987,7 +991,6 @@
 
         <component id="board">
             <transformation>
-                <translate x="0.5" y="0" z="0.5"/>
             </transformation>
 
             <materials>
@@ -997,7 +1000,7 @@
             <texture id="texBoard" length_s="1" length_t="1"/>
 
             <children>
-                <primitiveref id="nurb"/>
+                <primitiveref id="board1"/>
             </children>
 
         </component>

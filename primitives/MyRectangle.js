@@ -13,6 +13,7 @@ class MyRectangle extends CGFobject
 		this.maxS = maxS;
 		this.minT = minT;
 		this.maxT = maxT;
+		console.log(points);
 		this.x1 = points[0];
 		this.y1 = points[1];
 		this.x2 = points[2];
@@ -28,10 +29,10 @@ class MyRectangle extends CGFobject
 	{
 
 		this.vertices = [
-			this.x1, this.y1, 0, 
-			this.x2, this.y1, 0,
-			this.x2, this.y2, 0, 
-			this.x1, this.y2, 0
+			this.x1, 0, this.y1, 
+			this.x2, 0, this.y1,
+			this.x2, 0, this.y2, 
+			this.x1, 0, this.y2
 		];
 		
 		this.indices = [
@@ -40,10 +41,10 @@ class MyRectangle extends CGFobject
 			];
 
 		this.normals = [
-				0, 0, 1,
-				0, 0, 1,
-				0, 0, 1,
-				0, 0, 1
+				0, 1, 0,
+				0, 1, 0,
+				0, 1, 0,
+				0, 1, 0
 		];
 
 		this.texCoords = [

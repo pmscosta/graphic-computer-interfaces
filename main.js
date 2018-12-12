@@ -12,13 +12,13 @@ function getUrlVars() {
 }	 
 //Include additional files here
 serialInclude(['../lib/CGF.js', 'Transformation.js', 'Component.js', 'Camera.js','/game/Server.js', '/game/Game.js',
-'/primitives/MyCircle.js', '/primitives/MyCylinder.js', 
+'/primitives/MyCircle.js', '/primitives/MyCylinder.js',  '/game/Board.js',
 '/primitives/MyPrism.js', '/primitives/MyRectangle.js', 
 '/primitives/MyTrapezoid.js', '/primitives/MyTriangle.js', '/primitives/surfaces/Plane.js', 
 '/primitives/MySphere.js','/primitives/MyTorus.js','/primitives/surfaces/Cylinder2.js',
 '/primitives/surfaces/Patch.js','/primitives/surfaces/Terrain.js',
 '/primitives/surfaces/Water.js','/primitives/Vehicle.js', '/game/pieces/WhitePiece.js','/game/pieces/BlackPiece.js',
-'Helpers.js','XMLscene.js',  'MySceneGraph.js', 'MyInterface.js', '/primitives/Board.js',
+'Helpers.js','XMLscene.js',  'MySceneGraph.js', 'MyInterface.js',
 '/animations/Animation.js', '/animations/CircularAnimation.js', '/animations/LinearAnimation.js',
 
 main=function()

@@ -11,8 +11,7 @@ function getUrlVars() {
     return vars;
 }	 
 //Include additional files here
-serialInclude(['../lib/CGF.js', 'Transformation.js', 'Component.js', 'Camera.js',
-serialInclude(['../lib/CGF.js', 'Transformation.js', 'Component.js','/game/Server.js', '/game/Game.js',
+serialInclude(['../lib/CGF.js', 'Transformation.js', 'Component.js', 'Camera.js','/game/Server.js', '/game/Game.js',
 '/primitives/MyCircle.js', '/primitives/MyCylinder.js', 
 '/primitives/MyPrism.js', '/primitives/MyRectangle.js', 
 '/primitives/MyTrapezoid.js', '/primitives/MyTriangle.js', '/primitives/surfaces/Plane.js', 

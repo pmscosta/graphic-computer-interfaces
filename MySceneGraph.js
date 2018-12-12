@@ -178,6 +178,11 @@ class MySceneGraph {
 
     this.generateDefaults();
     this.validateIds();
+
+    this.game = new Game(this.scene,this.primitives['board1']);
+    console.log(this.primitives['board1']);
+    this.game.move([0,0,3]);
+    console.log(this.primitives['board1']);
   }
 
   generateDefaults() {
@@ -568,6 +573,7 @@ class MySceneGraph {
    */
   displayScene() {
     var rootElement = this.components[this.idRoot];
+
     this.iterateChildren(rootElement);
   }
 
@@ -704,7 +710,7 @@ class MySceneGraph {
             let row = customId % 10; 
             let col = Math.floor(customId / 10);
             let sCol = String.fromCharCode(col + 64);
-            console.log(sCol, row);
+            console.log(col, row);
           }
         }
         this.scene.pickResults.splice(0, this.scene.pickResults.length);

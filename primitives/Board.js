@@ -10,10 +10,57 @@ class Board extends CGFobject {
 
         this.mat =  this.scene.graph.materials['table_wood'];
 
-        this.whitePieces = [new WhitePiece(this.scene, [2,3]), new WhitePiece(this.scene, [1, 0]), new WhitePiece(this.scene, [3,0])];
+        this.whitePieces = [new WhitePiece(this.scene, [2,3]), new WhitePiece(this.scene, [0, 0]), new WhitePiece(this.scene, [4,0])];
         this.blackPieces = [new BlackPiece(this.scene, [2,1]), new BlackPiece(this.scene, [1, 4]), new BlackPiece(this.scene, [3,4])];
 
+        this.b = this.getBoard();
     };
+
+    getPiece(list,pos){
+        let res = null;
+        list.forEach(function(p){
+            if(p.position[0]==pos[0] && p.position[1]==pos[1])res=p;});
+        return res;
+    }
+
+    getDif(oldB,newB){
+        let state=[]
+        newB = JSON.parse(newB)
+
+        for(let i = 0; i < oldB.length;i++){
+            for(let j = 0; j < oldB.length;j++){
+                if(oldB[i][j] != newB[i][j]){
+                    let piece = this.getPiece(this.whitePieces,[i,j]);
+                    console.log("Hre",piece);
+                    if(piece == null)
+                        state['newCell'] = [i,j]; 
+                    else
+                        state['piece'] = piece;
+                }
+            }
+        }
+        return state;
+    }
+
+    updateBoard(newBoard){
+        let state = this.getDif(this.b,newBoard);
+        this.b=newBoard;
+        state['piece'].position = state['newCell'];
+
+    }
+
+    getBoard(){
+        let b = [[0,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0]];
+
+        this.whitePieces.forEach(p=>b[p.position[1]][p.position[0]] = 2);
+        this.blackPieces.forEach(p=>b[p.position[1]][p.position[0]] = 1);
+
+        return b;
+    }
 
     display() {
         this.scene.pushMatrix();
@@ -23,9 +70,6 @@ class Board extends CGFobject {
         this.scene.popMatrix();
 
         this.displayPieces();
-
-/*         if (this.scene.pickMode) 
-            this.placePickingSquare(); */
     }
 /* 
     placePickingSquare(){

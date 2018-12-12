@@ -571,6 +571,14 @@ class MySceneGraph {
     this.iterateChildren(rootElement);
   }
 
+  onLoaded(){
+
+    console.log(this.components);
+
+    console.log(this.components.board);
+
+    this.primitives.board1.init();
+  }
 
 
   iterateChildren(component) {
@@ -643,6 +651,19 @@ class MySceneGraph {
     for (var key in this.components) {
       var component = this.components[key];
 
+
+      component.primitiveChildren.forEach(element => {
+
+
+        //console.log(this.primitives[element])
+
+        if(typeof this.primitives[element].update === 'function'){
+          this.primitives[element].update();
+        }
+        
+      });
+
+
       if (component.hasAnimations()) {
 
         let currentAnimation =
@@ -660,6 +681,9 @@ class MySceneGraph {
           currentAnimation.update(currTime);
         }
       }
+
+
+
     }
   }
 

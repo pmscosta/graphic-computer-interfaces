@@ -6,25 +6,10 @@
             <to x="0" y="0" z="0"/>
         </perspective>
 
-        <perspective id="close_up" near="0.1" far="50" angle="30">
-            <from x="7" y="3.5" z="7"/>
-            <to x="0" y="0" z="0"/>
+        <perspective id="Game Camera" near="0.1" far="400" angle="45">
+            <from x="1" y="1.5" z="4"/>
+            <to x="1" y="0" z="-2"/>
         </perspective>
-
-        <ortho id="ortho_view" near="0.1" far="5" left="-2" right="2" top="2" bottom="-2">
-            <from x="4.1" y="3" z="1.8"/>
-            <to x="4.1" y="4" z="50"/>
-        </ortho>
-
-        <ortho id="painting_view" near="0.1" far="5" left="-3" right="3" top="2" bottom="-2">
-            <from x="2" y="3" z="4"/>
-            <to x="0" y="3" z="4"/>
-        </ortho>
-
-        <ortho id="cara_duarte" near="0.1" far="5" left="-2" right="2" top="1" bottom="-1">
-            <from x="4" y="3.45" z="2"/>
-            <to x="4" y="3.45" z="0"/>
-        </ortho>
     </views>
 
     <ambient>

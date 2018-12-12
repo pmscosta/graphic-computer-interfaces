@@ -13,7 +13,15 @@ class Board extends CGFobject {
         this.whitePieces = [new WhitePiece(this.scene, [2,3]), new WhitePiece(this.scene, [1, 0]), new WhitePiece(this.scene, [3,0])];
         this.blackPieces = [new BlackPiece(this.scene, [2,1]), new BlackPiece(this.scene, [1, 4]), new BlackPiece(this.scene, [3,4])];
 
+        
+
     };
+
+    init(){
+        console.log('y yooooooooooooooooooo');
+
+        this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [1, 1, 0]);
+    }
 
     display() {
         this.scene.pushMatrix();

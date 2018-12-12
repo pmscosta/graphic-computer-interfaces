@@ -11,9 +11,9 @@ function getUrlVars() {
     return vars;
 }	 
 //Include additional files here
-serialInclude(['../lib/CGF.js', 'Transformation.js', 'Component.js',
+serialInclude(['../lib/CGF.js', 'Transformation.js', 'Component.js', 'Camera.js',
 '/primitives/MyCircle.js', '/primitives/MyCylinder.js', 
-'/primitives/MyPrism.js', '/primitives/MyRectangle.js',
+'/primitives/MyPrism.js', '/primitives/MyRectangle.js', 
 '/primitives/MyTrapezoid.js', '/primitives/MyTriangle.js', '/primitives/surfaces/Plane.js', 
 '/primitives/MySphere.js','/primitives/MyTorus.js','/primitives/surfaces/Cylinder2.js',
 '/primitives/surfaces/Patch.js','/primitives/surfaces/Terrain.js',

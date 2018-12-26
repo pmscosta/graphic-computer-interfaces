@@ -677,6 +677,8 @@ function createTexture(scene, texture_element, reader, textureID) {
  */
 function parsePrimitive(scene, reader, children, ID) {
   switch (children.nodeName) {
+    case 'clock':
+    return new Clock(scene);  
     case 'board':
        return new Board(scene);
     case 'rectangle':

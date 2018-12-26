@@ -664,7 +664,7 @@ class MySceneGraph {
         //console.log(this.primitives[element])
 
         if(typeof this.primitives[element].update === 'function'){
-          this.primitives[element].update();
+          this.primitives[element].update(currTime);
         }
         
       });

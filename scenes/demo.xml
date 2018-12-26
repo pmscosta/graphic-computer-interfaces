@@ -1,14 +1,14 @@
 <yas>
-    <scene root="board" axis_length="5"/>
-    <views default="far_view">
+    <scene root="living_room" axis_length="5"/>
+    <views default="Game Camera">
         <perspective id="far_view" near="0.1" far="400" angle="45">
             <from x="20" y="8" z="20"/>
             <to x="0" y="0" z="0"/>
         </perspective>
 
         <perspective id="Game Camera" near="0.1" far="400" angle="45">
-            <from x="1" y="1.5" z="4"/>
-            <to x="1" y="0" z="-2"/>
+            <from x="1" y="2.3" z="5"/>
+            <to x="1" y="0" z="1"/>
         </perspective>
     </views>
 
@@ -85,7 +85,16 @@
         <texture id="water" file="scenes/images/water.jpg"/>
         <texture id="water-height" file="scenes/images/water-height.jpg"/>
         <texture id="texBoard" file="scenes/images/board.gif"/>
-
+        <texture id="digit_0" file="scenes/images/numbers/digit0.png"/>
+        <texture id="digit_1" file="scenes/images/numbers/digit1.png"/>
+        <texture id="digit_2" file="scenes/images/numbers/digit2.png"/>
+        <texture id="digit_3" file="scenes/images/numbers/digit3.png"/>
+        <texture id="digit_4" file="scenes/images/numbers/digit4.png"/>
+        <texture id="digit_5" file="scenes/images/numbers/digit5.png"/>
+        <texture id="digit_6" file="scenes/images/numbers/digit6.png"/>
+        <texture id="digit_7" file="scenes/images/numbers/digit7.png"/>
+        <texture id="digit_8" file="scenes/images/numbers/digit8.png"/>
+        <texture id="digit_9" file="scenes/images/numbers/digit9.png"/>
     </textures>
 
     <materials>
@@ -163,47 +172,6 @@
 
     <animations>
 
-        <linear id="l1" span="2">
-            <controlpoint xx="0" yy="2" zz="1"/>
-            <controlpoint xx="0" yy="4" zz="4"/>
-            <controlpoint xx="0" yy="3" zz="8"/>
-        </linear>
-
-         <circular id = "c1" span = "2" center = "4 3 8"
-            radius ="4" startang = "135" rotang = "180" />
-
-        <linear id="l2" span="1">
-            <controlpoint xx="8" yy="3" zz="8"/>    
-            <controlpoint xx="8" yy="3" zz="6" />      
-            <controlpoint xx="8" yy="2" zz="1"/>            
-        </linear>
-
-        <circular id = "c2" span = "2" center = "4 2 1"
-            radius ="4" startang = "45" rotang = "180" />
-
-    </animations>
-
-    <primitives>
-        <primitive id="square">
-            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
-        </primitive>
-
-        <primitive id="square_at_zero">
-            <rectangle x1="0" y1="0" x2="1" y2="1" />
-        </primitive>
-
-        <primitive id="triangle">
-            <triangle x1="0" y1="1" z1="0"
-                    x2="-0.8" y2="0" z2="0"
-                    x3="0.8" y3="0" z3="0"/>
-        </primitive>
-
-        <primitive id="sphere">
-            <sphere radius="1" slices="20" stacks="20"/>
- 
-
-    <animations>
-
         <linear id="lin" span="5">
             <controlpoint xx="0" yy="0" zz="0" />
             <controlpoint xx="1" yy="1" zz="1" />
@@ -217,9 +185,12 @@
             radius ="5" startang = "0" rotang = "90" />
 
 
-    </animations>     
+    </animations>   
+ 
+
+      
     
- </primitive>
+    <primitives>
 
         <primitive id="board1">
             <board/>
@@ -283,7 +254,13 @@
             <water idtexture="water" idwavemap="water-height" parts="100" heightscale="0.7" texscale="4" />
         </primitive>
 
+        <primitive id= "clock">
+            <clock/>
+        </primitive>
+
     </primitives>
+
+    
 
     <components>
 
@@ -975,6 +952,23 @@
 
         </component>
 
+         <component id="clock">
+            <transformation>
+
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="leather" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="clock"/>
+            </children>
+
+        </component>
+
 
         <component id="board">
             <transformation>
@@ -1004,7 +998,9 @@
             <texture id="none"/>
 
             <children>
-                <componentref id="desk"/>
+                <componentref id="board"/>
+                <componentref id="clock"/>
+                <!-- <componentref id="desk"/>
                 <componentref id="ball"/>
                 <componentref id="big_lamp"/>
                 <componentref id="small_lamp"/>
@@ -1014,7 +1010,7 @@
                 <componentref id="chair"/>
                 <componentref id="flowers"/>
                 <componentref id="starry_night"/>
-                <componentref id="duarte"/>
+                <componentref id="duarte"/> -->
             </children>
         </component>
 

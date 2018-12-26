@@ -9,7 +9,7 @@ class BlackPiece extends CGFobject {
 
         this.piece = new MyCylinder(this.scene,0.12,0.12,0.1,20,20); 
 
-        this.mat =  this.scene.graph.materials['m1'];
+        this.mat =  new CGFappearance(this.scene);
         this.mat.setTexture(this.scene.graph.textures['black_piece']);
     };
 

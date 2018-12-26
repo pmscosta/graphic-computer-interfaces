@@ -8,7 +8,6 @@ class RotateCamera{
 
         this.finalPosition = finalPosition;
 
-        console.log(this.initialPosition, this.finalPosition);
 
         this.angle = Math.PI;
 
@@ -19,10 +18,17 @@ class RotateCamera{
         this.axis = axis;
 
         this.elapsedTime = 0; 
+
+        this.waitForMove = true;
     }
 
 
     orbitCamera(time){
+
+        if(this.waitForMove)
+            return;
+
+        time = time / 1000;
         
         this.elapsedTime += time;
 
@@ -45,6 +51,8 @@ class RotateCamera{
         this.finalPosition = temp;
 
         this.elapsedTime = 0; 
+
+        this.waitForMove = true;
 
     }
 

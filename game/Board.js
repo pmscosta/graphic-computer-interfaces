@@ -17,7 +17,18 @@ class Board extends CGFobject {
     };
 
     init(){
+<<<<<<< HEAD
         this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [1, 1, 0]);
+=======
+        this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [0, 1, 0]);
+    }
+
+
+    update(time){
+
+        this.camera.orbitCamera(time);
+
+>>>>>>> f914ef8bdfa6128f46a02ae061c6d2d66e7f583f
     }
 
     getBoardPiece(row,col){
@@ -79,13 +90,21 @@ class Board extends CGFobject {
             this.plane.display();
         this.scene.popMatrix();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f914ef8bdfa6128f46a02ae061c6d2d66e7f583f
         if(this.scene.pickMode){
             this.placePickingSquare();
         }
 
         this.displayPieces();
     }
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> f914ef8bdfa6128f46a02ae061c6d2d66e7f583f
     placePickingSquare(){
 
         for(let i = 0; i < 5; i++){

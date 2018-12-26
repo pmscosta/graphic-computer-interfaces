@@ -137,9 +137,6 @@ var DEGREE_TO_RAD = Math.PI / 180;
 
         //this.scene.rotate(this.yzRot,1,0,0);
 
-        console.log('xy:', this.xyRot / DEGREE_TO_RAD);
-        console.log('curr', this.currentAngle / DEGREE_TO_RAD);
-
         this.scene.rotate(this.xyRot, 0, 1, 0); 
 
     }

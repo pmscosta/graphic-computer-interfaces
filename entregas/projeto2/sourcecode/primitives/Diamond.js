@@ -13,8 +13,6 @@ class Diamond extends CGFobject {
 
         this.ang = (Math.PI * 2) / slices;
 
-        console.log(this.ang);
-
         this.spacer = 1.0 / slices;
 
         this.heigth = 1;

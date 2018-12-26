@@ -849,18 +849,6 @@ function dispatchComponent(
           reader.getFloat(component_spec, 'length_t'));
       }
 
-      let force = reader.getString(component_spec, 'force', false);
-
-     // console.log('here', force);
-
-
-      if(force === null || force == 'false'){
-        console.log('pushing----false');
-        component.force = false;
-      }else{
-        console.log('pushing----true');
-        component.force = true;
-      } 
 
       break;
     case 'children':

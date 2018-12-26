@@ -17,9 +17,11 @@ class Board extends CGFobject {
     };
 
     init(){
-        console.log('y yooooooooooooooooooo');
-
         this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [1, 1, 0]);
+    }
+
+    getBoardPiece(row,col){
+        return this.b[row-1][col-1];
     }
 
     getPiece(list,pos){
@@ -33,11 +35,12 @@ class Board extends CGFobject {
         let state=[]
         newB = JSON.parse(newB)
 
+        console.log(oldB,newB);
         for(let i = 0; i < oldB.length;i++){
             for(let j = 0; j < oldB.length;j++){
                 if(oldB[i][j] != newB[i][j]){
                     let piece = this.getPiece(this.whitePieces,[i,j]);
-                    console.log("Hre",piece);
+                    console.log(this.whitePieces,i,j,piece)
                     if(piece == null)
                         state['newCell'] = [i,j]; 
                     else
@@ -50,7 +53,8 @@ class Board extends CGFobject {
 
     updateBoard(newBoard){
         let state = this.getDif(this.b,newBoard);
-        this.b=newBoard;
+        this.b=JSON.parse(newBoard);
+        console.log(this.state)
         state['piece'].position = state['newCell'];
 
     }
@@ -75,9 +79,13 @@ class Board extends CGFobject {
             this.plane.display();
         this.scene.popMatrix();
 
+        if(this.scene.pickMode){
+            this.placePickingSquare();
+        }
+
         this.displayPieces();
     }
-/* 
+ 
     placePickingSquare(){
 
         for(let i = 0; i < 5; i++){
@@ -93,7 +101,7 @@ class Board extends CGFobject {
                 this.scene.popMatrix();
             }
         }
-    } */
+    } 
     
     displayPieces(){
         this.whitePieces.forEach(element => {

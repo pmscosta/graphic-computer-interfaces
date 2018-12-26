@@ -181,7 +181,6 @@ class MySceneGraph {
 
     this.game = new Game(this.scene,this.primitives['board1']);
     console.log(this.primitives['board1']);
-    this.game.move([0,0,3]);
     console.log(this.primitives['board1']);
   }
 
@@ -734,7 +733,7 @@ class MySceneGraph {
             let row = customId % 10; 
             let col = Math.floor(customId / 10);
             let sCol = String.fromCharCode(col + 64);
-            console.log(col, row);
+            this.game.assignChoice(row,col)
           }
         }
         this.scene.pickResults.splice(0, this.scene.pickResults.length);

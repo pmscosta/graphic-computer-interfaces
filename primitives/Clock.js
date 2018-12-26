@@ -12,9 +12,13 @@ class Clock{
         this.timeElapsed = 0; 
 
         this.tensMat =  new CGFappearance(this.scene);
+        this.tensMat.setShininess(100);
+        this.tensMat.setEmission(1,1,1,1);
         this.tensMat.setTexture(this.scene.graph.textures['digit_0']);
 
         this.unitsMat =  new CGFappearance(this.scene);
+        this.unitsMat.setShininess(100);
+        this.unitsMat.setEmission(1, 1,1, 1);
         this.unitsMat.setTexture(this.scene.graph.textures['digit_0']);
 
         this.lastTen = 0;
@@ -25,7 +29,7 @@ class Clock{
     update(time){
         this.timeElapsed += (time / 1000);
 
-        this.tens = Math.floor(this.timeElapsed / 10); 
+        this.tens = Math.floor(this.timeElapsed / 10) % 10;
 
         this.units = Math.floor(this.timeElapsed % 10);
 
@@ -34,11 +38,6 @@ class Clock{
     updateTexName(){
 
         
-
-       
-
-        
-
         if(this.lastTen != this.tens){
             this.tensName = 'digit_' + this.tens;
              this.tensMat.setTexture(this.scene.graph.textures[this.tensName]);

@@ -180,8 +180,9 @@ class MySceneGraph {
     this.validateIds();
 
     this.game = new Game(this.scene,this.primitives['board1']);
-    console.log(this.primitives['board1']);
-    console.log(this.primitives['board1']);
+    /* console.log(this.primitives['board1']);
+    this.game.move([0,0,3]);
+    console.log(this.primitives['board1']); */
   }
 
   generateDefaults() {
@@ -658,10 +659,6 @@ class MySceneGraph {
 
 
       component.primitiveChildren.forEach(element => {
-
-
-        //console.log(this.primitives[element])
-
         if(typeof this.primitives[element].update === 'function'){
           this.primitives[element].update(currTime);
         }

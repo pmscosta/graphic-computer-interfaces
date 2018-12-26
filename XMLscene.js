@@ -222,22 +222,21 @@ class XMLscene extends CGFscene {
 
     this.pushMatrix();
 
+    // Draw axis
+    this.axis.display();
+
     if (this.sceneInited) {
 
       this.graph.logPicking();
 
       this.clearPickRegistration();
 
-      // Draw axis
-      this.axis.display();
+      
 
       this.updateLights();
 
       // Displays the scene (MySceneGraph function).
       this.graph.displayScene();
-    } else {
-      // Draw axis
-      this.axis.display();
     }
 
 

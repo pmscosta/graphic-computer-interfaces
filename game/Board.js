@@ -10,7 +10,7 @@ class Board extends CGFobject {
 
         this.mat =  this.scene.graph.materials['table_wood'];
 
-        this.whitePieces = [new WhitePiece(this.scene, [2,3]), new WhitePiece(this.scene, [0, 0]), new WhitePiece(this.scene, [4,0])];
+        this.whitePieces = [new WhitePiece(this.scene, [2,3]), new WhitePiece(this.scene, [1, 0]), new WhitePiece(this.scene, [3,0])];
         this.blackPieces = [new BlackPiece(this.scene, [2,1]), new BlackPiece(this.scene, [1, 4]), new BlackPiece(this.scene, [3,4])];
 
         this.b = this.getBoard();

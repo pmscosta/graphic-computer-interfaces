@@ -1,7 +1,6 @@
 class Game{
     constructor(scene,board){
         this.board=board;
-        this.piece = 2;
         this.server = new Server();
         this.pieceToMove = null;
         this.destination = null;
@@ -42,7 +41,8 @@ class Game{
         console.log(piece)
         if(this.pieceToMove ==null && piece != 0){
             this.pieceToMove=[row,col];
-        }else if(this.pieceToMove!=null && piece==0){
+            this.piece = piece;
+        }else if(this.pieceToMove!=null && piece ==0){
             this.destination=[row,col];
             let direction = this.getChoice(this.pieceToMove,this.destination);
             this.move([this.pieceToMove[0]-1,this.pieceToMove[1]-1,direction]);
@@ -85,7 +85,7 @@ class Game{
     }
 
     move(move){
-        console.log(move)
+        console.log('Move: ', move, 'Piece: ', this.piece);
         let board = this.arrToStr(this.board.b);
         let strMove = this.arrToStr(move);
         this.server.send("move("+strMove+","+this.piece+"," +board+  ",NewBoard)",this.applyMove,null,this);

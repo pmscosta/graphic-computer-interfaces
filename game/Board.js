@@ -14,12 +14,13 @@ class Board extends CGFobject {
         this.blackPieces = [new BlackPiece(this.scene, [2,1]), new BlackPiece(this.scene, [1, 4]), new BlackPiece(this.scene, [3,4])];
 
         this.b = this.getBoard();
+
+
+        //Black always move first
+        this.currentPlayer = 1;
     };
 
     init(){
-<<<<<<< HEAD
-        this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [1, 1, 0]);
-=======
         this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [0, 1, 0]);
     }
 
@@ -28,34 +29,45 @@ class Board extends CGFobject {
 
         this.camera.orbitCamera(time);
 
->>>>>>> f914ef8bdfa6128f46a02ae061c6d2d66e7f583f
     }
 
     getBoardPiece(row,col){
         return this.b[row-1][col-1];
     }
 
-    getPiece(list,pos){
+    getPiece(piece,pos){
         let res = null;
+        let list = null;
+
+        if(piece == 2)
+            list = this.blackPieces;
+        else
+            list = this.whitePieces;
+
         list.forEach(function(p){
-            if(p.position[0]==pos[0] && p.position[1]==pos[1])res=p;});
+            if(p.position[0]==pos[0] && p.position[1]==pos[1])
+                res=p;
+            });
+
+
         return res;
     }
 
     getDif(oldB,newB){
         let state=[]
-        newB = JSON.parse(newB)
 
-        console.log(oldB,newB);
         for(let i = 0; i < oldB.length;i++){
-            for(let j = 0; j < oldB.length;j++){
+            for(let j = 0; j < oldB[i].length;j++){
                 if(oldB[i][j] != newB[i][j]){
-                    let piece = this.getPiece(this.whitePieces,[i,j]);
-                    console.log(this.whitePieces,i,j,piece)
-                    if(piece == null)
-                        state['newCell'] = [i,j]; 
-                    else
-                        state['piece'] = piece;
+
+                    //if it is different and it is 0 on the old board, it is the new position of the piece
+                    if(oldB[i][j] == 0){
+                        state['newCell'] = [j, i];
+                    }
+                    //else it is the position where that piece was before the movement
+                    else{
+                        state['piece'] = this.getPiece(oldB[i][j], [j, i]);
+                    }
                 }
             }
         }
@@ -63,9 +75,13 @@ class Board extends CGFobject {
     }
 
     updateBoard(newBoard){
+
+        newBoard = JSON.parse(newBoard);
+
         let state = this.getDif(this.b,newBoard);
-        this.b=JSON.parse(newBoard);
-        console.log(this.state)
+
+        this.b = newBoard;
+
         state['piece'].position = state['newCell'];
 
     }
@@ -77,8 +93,8 @@ class Board extends CGFobject {
         [0,0,0,0,0],
         [0,0,0,0,0]];
 
-        this.whitePieces.forEach(p=>b[p.position[1]][p.position[0]] = 2);
-        this.blackPieces.forEach(p=>b[p.position[1]][p.position[0]] = 1);
+        this.whitePieces.forEach(p=>b[p.position[1]][p.position[0]] = 1);
+        this.blackPieces.forEach(p=>b[p.position[1]][p.position[0]] = 2);
 
         return b;
     }
@@ -90,21 +106,12 @@ class Board extends CGFobject {
             this.plane.display();
         this.scene.popMatrix();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f914ef8bdfa6128f46a02ae061c6d2d66e7f583f
         if(this.scene.pickMode){
             this.placePickingSquare();
         }
 
         this.displayPieces();
     }
-<<<<<<< HEAD
- 
-=======
-
->>>>>>> f914ef8bdfa6128f46a02ae061c6d2d66e7f583f
     placePickingSquare(){
 
         for(let i = 0; i < 5; i++){

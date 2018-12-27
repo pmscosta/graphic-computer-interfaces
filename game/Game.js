@@ -4,6 +4,8 @@ class Game{
         this.server = new Server();
         this.pieceToMove = null;
         this.destination = null;
+        this.currentPlayer = 2;
+        this.auxLength = this.board.b.length;
         
     }
 
@@ -37,8 +39,7 @@ class Game{
     }
 
     assignChoice(row,col){
-        let piece = this.board.getBoardPiece(row,col);
-        console.log(piece)
+        let piece = this.board.getBoardPiece(row,col)
         if(this.pieceToMove ==null && piece != 0){
             this.pieceToMove=[row,col];
             this.piece = piece;
@@ -52,15 +53,6 @@ class Game{
 
     }
 
-
-
-    getValidMoves(){
-
-    }
-
-    applyMove(){
-        this.game.board.updateBoard(this.response);
-    }
 
     arrToStr(arr){
         let me = [];
@@ -84,15 +76,66 @@ class Game{
         return me.join("");
     }
 
+
+    checkDraw(){
+        let board = this.arrToStr(this.board.b);
+        this.server.send("checkDraw("+board+")",this.showDraw, null, this);
+    }
+
+    showDraw(){
+
+        //NO DRAW SO ADVANCE TO NEXT PLAY
+        if(this.status !== 200){
+            this.game.currentPlayer = (this.game.currentPlayer % 2) + 1;
+            console.log(this.game.currentPlayer);
+            return;
+        }
+
+        //END GAME AND PRESENT DRAW
+    }
+
+    checkGameOver(){
+
+        console.log(this.board.b);
+
+        let board = this.arrToStr(this.board.b);
+        this.server.send("game_over("+board+"," + ( this.currentPlayer - 1) + "," + this.auxLength+ ")",this.gameOver, null, this);
+    }
+
+    gameOver(){
+
+         //NO GAME OVER SO CHECK FOR DRAW
+         if(this.status !== 200){
+            this.game.checkDraw();
+            return;
+         }
+        //END GAME AND PRESENT GAME OVER
+
+        console.log('game over');
+    }
+
+
     move(move){
+
+
+        if(this.piece !== this.currentPlayer)
+            return;
+
+        console.log('yo');
         console.log('Move: ', move, 'Piece: ', this.piece);
         let board = this.arrToStr(this.board.b);
         let strMove = this.arrToStr(move);
         this.server.send("move("+strMove+","+this.piece+"," +board+  ",NewBoard)",this.applyMove,null,this);
-
-
-
     }
+
+    applyMove(){
+        this.game.board.updateBoard(this.response);
+        this.game.checkGameOver();
+    }
+
+   
+
+
 
     checkEndGame(move){
         

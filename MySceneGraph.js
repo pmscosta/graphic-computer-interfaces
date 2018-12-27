@@ -180,9 +180,6 @@ class MySceneGraph {
     this.validateIds();
 
     this.game = new Game(this.scene,this.primitives['board1']);
-    /* console.log(this.primitives['board1']);
-    this.game.move([0,0,3]);
-    console.log(this.primitives['board1']); */
   }
 
   generateDefaults() {
@@ -511,7 +508,6 @@ class MySceneGraph {
       }
       this.components[componentId] = component;
     }
-
     this.log('parsed components');
 
     return null;
@@ -578,12 +574,10 @@ class MySceneGraph {
   }
 
   onLoaded(){
+    this.game.init();
 
     console.log(this.components);
-
-    console.log(this.components.board);
-
-    this.primitives.board1.init();
+    this.primitives['clock'].assignGame(this.game);
   }
 
 
@@ -683,10 +677,11 @@ class MySceneGraph {
           currentAnimation.update(currTime);
         }
       }
-
-
-
     }
+
+    //UPDATE THE GAME AS WELL
+    this.game.update(currTime);
+
   }
 
 

@@ -1,12 +1,26 @@
 class Game{
     constructor(scene,board){
+        this.scene = scene;
         this.board=board;
         this.server = new Server();
         this.pieceToMove = null;
         this.destination = null;
         this.currentPlayer = 2;
         this.auxLength = this.board.b.length;
+        this.clock = null;
         
+    }
+
+    init(){
+        this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [0, 1, 0]);
+    }
+
+
+    update(time){
+
+        this.camera.orbitCamera(time);
+        this.board.update(time);
+
     }
 
     getChoice(source,dest){
@@ -86,13 +100,28 @@ class Game{
 
         //NO DRAW SO ADVANCE TO NEXT PLAY
         if(this.status !== 200){
-            this.game.currentPlayer = (this.game.currentPlayer % 2) + 1;
-            console.log(this.game.currentPlayer);
+            this.game.nextPlayer();
             return;
         }
 
         //END GAME AND PRESENT DRAW
     }
+
+    timeUp(){
+
+        if(!this.madeMove)
+            this.nextPlayer();
+    }
+
+
+    nextPlayer(){
+        this.currentPlayer = (this.currentPlayer % 2) + 1;
+        this.camera.waitForMove = false;
+        this.clock.reset();
+        this.madeMove = false;
+
+    }
+
 
     checkGameOver(){
 
@@ -126,6 +155,7 @@ class Game{
         let board = this.arrToStr(this.board.b);
         let strMove = this.arrToStr(move);
         this.server.send("move("+strMove+","+this.piece+"," +board+  ",NewBoard)",this.applyMove,null,this);
+        this.madeMove = true;
     }
 
     applyMove(){

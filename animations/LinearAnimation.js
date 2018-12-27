@@ -7,7 +7,7 @@
         super(scene);
 
         this.controlPoints = controlPoints;
-
+        
         this.numberOfPoints = this.controlPoints.length;
 
         this.totalTime = totalTime;

@@ -23,16 +23,23 @@ class Clock{
 
         this.lastTen = 0;
         this.lastUnit = 0; 
+
+        this.game = null;
         
     }
 
     update(time){
+
+        if(this.timeElapsed > 4.1){
+            this.game.timeUp();
+            this.reset();
+        }
+
         this.timeElapsed += (time / 1000);
 
         this.tens = Math.floor(this.timeElapsed / 10) % 10;
 
         this.units = Math.floor(this.timeElapsed % 10);
-
     }
 
     updateTexName(){
@@ -52,6 +59,15 @@ class Clock{
         }
 
 
+    }
+
+    reset(){
+        this.timeElapsed = 0;
+    }
+
+    assignGame(game){
+        this.game = game; 
+        this.game.clock = this;
     }
 
 

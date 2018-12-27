@@ -13,7 +13,7 @@ class RotateCamera{
 
         this.step = 0;
 
-        this.orbitTime = 2; //s
+        this.orbitTime = 1; //s
 
         this.axis = axis;
 
@@ -28,22 +28,31 @@ class RotateCamera{
         if(this.waitForMove)
             return;
 
+
         time = time / 1000;
-        
+
+        this.lastTime = this.elapsedTime;
+
         this.elapsedTime += time;
 
         if(this.elapsedTime >= this.orbitTime){
+            this.makeStep(this.orbitTime - this.lastTime);
             this.finish();
             return;
         }
 
-        this.step = (time * this.angle) / this.orbitTime;
-        
-        this.camera.orbit(this.axis, this.step);
+        this.makeStep(time);
 
     }
 
+    makeStep(time){
+        this.step = (time * this.angle) / this.orbitTime;
+        
+        this.camera.orbit(this.axis, this.step);
+    }
+
     finish(){
+
         let temp = this.initialPosition; 
 
         this.initialPosition = this.finalPosition; 

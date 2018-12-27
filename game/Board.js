@@ -14,22 +14,9 @@ class Board extends CGFobject {
         this.blackPieces = [new BlackPiece(this.scene, [2,1]), new BlackPiece(this.scene, [1, 4]), new BlackPiece(this.scene, [3,4])];
 
         this.b = this.getBoard();
-
-
-        //Black always move first
-        this.currentPlayer = 1;
     };
 
-    init(){
-        this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [0, 1, 0]);
-    }
 
-
-    update(time){
-
-        this.camera.orbitCamera(time);
-
-    }
 
     getBoardPiece(row,col){
         return this.b[row-1][col-1];
@@ -82,7 +69,10 @@ class Board extends CGFobject {
 
         this.b = newBoard;
 
-        state['piece'].position = state['newCell'];
+
+        state['piece'].addAnimation({ first: state['piece'].position, end: state['newCell'] });
+
+        //state['piece'].position = state['newCell'];
 
     }
 
@@ -141,5 +131,15 @@ class Board extends CGFobject {
 
     updateTexCoords(dummy1, dummy2) {
 
+    }
+
+    update(time){
+        this.whitePieces.forEach(element => {
+            element.update(time);
+        });
+
+        this.blackPieces.forEach(element => {
+            element.update(time);
+        });
     }
 };

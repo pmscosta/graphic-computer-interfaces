@@ -1,13 +1,15 @@
-class RotateCamera{
+class RotateCamera {
 
-    constructor(camera, finalPosition, axis){
+    constructor(camera, axis) {
 
         this.camera = camera;
 
-        this.initialPosition = { from: camera.position, to: camera.target };
+        this.from = this.camera.position.slice(0);
 
-        this.finalPosition = finalPosition;
+        this.to = this.camera.target.slice(0);
 
+        console.log('From: ', this.from, "To: ", this.to);
+        console.log(this.camera);
 
         this.angle = Math.PI;
 
@@ -17,17 +19,32 @@ class RotateCamera{
 
         this.axis = axis;
 
-        this.elapsedTime = 0; 
+        this.elapsedTime = 0;
 
         this.waitForMove = true;
+
+        this.firstIteration = true;
     }
 
 
-    orbitCamera(time){
+    orbitCamera(time) {
 
-        if(this.waitForMove)
+        if (this.waitForMove)
             return;
 
+        if (this.firstIteration) {
+
+
+        console.log('From: ', this.from, "To: ", this.to);
+
+
+            this.camera.setPosition(this.from);
+            this.camera.setTarget(this.to);
+
+            console.log(this.camera);
+
+            this.firstIteration = false;
+        }
 
         time = time / 1000;
 
@@ -35,7 +52,7 @@ class RotateCamera{
 
         this.elapsedTime += time;
 
-        if(this.elapsedTime >= this.orbitTime){
+        if (this.elapsedTime >= this.orbitTime) {
             this.makeStep(this.orbitTime - this.lastTime);
             this.finish();
             return;
@@ -45,23 +62,23 @@ class RotateCamera{
 
     }
 
-    makeStep(time){
+    makeStep(time) {
         this.step = (time * this.angle) / this.orbitTime;
-        
+
         this.camera.orbit(this.axis, this.step);
     }
 
-    finish(){
+    finish() {
 
-        let temp = this.initialPosition; 
+        this.from = this.camera.position.slice();
 
-        this.initialPosition = this.finalPosition; 
+        this.to = this.camera.target.slice();
 
-        this.finalPosition = temp;
-
-        this.elapsedTime = 0; 
+        this.elapsedTime = 0;
 
         this.waitForMove = true;
+
+        this.firstIteration = true;
 
     }
 

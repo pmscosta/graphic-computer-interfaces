@@ -12,7 +12,7 @@ class Game{
     }
 
     init(){
-        this.camera = new RotateCamera(this.scene.getGameCamera(),{ from: [1, 1.5, -2], to: [1, 0, 4]}, [0, 1, 0]);
+        this.camera = new RotateCamera(this.scene.getGameCamera(), [0, 1, 0]);
     }
 
 

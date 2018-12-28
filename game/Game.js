@@ -54,9 +54,10 @@ class Game{
 
     assignChoice(row,col){
         let piece = this.board.getBoardPiece(row,col)
-        if(this.pieceToMove ==null && piece != 0){
+        if(piece != 0 && piece == this.currentPlayer){
             this.pieceToMove=[row,col];
             this.piece = piece;
+            this.board.calculatePossibleMoves(this.pieceToMove);
         }else if(this.pieceToMove!=null && piece ==0){
             this.destination=[row,col];
             let direction = this.getChoice(this.pieceToMove,this.destination);
@@ -150,8 +151,6 @@ class Game{
         if(this.piece !== this.currentPlayer)
             return;
 
-        console.log('yo');
-        console.log('Move: ', move, 'Piece: ', this.piece);
         let board = this.arrToStr(this.board.b);
         let strMove = this.arrToStr(move);
         this.server.send("move("+strMove+","+this.piece+"," +board+  ",NewBoard)",this.applyMove,null,this);

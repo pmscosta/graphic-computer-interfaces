@@ -8,7 +8,7 @@ class Game{
         this.destination = null;
         this.currentPlayer = 2;
         this.auxLength = this.board.b.length;
-        this.mode = "Player vs Bot";
+        this.mode = "Player vs Player";
         this.bot1Dif = "Random";
         this.bot2Dif = "Minimax";
         this.pastBoards = [];
@@ -99,7 +99,6 @@ class Game{
     }
 
     undo(){
-        //console.log(this.pastBoards)
 
         if(this.pastBoards.length<2) return;
 
@@ -112,12 +111,10 @@ class Game{
 
         this.pastBoards.push(toSave)
 
-       // console.log("Aqui: " + this.game.currentPlayer)
         if(this.mode != "Player vs Player"){
             botPlay(this.game);
         }
 
-        //this.currentPlayer = (this.game.currentPlayer % 2) + 1;
     }
 
     arrToStr(arr){
@@ -167,8 +164,10 @@ class Game{
 
 
     nextPlayer(){
-        if(this.mode =="Player vs Player")
+        if(this.mode =="Player vs Player"){
             this.camera.waitForMove = false;
+            this.currentPlayer =  (this.game.currentPlayer % 2) + 1
+        }
         this.clock.reset();
         this.madeMove = false;
 
@@ -189,10 +188,7 @@ class Game{
          }
         //END GAME AND PRESENT GAME OVER
         
-        //console.log(this.game.scene.interface.status)
         this.game.scene.interface.status="Game Over";
-        //console.log(this.game.scene.interface.status)
-        //console.log('game over');
     }
 
 
@@ -217,8 +213,6 @@ class Game{
         console.log("Resposta" , this.response)
         this.game.board.updateBoard(this.response);
         this.game.checkGameOver();
-        //console.log(this.game.pastBoards)
-
         this.game.savePlay(JSON.parse(this.response),this.game)
 
 
@@ -233,34 +227,34 @@ class Game{
 
         let white=[];
         game.board.whitePieces.forEach(element => {
-            white.push(new WhitePiece(game.scene,[...element.position]));
+            white.push(new WhitePiece(game.scene,[...element.position],game.board.points));
         });
 
         let black=[];
         game.board.blackPieces.forEach(element => {
-            black.push(new BlackPiece(game.scene,[...element.position]));
+            black.push(new BlackPiece(game.scene,[...element.position],game.board.points));
         });
 
 
         game.pastBoards.push([newBoard,white,black]);
+        console.log(game.pastBoards)
     }
     applyMove(){
         console.log("First response: " , this.response)
         this.game.board.updateBoard(this.response);
         this.game.checkGameOver();
-        //console.log(this.game.pastBoards)
+        
         this.game.currentPlayer =  (this.game.currentPlayer % 2) + 1
         this.game.savePlay(JSON.parse(this.response),this.game)
 
         if(this.game.mode != "Player vs Player"){
             this.game.playBot(this.game)
-            //console.log("Here incrementing")
         }
-        //this.game.checkGameOver();
+        
     }
 
     playBot(game){
-        //console.log("Sending message from bot")
+        
         let board = game.arrToStr(game.board.b);
         let message = "botPlay(" + board + "," + (game.currentPlayer -1) + ",1,OutTab)"
         game.server.send(message,game.test,null,game);

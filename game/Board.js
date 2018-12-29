@@ -219,7 +219,7 @@ class Board extends CGFobject {
 
     reset(defaultBoard){
         this.b = defaultBoard;
-        this.whitePieces = [new WhitePiece(this.scene, [2,3]), new WhitePiece(this.scene, [1, 0]), new WhitePiece(this.scene, [3,0])];
-        this.blackPieces = [new BlackPiece(this.scene, [2,1]), new BlackPiece(this.scene, [1, 4]), new BlackPiece(this.scene, [3,4])];
+        this.whitePieces = [new WhitePiece(this.scene, [2,3],this.points), new WhitePiece(this.scene, [1, 0],this.points), new WhitePiece(this.scene, [3,0],this.points)];
+        this.blackPieces = [new BlackPiece(this.scene, [2,1],this.points), new BlackPiece(this.scene, [1, 4],this.points), new BlackPiece(this.scene, [3,4],this.points)];
     }
 };

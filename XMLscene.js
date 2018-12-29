@@ -56,7 +56,6 @@ class XMLscene extends CGFscene {
    */
   getViews() {
     for (var key in this.graph.views) {
-      console.log(key);
 
       if (this.graph.views[key].type == 'perspective') {
         var new_camera = new CGFcamera(
@@ -83,7 +82,7 @@ class XMLscene extends CGFscene {
 
   getGameCamera(){
 
-    return this.cameras['Game Camera'];
+    return this.cameras['Close'];
 
   }
 
@@ -91,6 +90,7 @@ class XMLscene extends CGFscene {
     this.camera = this.cameras[key];
     this.interface.setActiveCamera(this.camera);
     this.interface.setActiveCamera(null);
+    this.graph.game.changeCamera(this.camera);
   }
 
   /* Handler called when the graph is finally loaded.

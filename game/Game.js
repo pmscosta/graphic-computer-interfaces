@@ -16,6 +16,10 @@ class Game{
         this.camera = new RotateCamera(this.scene.getGameCamera(), [0, 1, 0]);
     }
 
+    changeCamera(camera){
+        this.camera.change(camera);
+    }
+
 
     update(time){
 
@@ -126,9 +130,6 @@ class Game{
 
 
     checkGameOver(){
-
-        console.log(this.board.b);
-
         let board = this.arrToStr(this.board.b);
         this.server.send("game_over("+board+"," + ( this.currentPlayer - 1) + "," + this.auxLength+ ")",this.gameOver, null, this);
     }

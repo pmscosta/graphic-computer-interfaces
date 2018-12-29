@@ -1,13 +1,14 @@
 <yas>
     <scene root="living_room" axis_length="5"/>
-    <views default="Game Camera">
-        <perspective id="far_view" near="0.1" far="400" angle="45">
-            <from x="20" y="8" z="20"/>
-            <to x="0" y="0" z="0"/>
+    <views default="Close">
+
+        <perspective id="Close" near="0.1" far="400" angle="45">
+            <from x="1" y="2.3" z="5"/>
+            <to x="1" y="0" z="1"/>
         </perspective>
 
-        <perspective id="Game Camera" near="0.1" far="400" angle="45">
-            <from x="1" y="2.3" z="5"/>
+        <perspective id="Far" near="0.1" far="400" angle="45">
+            <from x="1" y="8" z="6.5"/>
             <to x="1" y="0" z="1"/>
         </perspective>
     </views>

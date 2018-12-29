@@ -576,7 +576,6 @@ class MySceneGraph {
   onLoaded(){
     this.game.init();
 
-    console.log(this.components);
     this.primitives['clock'].assignGame(this.game);
   }
 

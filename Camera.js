@@ -21,21 +21,30 @@ class RotateCamera {
         this.waitForMove = true;
 
         this.firstIteration = true;
+
+        this.rotations = 0;
+
+        this.side = 0;
     }
+
+    change(camera) {
+
+        this.camera = camera;
+
+        let dir = this.camera.position[2] - this.camera.target[2];
+        
+        if (dir > 0 && this.side == 1 || dir < 0 && this.side == 0)
+            this.camera.orbit(this.axis, this.angle);
+
+
+    }
+
 
 
     orbitCamera(time) {
 
         if (this.waitForMove)
             return;
-
-        if (this.firstIteration) {
-            
-            this.camera.setPosition(this.from);
-            this.camera.setTarget(this.to);
-
-            this.firstIteration = false;
-        }
 
         time = time / 1000;
 
@@ -61,15 +70,11 @@ class RotateCamera {
 
     finish() {
 
-        this.from = this.camera.position.slice();
-
-        this.to = this.camera.target.slice();
-
         this.elapsedTime = 0;
 
         this.waitForMove = true;
 
-        this.firstIteration = true;
+        this.side = (this.side + 1) % 2;
 
     }
 

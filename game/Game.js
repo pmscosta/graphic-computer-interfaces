@@ -2,14 +2,35 @@ class Game{
     constructor(scene,board){
         this.scene = scene;
         this.board=board;
+        this.defaultBoard = [...board.b];
         this.server = new Server();
         this.pieceToMove = null;
         this.destination = null;
         this.currentPlayer = 2;
         this.auxLength = this.board.b.length;
+        this.mode = "Player vs Bot";
+        this.bot1Dif = "Random";
+        this.bot2Dif = "Minimax";
+        this.pastBoards = [];
+        this.savePlay(this.board.b,this);
         this.clock = null;
         
         
+    }
+
+    changeMode(mode){
+        //console.log("Changes to mode ", mode);
+        this.mode=mode;
+    }
+
+    changeBot1Dif(dif){
+        //console.log("Changes to bot1dif ", dif);
+        this.bot1Dif=dif;
+    }
+
+    changeBot2Dif(dif){
+        //console.log("Changes to bot2dif ", dif);
+        this.bot2Dif=dif;
     }
 
     init(){
@@ -51,7 +72,6 @@ class Game{
         
     }
 
-
     resetChoices(){
         this.destination =null;
         this.pieceToMove = null;
@@ -67,12 +87,38 @@ class Game{
             this.destination=[row,col];
             let direction = this.getChoice(this.pieceToMove,this.destination);
             this.move([this.pieceToMove[0]-1,this.pieceToMove[1]-1,direction]);
+            console.log("Moving")
             this.resetChoices();
         }
 
 
     }
 
+    resetGame(){
+        this.board.reset(this.defaultBoard);
+    }
+
+    undo(){
+        //console.log(this.pastBoards)
+
+        if(this.pastBoards.length<2) return;
+
+        let toSave = this.pastBoards.pop();
+        let lastPlay = this.pastBoards.pop();
+
+        this.board.b =lastPlay[0];
+        this.board.whitePieces = lastPlay[1];
+        this.board.blackPieces = lastPlay[2];
+
+        this.pastBoards.push(toSave)
+
+       // console.log("Aqui: " + this.game.currentPlayer)
+        if(this.mode != "Player vs Player"){
+            botPlay(this.game);
+        }
+
+        //this.currentPlayer = (this.game.currentPlayer % 2) + 1;
+    }
 
     arrToStr(arr){
         let me = [];
@@ -121,8 +167,8 @@ class Game{
 
 
     nextPlayer(){
-        this.currentPlayer = (this.currentPlayer % 2) + 1;
-        this.camera.waitForMove = false;
+        if(this.mode =="Player vs Player")
+            this.camera.waitForMove = false;
         this.clock.reset();
         this.madeMove = false;
 
@@ -131,7 +177,7 @@ class Game{
 
     checkGameOver(){
         let board = this.arrToStr(this.board.b);
-        this.server.send("game_over("+board+"," + ( this.currentPlayer - 1) + "," + this.auxLength+ ")",this.gameOver, null, this);
+        this.server.send("game_over("+board+"," + ( this.piece) + "," + this.auxLength+ ")",this.gameOver, null, this);
     }
 
     gameOver(){
@@ -142,30 +188,83 @@ class Game{
             return;
          }
         //END GAME AND PRESENT GAME OVER
-
-        console.log('game over');
+        
+        //console.log(this.game.scene.interface.status)
+        this.game.scene.interface.status="Game Over";
+        //console.log(this.game.scene.interface.status)
+        //console.log('game over');
     }
 
 
     move(move){
 
-
+        console.log("Piece", this.piece)
+        console.log("Current Player", this.currentPlayer )
         if(this.piece !== this.currentPlayer)
             return;
 
+        console.log('yo');
+        console.log('Move: ', move, 'Piece: ', this.piece);
         let board = this.arrToStr(this.board.b);
         let strMove = this.arrToStr(move);
         this.server.send("move("+strMove+","+this.piece+"," +board+  ",NewBoard)",this.applyMove,null,this);
         this.madeMove = true;
     }
 
-    applyMove(){
+
+
+    test(){
+        console.log("Resposta" , this.response)
         this.game.board.updateBoard(this.response);
         this.game.checkGameOver();
+        //console.log(this.game.pastBoards)
+
+        this.game.savePlay(JSON.parse(this.response),this.game)
+
+
+        this.game.currentPlayer =  (this.game.currentPlayer % 2) + 1
+        this.madeMove = true;
+
     }
 
-   
 
+    savePlay(board,game){
+        let newBoard = board;
+
+        let white=[];
+        game.board.whitePieces.forEach(element => {
+            white.push(new WhitePiece(game.scene,[...element.position]));
+        });
+
+        let black=[];
+        game.board.blackPieces.forEach(element => {
+            black.push(new BlackPiece(game.scene,[...element.position]));
+        });
+
+
+        game.pastBoards.push([newBoard,white,black]);
+    }
+    applyMove(){
+        console.log("First response: " , this.response)
+        this.game.board.updateBoard(this.response);
+        this.game.checkGameOver();
+        //console.log(this.game.pastBoards)
+        this.game.currentPlayer =  (this.game.currentPlayer % 2) + 1
+        this.game.savePlay(JSON.parse(this.response),this.game)
+
+        if(this.game.mode != "Player vs Player"){
+            this.game.playBot(this.game)
+            //console.log("Here incrementing")
+        }
+        //this.game.checkGameOver();
+    }
+
+    playBot(game){
+        //console.log("Sending message from bot")
+        let board = game.arrToStr(game.board.b);
+        let message = "botPlay(" + board + "," + (game.currentPlayer -1) + ",1,OutTab)"
+        game.server.send(message,game.test,null,game);
+    }
 
 
     checkEndGame(move){

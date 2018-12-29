@@ -119,6 +119,8 @@ class XMLscene extends CGFscene {
     // Adds lights group.
     this.interface.addLightsGroup();
 
+    this.interface.addGameStatus();
+
     this.updateLights();
 
     this.sceneInited = true;

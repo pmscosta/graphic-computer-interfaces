@@ -97,12 +97,12 @@ class Board extends CGFobject {
         return res;
     }
 
-    getDif(oldB, newB) {
-        let state = []
+    getDif(oldB,newB){
+        let state=[]
 
-        for (let i = 0; i < oldB.length; i++) {
-            for (let j = 0; j < oldB[i].length; j++) {
-                if (oldB[i][j] != newB[i][j]) {
+        for(let i = 0; i < oldB.length;i++){
+            for(let j = 0; j < oldB[i].length;j++){
+                if(oldB[i][j] != newB[i][j]){
 
                     //if it is different and it is 0 on the old board, it is the new position of the piece
                     if (oldB[i][j] == 0) {
@@ -215,5 +215,11 @@ class Board extends CGFobject {
         this.blackPieces.forEach(element => {
             element.update(time);
         });
+    }
+
+    reset(defaultBoard){
+        this.b = defaultBoard;
+        this.whitePieces = [new WhitePiece(this.scene, [2,3]), new WhitePiece(this.scene, [1, 0]), new WhitePiece(this.scene, [3,0])];
+        this.blackPieces = [new BlackPiece(this.scene, [2,1]), new BlackPiece(this.scene, [1, 4]), new BlackPiece(this.scene, [3,4])];
     }
 };

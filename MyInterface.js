@@ -52,6 +52,42 @@ class MyInterface extends CGFinterface {
     group.close();
   }
 
+  addGameStatus(){
+
+    var group = this.gui.addFolder('Game Settings');
+
+    group.open();
+    
+    this.modes = ["Player vs Player","Player vs Bot","Bot vs Player"]
+    this.mode = "Player vs Player";
+    group.add(this, 'mode', this.modes).onChange((val)=>{
+      this.scene.graph.game.changeMode(val);
+    });;
+
+    this.botDifficulties = ["Random","Greedy","Minimax"]
+    this.FirstBot = "Random";
+    group.add(this, 'FirstBot', this.botDifficulties).onChange((val)=>{
+      this.scene.graph.game.changeBot1Dif(val);
+    });
+    this.SecondBot_BvB = "Minimax";
+    group.add(this, 'SecondBot_BvB', this.botDifficulties).onChange((val)=>{
+      this.scene.graph.game.changeBot1Dif(val);
+    });;
+
+
+    group.close();
+
+    this.NewGame = function(){
+      this.scene.graph.game.resetGame();
+    }
+
+    this.undo = function(){
+      this.scene.graph.game.undo();
+    }
+
+    this.gui.add(this, 'NewGame');
+    this.gui.add(this,'undo');
+  }
 
   addCameraGroup() {
     var keys = Object.keys(this.scene.cameras);

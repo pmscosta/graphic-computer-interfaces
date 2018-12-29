@@ -77,6 +77,7 @@ class XMLscene extends CGFscene {
 
     this.camera = this.cameras[this.graph.defaultPerspectiveId];
     this.interface.setActiveCamera(this.camera);
+    this.interface.setActiveCamera(null);
   }
 
 
@@ -89,6 +90,7 @@ class XMLscene extends CGFscene {
   updateCamera(key) {
     this.camera = this.cameras[key];
     this.interface.setActiveCamera(this.camera);
+    this.interface.setActiveCamera(null);
   }
 
   /* Handler called when the graph is finally loaded.

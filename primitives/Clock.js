@@ -30,7 +30,7 @@ class Clock{
 
     update(time){
 
-        if(this.timeElapsed > 200){
+        if(this.timeElapsed > 8){
             this.game.timeUp();
             this.reset();
         }

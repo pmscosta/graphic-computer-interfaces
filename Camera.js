@@ -8,9 +8,6 @@ class RotateCamera {
 
         this.to = this.camera.target.slice(0);
 
-        console.log('From: ', this.from, "To: ", this.to);
-        console.log(this.camera);
-
         this.angle = Math.PI;
 
         this.step = 0;
@@ -33,15 +30,9 @@ class RotateCamera {
             return;
 
         if (this.firstIteration) {
-
-
-        console.log('From: ', this.from, "To: ", this.to);
-
-
+            
             this.camera.setPosition(this.from);
             this.camera.setTarget(this.to);
-
-            console.log(this.camera);
 
             this.firstIteration = false;
         }

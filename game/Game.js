@@ -9,6 +9,7 @@ class Game{
         this.auxLength = this.board.b.length;
         this.clock = null;
         
+        
     }
 
     init(){

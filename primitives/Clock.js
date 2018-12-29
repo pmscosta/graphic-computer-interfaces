@@ -1,6 +1,6 @@
 class Clock{
 
-    constructor(scene){
+    constructor(scene, points){
 
         this.scene = scene;
 
@@ -23,6 +23,10 @@ class Clock{
 
         this.lastTen = 0;
         this.lastUnit = 0; 
+        this.points = [];
+        this.points[0] = points[0] + 4;
+        this.points[1] = points[1] + Math.sqrt(2) / 8;
+        this.points[2] = points[2] + 2.15;
 
         this.game = null;
         
@@ -30,7 +34,7 @@ class Clock{
 
     update(time){
 
-        if(this.timeElapsed > 4){
+        if(this.timeElapsed > 200){
             this.game.timeUp();
             this.reset();
         }
@@ -76,7 +80,7 @@ class Clock{
         this.updateTexName();
 
         this.scene.pushMatrix();
-            this.scene.translate(2.8, Math.sqrt(2) / 8, 0.68);
+            this.scene.translate( this.points[0], this.points[1], this.points[2]);
             this.scene.rotate(Math.PI / 4, 0, 0, 1);
             this.scene.scale(0.7, 0.7, 0.7);
             this.body.display();
@@ -84,10 +88,11 @@ class Clock{
 
 
         this.scene.pushMatrix();
-            this.scene.translate(2.8 - Math.sqrt(2) / 8, 0.17, 1.2);
+            this.scene.translate(this.points[0] - Math.sqrt(2) / 8, this.points[1], this.points[2] + 0.5);
             this.scene.rotate(-Math.PI / 2, 1, 0, 0);
             this.scene.rotate(-Math.PI /2, 0, 0, 1);
-            this.scene.scale(0.4, 0.6, 0.4); 
+            this.scene.rotate(Math.PI / 2, 1, 0, 0);
+            this.scene.scale(0.4, 0.4, 0.4); 
 
             this.unitsMat.apply();
             

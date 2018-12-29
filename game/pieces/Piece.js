@@ -2,7 +2,7 @@ class Piece extends CGFobject {
     /**
      * @param  {XML Scene} scene
      */
-    constructor(scene, position) {
+    constructor(scene, position, points) {
         super(scene);
         this.scene = scene;
         this.position = position || [0, 0];
@@ -12,6 +12,7 @@ class Piece extends CGFobject {
         this.mat = new CGFappearance(this.scene);
         this.animation = null;
         this.endPosition = null;
+        this.parentPoints = points;
     };
 
     display() {
@@ -20,12 +21,12 @@ class Piece extends CGFobject {
         
 
         this.mat.apply();
-        this.scene.registerForPick((this.position[0] + 1) * 10 + (this.position[1] + 1), this.piece);
-        this.scene.translate(0.4 * this.position[0], 0, 0.4 * this.position[1]);
+        this.scene.translate(0.4 * this.position[0] + this.parentPoints[0] , 0 + this.parentPoints[1], 0.4 * this.position[1] + this.parentPoints[2]);
         this.scene.translate(0.2, 0, 0.2);
         if (this.animation != null)
-            this.animation.apply();
+        this.animation.apply();
         this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+        this.scene.registerForPick((this.position[0] + 1) * 10 + (this.position[1] + 1), this.piece);
         this.piece.display();
         this.scene.popMatrix();
     }

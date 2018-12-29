@@ -2,7 +2,7 @@ class Board extends CGFobject {
     /**
      * @param  {XML Scene} scene
      */
-    constructor(scene) {
+    constructor(scene, points) {
         super(scene);
         this.scene = scene;
         this.plane = new Plane(this.scene, 20, 20);
@@ -10,6 +10,7 @@ class Board extends CGFobject {
         this.green_area = new MyRectangle(this.scene, [0, 0.3, 0.3, 0], 0, 1, 0, 1);
         this.green_areas = null;
 
+        this.points = points;
 
         this.mat = this.scene.graph.materials['table_wood'];
         this.greenMat = new CGFappearance(this.scene);
@@ -20,8 +21,8 @@ class Board extends CGFobject {
         this.greenMat.setEmission(0, 0, 0, 0);
         this.greenMat.setShininess(0.1);
 
-        this.whitePieces = [new WhitePiece(this.scene, [2, 3]), new WhitePiece(this.scene, [1, 0]), new WhitePiece(this.scene, [3, 0])];
-        this.blackPieces = [new BlackPiece(this.scene, [2, 1]), new BlackPiece(this.scene, [1, 4]), new BlackPiece(this.scene, [3, 4])];
+        this.whitePieces = [new WhitePiece(this.scene, [2, 3], this.points), new WhitePiece(this.scene, [1, 0], this.points), new WhitePiece(this.scene, [3, 0], this.points)];
+        this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];
 
         this.b = this.getBoard();
     };
@@ -61,11 +62,12 @@ class Board extends CGFobject {
 
             this.scene.pushMatrix();
 
-            this.scene.translate(0.4 * i, 0.01, 0.4 * j);
+            this.scene.translate(this.points[0], 0, this.points[2]);
+            this.scene.translate(0.4 * i + this.points[0], 0.01 + this.points[1], 0.4 * j + this.points[2]);
             this.scene.translate(0.05, 0, 0.05);
 
             this.scene.registerForPick((i + 1) * 10 + (j + 1), this.marker);
-
+            this.scene.rotate(Math.PI / 2, 1, 0, 0);
             this.greenMat.apply();
             this.marker.display();
             this.scene.popMatrix();
@@ -152,6 +154,7 @@ class Board extends CGFobject {
         this.scene.pushMatrix();
         this.scene.scale(2, 1, 2);
         this.scene.translate(0.5, 0, 0.5);
+        this.scene.translate(this.points[0], this.points[1], this.points[2]);
         this.plane.display();
         this.scene.popMatrix();
 
@@ -170,12 +173,12 @@ class Board extends CGFobject {
         for (let i = 0; i < 5; i++) {
             for (let j = 0; j < 5; j++) {
                 this.scene.pushMatrix();
-
-                this.scene.translate(0.4 * i, 0.01, 0.4 * j);
+                this.scene.translate(this.points[0], 0, this.points[2]);
+                this.scene.translate(0.4 * i + this.points[0], 0.01 + this.points[1], 0.4 * j + this.points[2]);
                 this.scene.translate(0.05, 0, 0.05);
 
                 this.scene.registerForPick((i + 1) * 10 + (j + 1), this.marker);
-
+                this.scene.rotate(Math.PI / 2, 1, 0, 0);
                 this.marker.display();
                 this.scene.popMatrix();
             }
@@ -183,6 +186,11 @@ class Board extends CGFobject {
     }
 
     displayPieces() {
+
+        this.scene.pushMatrix();
+        
+        this.scene.translate(this.points[0], 0, this.points[2]);
+
         this.whitePieces.forEach(element => {
             element.display();
         });
@@ -190,6 +198,9 @@ class Board extends CGFobject {
         this.blackPieces.forEach(element => {
             element.display();
         });
+
+
+        this.scene.popMatrix();
     }
 
     updateTexCoords(dummy1, dummy2) {

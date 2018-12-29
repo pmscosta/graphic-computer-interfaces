@@ -3,13 +3,13 @@
     <views default="Close">
 
         <perspective id="Close" near="0.1" far="400" angle="45">
-            <from x="1" y="2.3" z="5"/>
-            <to x="1" y="0" z="1"/>
+            <from x="4.2" y="4.3" z="8"/>
+            <to x="4.2" y="2" z="4"/>
         </perspective>
 
         <perspective id="Far" near="0.1" far="400" angle="45">
-            <from x="1" y="8" z="6.5"/>
-            <to x="1" y="0" z="1"/>
+            <from x="4.2" y="9" z="10"/>
+            <to x="4.2" y="2" z="4"/>
         </perspective>
     </views>
 
@@ -194,7 +194,12 @@
     <primitives>
 
         <primitive id="board1">
-            <board/>
+            <board x="1.7" y="1.91" z="1.5"/>
+        </primitive>
+
+
+         <primitive id= "clock">
+            <clock  x="1.7" y="1.91" z="1.5"/>
         </primitive>
 
         <primitive id="square">
@@ -255,9 +260,7 @@
             <water idtexture="water" idwavemap="water-height" parts="100" heightscale="0.7" texscale="4" />
         </primitive>
 
-        <primitive id= "clock">
-            <clock/>
-        </primitive>
+       
 
     </primitives>
 
@@ -443,7 +446,7 @@
         <component id="table_top">
             <transformation>
                 <translate x="0" y="3.65" z="0.0"/>
-                <scale x="5" y="0.3" z="3"/>
+                <scale x="5" y="0.3" z="4.2"/>
             </transformation>
 
             <materials>
@@ -678,7 +681,7 @@
 
          <component id="small_lamp">
             <transformation>
-                <translate x="5.2" y="1.9" z="4.4"/>
+                <translate x="2.8" y="1.9" z="3.5"/>
             </transformation>
 
             <materials>
@@ -697,7 +700,7 @@
         <component id="chair_top">
             <transformation>
                 <translate x="0" y="1" z="0"/>
-                <scale x="1" y="0.3" z="0.1"/>
+                <scale x="1" y="1" z="0.1"/>
                 <translate x="0.5" y="0.5" z="0.5"/>
             </transformation>
 
@@ -715,7 +718,7 @@
         <component id="chair_right_bar">
             <transformation>
                 <translate x="0.925" y="0.9" z="0"/>
-                <scale x="0.1" y="0.5" z="0.1"/>
+                <scale x="0.1" y="1" z="0.1"/>
                 <translate x="0.5" y="0.5" z="0.3"/>
             </transformation>
 
@@ -733,7 +736,7 @@
         <component id="chair_left_bar">
             <transformation>
                 <translate x="-0.025" y="0.9" z="0"/>
-                <scale x="0.1" y="0.5" z="0.1"/>
+                <scale x="0.1" y="1" z="0.1"/>
                 <translate x="0.5" y="0.5" z="0.3"/>
             </transformation>
 
@@ -787,6 +790,23 @@
             </children>
         </component>
 
+        <component id="other_chair">
+            <transformation>
+                <translate x="8.5" y="0" z="8"/>
+                <rotate axis="y" angle="180"/>
+            </transformation>
+
+            <materials>
+                <material id ="table_wood"/>
+            </materials>
+
+            <texture id="none"/>
+
+            <children>
+                <componentref id="chair" />
+            </children>
+        </component>
+
         <component id="flowers">
             <transformation>
                 <translate x="4" y="4" z="0.1"/>
@@ -806,7 +826,7 @@
         <component id="ball">
             <transformation>
 
-                <translate x="3.2" y="2.3" z="4.4"/>
+                <translate x="2.8" y="2.3" z="4.8"/>
                 <scale x="0.4" y="0.4" z="0.4"/>
             </transformation>
 
@@ -1001,7 +1021,7 @@
             <children>
                 <componentref id="board"/>
                 <componentref id="clock"/>
-                <!-- <componentref id="desk"/>
+                <componentref id="desk"/>
                 <componentref id="ball"/>
                 <componentref id="big_lamp"/>
                 <componentref id="small_lamp"/>
@@ -1009,9 +1029,10 @@
                 <componentref id="back_wall"/>
                 <componentref id="floor"/>
                 <componentref id="chair"/>
+                <componentref id="other_chair"/>
                 <componentref id="flowers"/>
                 <componentref id="starry_night"/>
-                <componentref id="duarte"/> -->
+                <!-- <componentref id="duarte"/> -->
             </children>
         </component>
 

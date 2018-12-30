@@ -58,14 +58,14 @@ class MyInterface extends CGFinterface {
 
     group.open();
     
-    this.modes = ["Player vs Player","Player vs Bot","Bot vs Player"]
+    this.modes = ["Player vs Player","Player vs Bot","Bot vs Player","Bot vs Bot"]
     this.mode = "Player vs Player";
     group.add(this, 'mode', this.modes).onChange((val)=>{
       this.scene.graph.game.changeMode(val);
     });;
 
     this.botDifficulties = ["Random","Greedy","Minimax"]
-    this.FirstBot = "Random";
+    this.FirstBot = "Minimax";
     group.add(this, 'FirstBot', this.botDifficulties).onChange((val)=>{
       this.scene.graph.game.changeBot1Dif(val);
     });
@@ -85,7 +85,13 @@ class MyInterface extends CGFinterface {
       this.scene.graph.game.undo();
     }
 
+    this.BotSpeed=5;
+
+
     this.gui.add(this, 'NewGame');
+    this.gui.add(this, 'BotSpeed', 0, 10).onChange((val)=>{
+      this.scene.graph.game.botMult = val;
+    })
     this.gui.add(this,'undo');
   }
 

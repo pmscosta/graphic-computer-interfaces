@@ -242,7 +242,7 @@ class Game{
          //NO GAME OVER SO CHECK FOR DRAW
          if(this.status !== 200){
             this.game.receivedAnswer = true
-            //this.game.checkDraw();
+            this.game.checkDraw();
             return;
          }
         //END GAME AND PRESENT GAME OVER
@@ -278,9 +278,6 @@ class Game{
         this.game.checkGameOver(this.game);
         this.game.savePlay(JSON.parse(this.response),this.game)
 
-
-        this.game.currentPlayer =  (this.game.currentPlayer % 2) + 1
-        this.madeMove = true;
 
     }
 

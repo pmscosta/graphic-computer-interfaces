@@ -25,8 +25,6 @@ class Board extends CGFobject {
         this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];
 
         this.b = this.getBoard();
-
-        this.elapsedTime = 0;
     };
 
 
@@ -112,7 +110,7 @@ class Board extends CGFobject {
                     }
                     //else it is the position where that piece was before the movement
                     else {
-                        console.log("[" + j + "," + i + "]  =  "  + oldB[i][j] , this.getPiece(oldB[i][j], [j, i]))
+                       // console.log("[" + j + "," + i + "]  =  "  + oldB[i][j] , this.getPiece(oldB[i][j], [j, i]))
                         state['piece'] = this.getPiece(oldB[i][j], [j, i]);
                     }
                 }
@@ -139,29 +137,6 @@ class Board extends CGFobject {
 
         }
     }
-/* 
-    playMovie(boards){
-
-        for(let i = 1; i < boards.length; i++){
-
-            let board = boards[i][0];
-
-            console.log({board});
-
-            this.updateBoard2(board);
-            
-            let previousTime = this.elapsedTime;
-
-            while(1){
-
-                if(this.elapsedTime > previousTime + 1)
-                    break;
-            }
-
-        } 
-
-
-    }*/
 
     updateBoard(newBoard) {
         
@@ -183,10 +158,10 @@ class Board extends CGFobject {
 
     updateBoard2(newBoard) {
         
-        console.log(this.b,newBoard)
+       // console.log(this.b,newBoard)
 
         let state = this.getDif(this.b, newBoard);
-        console.log(state)
+        //console.log(state)
         this.b = newBoard;
 
         state['piece'].addAnimation({
@@ -272,8 +247,6 @@ class Board extends CGFobject {
 
     update(time) {
 
-        this.elapsedTime += time/1000;
-
         this.whitePieces.forEach(element => {
             element.update(time);
         });
@@ -285,7 +258,7 @@ class Board extends CGFobject {
 
     reset(defaultBoard){
         this.b = defaultBoard;
-        this.whitePieces = [new WhitePiece(this.scene, [2,3],this.points), new WhitePiece(this.scene, [1, 0],this.points), new WhitePiece(this.scene, [3,0],this.points)];
-        this.blackPieces = [new BlackPiece(this.scene, [2,1],this.points), new BlackPiece(this.scene, [1, 4],this.points), new BlackPiece(this.scene, [3,4],this.points)];
+        this.whitePieces = [new WhitePiece(this.scene, [2, 3], this.points), new WhitePiece(this.scene, [1, 0], this.points), new WhitePiece(this.scene, [3, 0], this.points)];
+        this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];
     }
 };

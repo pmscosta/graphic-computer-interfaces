@@ -2,7 +2,13 @@ class Game{
     constructor(scene,board){
         this.scene = scene;
         this.board=board;
-        this.defaultBoard = [...board.b];
+        this.defaultBoard = [
+            [0, 1, 0, 1, 0],
+            [0, 0, 2, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0],
+            [0, 2, 0, 2, 0]
+        ];
         this.server = new Server();
         this.pieceToMove = null;
         this.destination = null;
@@ -14,6 +20,7 @@ class Game{
         this.pastBoards = [];
         this.savePlay(this.board.b,this);
         this.clock = null;
+        this.counter = null;
         this.last = 0;
         this.gameOverFlag=false
         this.botTurn = true
@@ -130,6 +137,9 @@ class Game{
         this.gameOverFlag = false;
         this.currentPlayer = 2;
         this.botTurn = true
+        this.pastBoards = [];
+        this.savePlay(this.board.b,this);
+        this.clock.reset();
     }
 
     undo(){
@@ -208,6 +218,9 @@ class Game{
         if(this.mode =="Player vs Player"){
             this.camera.waitForMove = false;
         }
+
+        console.log(this);
+
         this.clock.reset();
         this.madeMove = false;
 
@@ -234,9 +247,12 @@ class Game{
          }
         //END GAME AND PRESENT GAME OVER
         console.log("GAME OVER")
+        this.game.clock.pause = true;
         this.game.gameOverFlag = true;
         this.game.receivedAnswer = true;
+        this.game.counter.updateScore(this.game.currentPlayer);
         this.game.playMovie();
+        
     }
 
 

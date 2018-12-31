@@ -5,11 +5,18 @@ class Clock{
         this.scene = scene;
 
         this.body = new MyCylinder(this.scene,Math.sqrt(2) / 4,Math.sqrt(2) / 4,1,4,1);
+        let value = -Math.sqrt(2) / 4
 
-        this.tensDisplay = new MyRectangle(this.scene, [-Math.sqrt(2) / 4, -Math.sqrt(2) / 4, Math.sqrt(2) / 4, Math.sqrt(2) / 4]); 
-        this.unitsDisplay = new MyRectangle(this.scene, [-Math.sqrt(2) / 4, -Math.sqrt(2) / 4, Math.sqrt(2) / 4, Math.sqrt(2) / 4]); 
+        this.tensDisplay = new MyRectangle(this.scene, [value, value, -value, -value]);
+        this.unitsDisplay = new MyRectangle(this.scene, [value, value, -value, -value]);
+        this.cover = new MyRectangle(this.scene, [-1, -1, 1, 1]); 
         
         this.timeElapsed = 0; 
+
+        this.coverMat = new CGFappearance(this.scene);
+        this.coverMat.setShininess(100);
+        this.coverMat.setEmission(1, 1, 1, 1);
+        this.coverMat.setTexture(this.scene.graph.textures['black']);
 
         this.tensMat =  new CGFappearance(this.scene);
         this.tensMat.setShininess(100);
@@ -30,9 +37,14 @@ class Clock{
 
         this.game = null;
         
+        this.pause = false;
+
     }
 
     update(time){
+
+        if(this.pause)
+            return;
 
         if(this.timeElapsed > 200){
             this.game.timeUp();
@@ -67,6 +79,7 @@ class Clock{
 
     reset(){
         this.timeElapsed = 0;
+        this.pause = false;
     }
 
     assignGame(game){
@@ -88,7 +101,7 @@ class Clock{
 
 
         this.scene.pushMatrix();
-            this.scene.translate(this.points[0] - Math.sqrt(2) / 8, this.points[1], this.points[2] + 0.5);
+            this.scene.translate(this.points[0] - 0.18, this.points[1], this.points[2] + 0.5);
             this.scene.rotate(-Math.PI / 2, 1, 0, 0);
             this.scene.rotate(-Math.PI /2, 0, 0, 1);
             this.scene.rotate(Math.PI / 2, 1, 0, 0);
@@ -101,6 +114,22 @@ class Clock{
             this.tensMat.apply();   
             this.scene.translate(-0.8, 0, 0);
             this.unitsDisplay.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+
+            this.scene.translate(this.points[0] -0.179, this.points[1], this.points[2] + 0.35);
+            this.scene.rotate(-Math.PI / 2, 1, 0, 0);
+            this.scene.rotate(-Math.PI /2, 0, 0, 1);
+            this.scene.rotate(Math.PI / 2, 1, 0, 0);
+            this.scene.scale(0.4, 0.4, 0.4); 
+
+
+        this.scene.scale(0.8, 0.37, 1);
+
+        this.coverMat.apply();
+        this.cover.display();
+
         this.scene.popMatrix();
     }
 

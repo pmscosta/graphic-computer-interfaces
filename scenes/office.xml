@@ -76,6 +76,7 @@
         <texture id="brick_wall" file="scenes/images/brick_wall.jpg"/>
         <texture id="desk" file="scenes/images/desk.jpg"/>
         <texture id="metal" file="scenes/images/metal.jpeg"/>
+        <texture id="black" file="scenes/images/black.jpg"/>
         <texture id="leather" file="scenes/images/leather.jpeg"/>
         <texture id="def_text" file="scenes/images/default-texture.png"/>
         <texture id="starry_night" file="scenes/images/starry_night.jpg"/>
@@ -197,9 +198,12 @@
             <board x="1.7" y="1.91" z="1.5"/>
         </primitive>
 
-
-         <primitive id= "clock">
+        <primitive id= "clock">
             <clock  x="1.7" y="1.91" z="1.5"/>
+        </primitive>
+
+        <primitive id= "counter">
+            <counter  x="1.7" y="1.91" z="1.5"/>
         </primitive>
 
         <primitive id="square">
@@ -681,7 +685,7 @@
 
          <component id="small_lamp">
             <transformation>
-                <translate x="2.8" y="1.9" z="3.5"/>
+                <translate x="2.8" y="1.9" z="2.9"/>
             </transformation>
 
             <materials>
@@ -826,7 +830,7 @@
         <component id="ball">
             <transformation>
 
-                <translate x="2.8" y="2.3" z="4.8"/>
+                <translate x="1" y="0.5" z="1"/>
                 <scale x="0.4" y="0.4" z="0.4"/>
             </transformation>
 
@@ -990,6 +994,23 @@
 
         </component>
 
+        <component id="counter">
+            <transformation>
+
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="metal" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="counter"/>
+            </children>
+
+        </component>
+
 
         <component id="board">
             <transformation>
@@ -1021,6 +1042,7 @@
             <children>
                 <componentref id="board"/>
                 <componentref id="clock"/>
+                <componentref id="counter"/>
                 <componentref id="desk"/>
                 <componentref id="ball"/>
                 <componentref id="big_lamp"/>

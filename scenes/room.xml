@@ -222,6 +222,10 @@
             <clock  x="1.7" y="1.27" z="1.5"/>
         </primitive>
 
+        <primitive id= "counter">
+            <counter  x="1.7" y="1.27" z="1.5"/>
+        </primitive>
+
         <primitive id="square">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
@@ -1023,6 +1027,24 @@
         </component>
 
 
+        <component id="counter">
+            <transformation>
+
+            </transformation>
+
+            <materials>
+                <material id="inherit"/>
+            </materials>
+
+            <texture id="metal" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="counter"/>
+            </children>
+
+        </component>
+
+
         <component id="living_room">
             <transformation>
             </transformation>
@@ -1037,6 +1059,7 @@
                 <componentref id="board"/>
                 <componentref id="tv"/>
                 <componentref id="clock"/>
+                <componentref id="counter"/>
                 <componentref id="desk"/>
                 <componentref id="floor"/>
                 <componentref id="left_wall"/>

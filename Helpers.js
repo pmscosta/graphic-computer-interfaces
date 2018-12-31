@@ -677,12 +677,23 @@ function createTexture(scene, texture_element, reader, textureID) {
  */
 function parsePrimitive(scene, reader, children, ID) {
   switch (children.nodeName) {
+
+    case 'counter':
+
+    var values = [];
+
+      getValuesOrDefault(
+        reader, xyz_comp, 'counter: ' + ID, values, children,
+        xyz_default);
+        
+    return new Counter(scene, values);  
+
     case 'clock':
 
     var values = [];
 
       getValuesOrDefault(
-        reader, xyz_comp, 'board: ' + ID, values, children,
+        reader, xyz_comp, 'clock: ' + ID, values, children,
         xyz_default);
 
     return new Clock(scene, values);  

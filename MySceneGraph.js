@@ -610,6 +610,7 @@ class MySceneGraph {
     this.game.init();
 
     this.primitives['clock'].assignGame(this.game);
+    this.primitives['counter'].assignGame(this.game);
   }
 
 

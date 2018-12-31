@@ -119,8 +119,9 @@ class Board extends CGFobject {
     }
 
     updateBoard(newBoard) {
-
+        
         newBoard = JSON.parse(newBoard);
+        console.log(this.b,newBoard)
 
         let state = this.getDif(this.b, newBoard);
 

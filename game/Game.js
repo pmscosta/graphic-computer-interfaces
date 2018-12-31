@@ -25,7 +25,8 @@ class Game{
         this.gameOverFlag=false
         this.botTurn = true
         this.receivedAnswer = true
-        this.botMult = 5        
+        this.botMult = 5
+        this.started = false;      
     }
 
     changeMode(mode){
@@ -46,6 +47,7 @@ class Game{
     init(){
         this.camera = new RotateCamera(this.scene.getGameCamera(), [0, 1, 0]);
         this.server.send("reset", null, null, this);
+        this.clock.pause = true;
     }
 
     changeCamera(camera){
@@ -117,6 +119,10 @@ class Game{
     }
 
     assignChoice(row,col){
+
+        if(!this.started)
+            return;
+
         let piece = this.board.getBoardPiece(row,col)
         if(piece != 0 && piece == this.currentPlayer){
             this.pieceToMove=[row,col];
@@ -140,6 +146,7 @@ class Game{
         this.pastBoards = [];
         this.savePlay(this.board.b,this);
         this.clock.reset();
+        this.started = true;
     }
 
     undo(){

@@ -28,8 +28,8 @@ class Clock{
         this.unitsMat.setEmission(1, 1,1, 1);
         this.unitsMat.setTexture(this.scene.graph.textures['digit_0']);
 
-        this.lastTen = 0;
-        this.lastUnit = 0; 
+        this.lastTen = this.tens = 0;
+        this.lastUnit = this.units = 0; 
         this.points = [];
         this.points[0] = points[0] + 4;
         this.points[1] = points[1] + Math.sqrt(2) / 8;

@@ -1,7 +1,7 @@
-class Game{
-    constructor(scene,board){
+class Game {
+    constructor(scene, board) {
         this.scene = scene;
-        this.board=board;
+        this.board = board;
         this.defaultBoard = [
             [0, 1, 0, 1, 0],
             [0, 0, 2, 0, 0],
@@ -18,71 +18,71 @@ class Game{
         this.bot1Dif = "Minimax";
         this.bot2Dif = "Minimax";
         this.pastBoards = [];
-        this.savePlay(this.board.b,this);
+        this.savePlay(this.board.b, this);
         this.clock = null;
         this.counter = null;
         this.last = 0;
-        this.gameOverFlag=false
+        this.gameOverFlag = false
         this.botTurn = true
         this.receivedAnswer = true
         this.botMult = 5
-        this.started = false;      
+        this.started = false;
     }
 
-    changeMode(mode){
+    changeMode(mode) {
         //console.log("Changes to mode ", mode);
-        this.mode=mode;
+        this.mode = mode;
     }
 
-    changeBot1Dif(dif){
+    changeBot1Dif(dif) {
         //console.log("Changes to bot1dif ", dif);
-        this.bot1Dif=dif;
+        this.bot1Dif = dif;
     }
 
-    changeBot2Dif(dif){
+    changeBot2Dif(dif) {
         //console.log("Changes to bot2dif ", dif);
-        this.bot2Dif=dif;
+        this.bot2Dif = dif;
     }
 
-    init(){
+    init() {
         this.camera = new RotateCamera(this.scene.getGameCamera(), [0, 1, 0]);
         this.server.send("reset", null, null, this);
         this.clock.pause = true;
     }
 
-    changeCamera(camera){
+    changeCamera(camera) {
         this.camera.change(camera);
     }
 
 
-    update(time){
+    update(time) {
 
         this.last += time;
         this.camera.orbitCamera(time);
         this.board.update(time);
 
-        if(this.gameOverFlag)
+        if (this.gameOverFlag)
             return
 
 
-        if(this.last< 50000/(this.botMult +1))
+
+        if (this.last < 50000 / (this.botMult + 1))
             return;
 
-        if(this.mode == "Bot vs Player" && this.receivedAnswer && !this.botTurn){
-            this.botTurn=true;
+        if (this.mode == "Bot vs Player" && this.receivedAnswer && !this.botTurn) {
+            this.botTurn = true;
             this.receivedAnswer = false
         }
 
-        if(this.mode == "Bot vs Player" && this.botTurn && this.receivedAnswer){
+        if (this.mode == "Bot vs Player" && this.botTurn && this.receivedAnswer) {
             this.playBot(this)
-            this.botTurn=false;
+            this.botTurn = false;
             this.receivedAnswer = false
         }
 
-        if(this.mode == "Bot vs Bot" )
-        {   
+        if (this.mode == "Bot vs Bot") {
             this.playBot(this)
-            this.last= 0;
+            this.last = 0;
         }
 
 
@@ -90,107 +90,108 @@ class Game{
 
     }
 
-    getChoice(source,dest){
-        let x = dest[0]-source[0], y=dest[1]-source[1];
-        if(x!=0)
-            x= x/Math.abs(x)
-        if(y!=0)
-            y=y/Math.abs(y);
+    getChoice(source, dest) {
+        let x = dest[0] - source[0],
+            y = dest[1] - source[1];
+        if (x != 0)
+            x = x / Math.abs(x)
+        if (y != 0)
+            y = y / Math.abs(y);
 
 
-        let dif = [x,y];
-        let moveMap= new Object();
-        moveMap[[-1,1]] = 9;
-        moveMap[[1,0]] = 2;
-        moveMap[[-1,0]] = 8;
-        moveMap[[0,1]] = 6;
-        moveMap[[0,-1]] = 4;
-        moveMap[[1,-1]] = 1;
-        moveMap[[-1,-1]] = 7;
-        moveMap[[1,1]] = 3;
-        moveMap[[0,0]] = 0;
+        let dif = [x, y];
+        let moveMap = new Object();
+        moveMap[[-1, 1]] = 9;
+        moveMap[[1, 0]] = 2;
+        moveMap[[-1, 0]] = 8;
+        moveMap[[0, 1]] = 6;
+        moveMap[[0, -1]] = 4;
+        moveMap[[1, -1]] = 1;
+        moveMap[[-1, -1]] = 7;
+        moveMap[[1, 1]] = 3;
+        moveMap[[0, 0]] = 0;
         return moveMap[dif];
-        
+
     }
 
-    resetChoices(){
-        this.destination =null;
+    resetChoices() {
+        this.destination = null;
         this.pieceToMove = null;
     }
 
-    assignChoice(row,col){
+    assignChoice(row, col) {
 
-        if(!this.started)
+        if (!this.started)
             return;
 
-        let piece = this.board.getBoardPiece(row,col)
-        if(piece != 0 && piece == this.currentPlayer){
-            this.pieceToMove=[row,col];
+        let piece = this.board.getBoardPiece(row, col)
+        if (piece != 0 && piece == this.currentPlayer) {
+            this.pieceToMove = [row, col];
             this.piece = piece;
             this.board.calculatePossibleMoves(this.pieceToMove);
-        }else if(this.pieceToMove!=null && piece ==0){
-            this.destination=[row,col];
-            let direction = this.getChoice(this.pieceToMove,this.destination);
-            this.move([this.pieceToMove[0]-1,this.pieceToMove[1]-1,direction]);
+        } else if (this.pieceToMove != null && piece == 0) {
+            this.destination = [row, col];
+            let direction = this.getChoice(this.pieceToMove, this.destination);
+            this.move([this.pieceToMove[0] - 1, this.pieceToMove[1] - 1, direction]);
             this.resetChoices();
         }
 
 
     }
 
-    resetGame(){
+    resetGame() {
         this.board.reset(this.defaultBoard);
         this.gameOverFlag = false;
         this.currentPlayer = 2;
         this.botTurn = true
         this.pastBoards = [];
-        this.savePlay(this.board.b,this);
+        this.savePlay(this.board.b, this);
         this.clock.reset();
         this.started = true;
     }
 
-    undo(){
+    undo() {
 
         console.log(this.pastBoards)
 
-        if(this.pastBoards.length<2) return;
+        if (this.pastBoards.length < 2) return;
 
         let toSave = this.pastBoards.pop();
 
         console.log(this.pastBoards)
 
         let lastPlay = this.pastBoards.pop();
-        console.log("last play",lastPlay)
+        console.log("last play", lastPlay)
 
-        console.log(this.board.getDif(this.board.b,lastPlay[0]));
+        console.log(this.board.getDif(this.board.b, lastPlay[0]));
 
         this.board.updateBoard2(lastPlay[0])
- 
-         this.savePlay(this.board.b,this)
+
+        this.savePlay(this.board.b, this)
 
         this.gameOverFlag = false;
 
-        this.currentPlayer =  (this.currentPlayer % 2) + 1  
-        
+        this.currentPlayer = (this.currentPlayer % 2) + 1
+
 
     }
 
-    arrToStr(arr){
+    arrToStr(arr) {
         let me = [];
         me.push("[")
-        for(let i = 0; i < arr.length;i++){
-            if(arr[0].length>1)
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[0].length > 1)
                 me.push("[");
-            else 
+            else
                 me.push("" + arr[i]);
-            for(let j = 0; j < arr[0].length;j++){
-                me.push(""+arr[i][j]);
-                if(j != arr[0].length -1)
+            for (let j = 0; j < arr[0].length; j++) {
+                me.push("" + arr[i][j]);
+                if (j != arr[0].length - 1)
                     me.push(",");
             }
-            if(arr[0].length>1)
+            if (arr[0].length > 1)
                 me.push("]")
-            if(i != arr.length -1)
+            if (i != arr.length - 1)
                 me.push(",")
         }
         me.push("]")
@@ -198,15 +199,15 @@ class Game{
     }
 
 
-    checkDraw(){
+    checkDraw() {
         let board = this.arrToStr(this.board.b);
-        this.server.send("checkDraw("+board+")",this.showDraw, null, this);
+        this.server.send("checkDraw(" + board + ")", this.showDraw, null, this);
     }
 
-    showDraw(){
+    showDraw() {
 
         //NO DRAW SO ADVANCE TO NEXT PLAY
-        if(this.status !== 200){
+        if (this.status !== 200) {
             this.game.nextPlayer();
             return;
         }
@@ -214,15 +215,15 @@ class Game{
         //END GAME AND PRESENT DRAW
     }
 
-    timeUp(){
+    timeUp() {
 
-        if(!this.madeMove)
+        if (!this.madeMove)
             this.nextPlayer();
     }
 
 
-    nextPlayer(){
-        if(this.mode =="Player vs Player"){
+    nextPlayer() {
+        if (this.mode == "Player vs Player") {
             this.camera.waitForMove = false;
         }
 
@@ -234,106 +235,108 @@ class Game{
     }
 
 
-    checkGameOver(game){
+    checkGameOver(game) {
         let board = game.arrToStr(game.board.b);
-        game.server.send("game_over("+board+"," + (game.currentPlayer -1) + "," + game.auxLength+ ")",game.gameOver, null, game);
+        game.server.send("game_over(" + board + "," + (game.currentPlayer - 1) + "," + game.auxLength + ")", game.gameOver, null, game);
     }
 
-    playMovie(){
+    playMovie() {
         this.board.reset(this.defaultBoard);
+        
         this.board.playMovie(this.pastBoards);
     }
 
 
-    gameOver(){
-         //NO GAME OVER SO CHECK FOR DRAW
-         if(this.status !== 200){
+    gameOver() {
+        //NO GAME OVER SO CHECK FOR DRAW
+        if (this.status !== 200) {
             this.game.receivedAnswer = true
             this.game.checkDraw();
             return;
-         }
+        }
         //END GAME AND PRESENT GAME OVER
         console.log("GAME OVER")
         this.game.clock.pause = true;
         this.game.gameOverFlag = true;
+        this.game.board.setGameOverStatus(this.game.currentPlayer);
         this.game.receivedAnswer = true;
         this.game.counter.updateScore(this.game.currentPlayer);
-        this.game.playMovie();
-        
     }
 
 
 
-    move(move){
-        console.log("Piece: ",this.piece)
-        console.log("Current Player: ",this.currentPlayer)
-        console.log("Flag: ",this.gameOverFlag)
-        if(this.piece !== this.currentPlayer || this.gameOverFlag)
+    move(move) {
+        console.log("Piece: ", this.piece)
+        console.log("Current Player: ", this.currentPlayer)
+        console.log("Flag: ", this.gameOverFlag)
+        if (this.piece !== this.currentPlayer || this.gameOverFlag)
             return;
 
         let board = this.arrToStr(this.board.b);
         let strMove = this.arrToStr(move);
-        this.server.send("move("+strMove+","+this.piece+"," +board+  ",NewBoard)",this.applyMove,null,this);
+        this.server.send("move(" + strMove + "," + this.piece + "," + board + ",NewBoard)", this.applyMove, null, this);
         this.madeMove = true;
     }
 
 
 
-    test(){
-        console.log("Resposta" , this.response)
+    test() {
+        console.log("Resposta", this.response)
         this.game.board.updateBoard(this.response);
         this.game.checkGameOver(this.game);
-        this.game.savePlay(JSON.parse(this.response),this.game)
+        this.game.savePlay(JSON.parse(this.response), this.game)
 
 
     }
 
 
-    savePlay(board,game){
+    savePlay(board, game) {
         let newBoard = board;
 
-        let white=[];
+        let white = [];
         game.board.whitePieces.forEach(element => {
-            white.push(new WhitePiece(game.scene,[...element.position],game.board.points));
+            white.push(new WhitePiece(game.scene, [...element.position], game.board.points));
         });
 
-        let black=[];
+        let black = [];
         game.board.blackPieces.forEach(element => {
-            black.push(new BlackPiece(game.scene,[...element.position],game.board.points));
+            black.push(new BlackPiece(game.scene, [...element.position], game.board.points));
         });
 
 
-        game.pastBoards.push([newBoard,white,black]);
+        game.pastBoards.push([newBoard, white, black]);
     }
 
-   
 
-    applyMove(){
+
+    applyMove() {
         this.game.board.updateBoard(this.response);
         this.game.checkGameOver(this.game);
-        this.game.currentPlayer =  (this.game.currentPlayer % 2) + 1
-        this.game.savePlay(JSON.parse(this.response),this.game)
+        this.game.currentPlayer = (this.game.currentPlayer % 2) + 1
+        this.game.savePlay(JSON.parse(this.response), this.game)
 
-        console.log(this.response)
+        //console.log(this.response)
 
-        if(this.game.mode == "Player vs Bot"){
+        if (this.game.mode == "Player vs Bot") {
             this.game.playBot(this.game)
         }
-        
+
     }
 
-    playBot(game){
+    playBot(game) {
         let board = game.arrToStr(game.board.b);
-        let message = "botPlay(" + board + "," + (game.currentPlayer -1) + ",2,OutTab)"
-        game.server.send(message,game.test,null,game);
+        let message = "botPlay(" + board + "," + (game.currentPlayer - 1) + ",2,OutTab)"
+        game.server.send(message, game.test, null, game);
     }
 
 
-    checkEndGame(move){
-        
+    checkEndGame(move) {
+
     }
 
-    display(){
+
+
+    display() {
         this.board.display();
     }
 }

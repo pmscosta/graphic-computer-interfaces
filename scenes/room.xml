@@ -1,7 +1,6 @@
 <yas>
     <scene root="living_room" axis_length="5"/>
     <views default="Close">
-
         <perspective id="Close" near="0.1" far="400" angle="45">
             <from x="4.2" y="3.3" z="8"/>
             <to x="4.2" y="2" z="4"/>
@@ -78,7 +77,7 @@
         <texture id="fuselage_window" file="scenes/images/fuselage_window.png"/>
         <texture id="guns_tubes" file="scenes/images/guns_tubes.jpeg"/>
         <texture id="fire" file="scenes/images/fire.jpg"/>
- 
+        <texture id="joao_won" file="scenes/images/joao_won.jpg"/>
         <texture id="digit_0" file="scenes/images/numbers/digit0.png"/>
         <texture id="digit_1" file="scenes/images/numbers/digit1.png"/>
         <texture id="digit_2" file="scenes/images/numbers/digit2.png"/>

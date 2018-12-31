@@ -9,7 +9,7 @@ class Board extends CGFobject {
         this.marker = new MyRectangle(this.scene, [0, 0.3, 0.3, 0], 0, 1, 0, 1);
         this.green_area = new MyRectangle(this.scene, [0, 0.3, 0.3, 0], 0, 1, 0, 1);
         this.green_areas = null;
-
+        this.currentPlayer = null;
         this.points = points;
 
         this.mat = this.scene.graph.materials['table_wood'];
@@ -23,6 +23,15 @@ class Board extends CGFobject {
 
         this.whitePieces = [new WhitePiece(this.scene, [2, 3], this.points), new WhitePiece(this.scene, [1, 0], this.points), new WhitePiece(this.scene, [3, 0], this.points)];
         this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];
+
+        this.gameOverFlag = false;
+
+        this.won_graphic = new MyRectangle(this.scene, [-1.5, -1.5, 1.5, 1.5]); 
+
+        this.mat_won = new CGFappearance(this.scene);
+        this.mat_won.setShininess(100);
+        this.mat_won.setEmission(1, 1, 1, 1);
+        this.mat_won.setTexture(this.scene.graph.textures['joao_won']);
 
         this.b = this.getBoard();
     };
@@ -139,6 +148,8 @@ class Board extends CGFobject {
     }
 
     updateBoard(newBoard) {
+
+        console.log(this.currentPlayer);
         
         newBoard = JSON.parse(newBoard);
         console.log(this.b,newBoard)
@@ -205,6 +216,10 @@ class Board extends CGFobject {
         }
 
         this.displayPieces();
+
+
+       if(this.gameOverFlag)
+            this.displayWon();
     }
     placePickingSquare() {
 
@@ -241,6 +256,27 @@ class Board extends CGFobject {
         this.scene.popMatrix();
     }
 
+    setGameOverStatus(player){
+        this.gameOverFlag = true;
+
+        console.log('GAME OVER FLAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG', this.gameOverFlag);  
+
+        player--;
+        this.messageAngle = (Math.PI) *player;
+
+        console.log(this.messageAngle);
+    }
+
+    displayWon(){
+        this.scene.pushMatrix();
+            this.scene.translate(4.3, 2.5, 4);
+            this.scene.scale(1, 0.5, 1);
+            this.scene.rotate(this.messageAngle, 0, 1, 0);
+            this.mat_won.apply();
+            this.won_graphic.display();
+        this.scene.popMatrix();
+    }
+
     updateTexCoords(dummy1, dummy2) {
 
     }
@@ -257,6 +293,10 @@ class Board extends CGFobject {
     }
 
     reset(defaultBoard){
+
+        console.log('RECKSEEEEEEEEEEET');
+
+        this.gameOverFlag = false;
         this.b = defaultBoard;
         this.whitePieces = [new WhitePiece(this.scene, [2, 3], this.points), new WhitePiece(this.scene, [1, 0], this.points), new WhitePiece(this.scene, [3, 0], this.points)];
         this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];

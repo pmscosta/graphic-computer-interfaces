@@ -96,6 +96,10 @@ class MyInterface extends CGFinterface {
       this.scene.graph.game.undo();
     }
 
+    this.movie = function(){
+      this.scene.graph.game.playMovie();
+    }
+
     this.BotSpeed=5;
 
 
@@ -104,6 +108,7 @@ class MyInterface extends CGFinterface {
       this.scene.graph.game.botMult = val;
     })
     this.gui.add(this,'undo');
+    this.gui.add(this, 'movie');
   }
 
   addCameraGroup() {

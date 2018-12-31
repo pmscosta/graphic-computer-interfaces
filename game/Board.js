@@ -98,18 +98,19 @@ class Board extends CGFobject {
     }
 
     getDif(oldB,newB){
+
         let state=[]
 
         for(let i = 0; i < oldB.length;i++){
             for(let j = 0; j < oldB[i].length;j++){
                 if(oldB[i][j] != newB[i][j]){
-
                     //if it is different and it is 0 on the old board, it is the new position of the piece
                     if (oldB[i][j] == 0) {
                         state['newCell'] = [j, i];
                     }
                     //else it is the position where that piece was before the movement
                     else {
+                        console.log("[" + j + "," + i + "]  =  "  + oldB[i][j] , this.getPiece(oldB[i][j], [j, i]))
                         state['piece'] = this.getPiece(oldB[i][j], [j, i]);
                     }
                 }
@@ -125,6 +126,23 @@ class Board extends CGFobject {
 
         let state = this.getDif(this.b, newBoard);
 
+        this.b = newBoard;
+
+        state['piece'].addAnimation({
+            first: state['piece'].position,
+            end: state['newCell']
+        });
+
+        this.green_areas = null;
+
+    }
+
+    updateBoard2(newBoard) {
+        
+        console.log(this.b,newBoard)
+
+        let state = this.getDif(this.b, newBoard);
+        console.log(state)
         this.b = newBoard;
 
         state['piece'].addAnimation({

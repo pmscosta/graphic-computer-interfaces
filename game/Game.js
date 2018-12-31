@@ -48,8 +48,6 @@ class Game{
 
     update(time){
 
-
-        console.log(this.botMult)
         this.last += time;
         this.camera.orbitCamera(time);
         this.board.update(time);
@@ -58,7 +56,7 @@ class Game{
             return
 
 
-        if(this.last< 1000/this.botMult)
+        if(this.last< 50000/(this.botMult +1))
             return;
 
         if(this.mode == "Bot vs Player" && this.receivedAnswer && !this.botTurn){
@@ -136,24 +134,27 @@ class Game{
 
     undo(){
 
+        console.log(this.pastBoards)
+
         if(this.pastBoards.length<2) return;
 
         let toSave = this.pastBoards.pop();
+
+        console.log(this.pastBoards)
+
         let lastPlay = this.pastBoards.pop();
+        console.log("last play",lastPlay)
 
-        this.board.b =lastPlay[0];
-        this.board.whitePieces = lastPlay[1];
-        this.board.blackPieces = lastPlay[2];
+        console.log(this.board.getDif(this.board.b,lastPlay[0]));
 
-        this.pastBoards.push(toSave)
+        this.board.updateBoard2(lastPlay[0])
+ 
+         this.savePlay(this.board.b,this)
 
         this.gameOverFlag = false;
 
-        this.currentPlayer =  (this.game.currentPlayer % 2) + 1
+        this.currentPlayer =  (this.currentPlayer % 2) + 1  
         
-        if(this.mode != "Player vs Player"){
-            botPlay(this.game);
-        }
 
     }
 
@@ -206,7 +207,6 @@ class Game{
     nextPlayer(){
         if(this.mode =="Player vs Player"){
             this.camera.waitForMove = false;
-            this.currentPlayer =  (this.game.currentPlayer % 2) + 1
         }
         this.clock.reset();
         this.madeMove = false;
@@ -223,7 +223,7 @@ class Game{
          //NO GAME OVER SO CHECK FOR DRAW
          if(this.status !== 200){
             this.game.receivedAnswer = true
-            this.game.checkDraw();
+            //this.game.checkDraw();
             return;
          }
         //END GAME AND PRESENT GAME OVER
@@ -234,19 +234,16 @@ class Game{
 
 
     move(move){
-        console.log(this.gameOverFlag)
+        console.log("Piece: ",this.piece)
+        console.log("Current Player: ",this.currentPlayer)
+        console.log("Flag: ",this.gameOverFlag)
         if(this.piece !== this.currentPlayer || this.gameOverFlag)
             return;
 
-        console.log("here")
         let board = this.arrToStr(this.board.b);
         let strMove = this.arrToStr(move);
         this.server.send("move("+strMove+","+this.piece+"," +board+  ",NewBoard)",this.applyMove,null,this);
         this.madeMove = true;
-
-
-        
-
     }
 
 

@@ -23,7 +23,8 @@ class MyInterface extends CGFinterface {
 
     this.gui = new dat.GUI();
 
-    // add a group of controls (and open/expand by defult)
+    this.currentFileName = null;
+
 
     this.initKeys();
 
@@ -52,8 +53,8 @@ class MyInterface extends CGFinterface {
     group.close();
   }
 
-  addGameStatus(){
 
+  addGameStatus(){
     var group = this.gui.addFolder('Game Settings');
 
     group.open();
@@ -73,6 +74,16 @@ class MyInterface extends CGFinterface {
     group.add(this, 'SecondBot_BvB', this.botDifficulties).onChange((val)=>{
       this.scene.graph.game.changeBot1Dif(val);
     });;
+
+    this.scenarios = ["office", "room"];
+    this.scenario =  this.currentFileName.split(".")[0];
+
+    group.add(this, 'scenario', this.scenarios).onChange( (val) =>{
+      this.gui.destroy();
+      this.gui = new dat.GUI();
+      this.currentFileName = val + '.xml';
+      this.scene.graph.changeScene(val);
+    });
 
 
     group.close();

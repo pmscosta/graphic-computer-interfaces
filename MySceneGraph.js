@@ -59,9 +59,38 @@ class MySceneGraph {
 
     this.reader.open('scenes/' + filename, this);
 
+
+
+
     this.texturesPile = [];
     this.materialsPile = [];
     this.lengthPile = [];
+  }
+
+  changeScene(file){
+
+    this.scene.setUpdatePeriod(-1);
+
+    this.scene.sceneInited = false;
+
+    this.loadedOk = false;
+
+    this.idRoot = null; // The id of the root element.
+
+    this.nodes = [];
+    this.texturesPile = [];
+    this.materialsPile = [];
+    this.lengthPile = [];
+
+    this.primitives = [];
+    this.components = [];
+    this.game = null;
+    
+     // File reading
+     this.reader = new CGFXMLreader();
+
+    this.reader.open('scenes/' + file + '.xml', this);
+    
   }
 
 
@@ -70,6 +99,7 @@ class MySceneGraph {
    */
   onXMLReady() {
     this.log('XML Loading finished.');
+
     var rootElement = this.reader.xmlDoc.documentElement;
 
     // Here should go the calls for different functions to parse the various
@@ -568,6 +598,9 @@ class MySceneGraph {
    * Displays the scene, processing each node, starting in the root node.
    */
   displayScene() {
+
+    if(!this.loadedOk)
+      return;
     var rootElement = this.components[this.idRoot];
 
     this.iterateChildren(rootElement);

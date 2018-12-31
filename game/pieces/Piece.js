@@ -10,6 +10,11 @@ class Piece extends CGFobject {
         this.piece = new MyCylinder(this.scene, 0.12, 0.12, 0.1, 20, 20);
 
         this.mat = new CGFappearance(this.scene);
+        this.mat.setAmbient(1, 1, 1, 1);
+        this.mat.setDiffuse(1, 1, 1, 1);
+        this.mat.setSpecular(1, 1, 1, 1);
+        this.mat.setEmission(0, 0, 0, 0);
+        this.mat.setShininess(100);
         this.animation = null;
         this.endPosition = null;
         this.parentPoints = points;

@@ -55,6 +55,9 @@ class XMLscene extends CGFscene {
    * Gets all the views from the parser and creates the appropriate cameras.
    */
   getViews() {
+
+    this.cameras = [];
+
     for (var key in this.graph.views) {
 
       if (this.graph.views[key].type == 'perspective') {
@@ -112,10 +115,10 @@ class XMLscene extends CGFscene {
 
     this.setPickEnabled(true);
 
-    this.interface.addCameraGroup();
-
     this.initLights();
-
+    
+    this.interface.addCameraGroup();
+    
     // Adds lights group.
     this.interface.addLightsGroup();
 
@@ -143,6 +146,9 @@ class XMLscene extends CGFscene {
   };
 
   initLights() {
+
+    this.lights = [];
+
     var i = 0;
 
     for (var key in this.graph.lights) {

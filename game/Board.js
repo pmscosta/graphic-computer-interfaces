@@ -25,6 +25,8 @@ class Board extends CGFobject {
         this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];
 
         this.b = this.getBoard();
+
+        this.elapsedTime = 0;
     };
 
 
@@ -118,6 +120,48 @@ class Board extends CGFobject {
         }
         return state;
     }
+
+
+    playMovie(boards){
+        
+        for(let i = 1; i < boards.length; i++){
+
+
+            (function(i, a){
+                setTimeout(function(){
+                    let board = boards[i][0];
+
+                    console.log({board});
+        
+                    a.updateBoard2(board);
+                }, 500 * i);
+            })(i, this);
+
+        }
+    }
+/* 
+    playMovie(boards){
+
+        for(let i = 1; i < boards.length; i++){
+
+            let board = boards[i][0];
+
+            console.log({board});
+
+            this.updateBoard2(board);
+            
+            let previousTime = this.elapsedTime;
+
+            while(1){
+
+                if(this.elapsedTime > previousTime + 1)
+                    break;
+            }
+
+        } 
+
+
+    }*/
 
     updateBoard(newBoard) {
         
@@ -227,6 +271,9 @@ class Board extends CGFobject {
     }
 
     update(time) {
+
+        this.elapsedTime += time/1000;
+
         this.whitePieces.forEach(element => {
             element.update(time);
         });

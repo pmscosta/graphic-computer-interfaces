@@ -20,6 +20,10 @@ class Piece extends CGFobject {
         this.parentPoints = points;
     };
 
+    hasAnimation(){
+        return this.animation == null;
+    }
+
     display() {
 
         this.scene.pushMatrix();

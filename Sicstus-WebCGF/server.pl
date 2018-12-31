@@ -107,6 +107,7 @@ print_header_line(_).
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
+parse_input(reset, 1):- write('hello'), retractall(map(_, _)).
 parse_input(move(Move, Piece, Board, NewBoard),NewBoard):-move(Move, Piece, Board, NewBoard).
 parse_input(checkDraw(Tab), 1):- checkDraw(Tab).
 parse_input(game_over(Board, Player, N), 1):- game_over(Board, Player, N).

@@ -18,8 +18,7 @@ class Game{
         this.gameOverFlag=false
         this.botTurn = true
         this.receivedAnswer = true
-        this.botMult = 5
-        
+        this.botMult = 5        
     }
 
     changeMode(mode){
@@ -39,6 +38,7 @@ class Game{
 
     init(){
         this.camera = new RotateCamera(this.scene.getGameCamera(), [0, 1, 0]);
+        this.server.send("reset", null, null, this);
     }
 
     changeCamera(camera){
@@ -219,6 +219,12 @@ class Game{
         game.server.send("game_over("+board+"," + (game.currentPlayer -1) + "," + game.auxLength+ ")",game.gameOver, null, game);
     }
 
+    playMovie(){
+        this.board.reset(this.defaultBoard);
+        this.board.playMovie(this.pastBoards);
+    }
+
+
     gameOver(){
          //NO GAME OVER SO CHECK FOR DRAW
          if(this.status !== 200){
@@ -229,8 +235,10 @@ class Game{
         //END GAME AND PRESENT GAME OVER
         console.log("GAME OVER")
         this.game.gameOverFlag = true;
-        this.game.receivedAnswer = true
+        this.game.receivedAnswer = true;
+        this.game.playMovie();
     }
+
 
 
     move(move){

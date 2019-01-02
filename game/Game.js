@@ -221,10 +221,14 @@ class Game {
             return;
         }
 
-        console.log("DRAWWWWWWWWWWWWWWW");
 
-        this.game.gameOverFlag = true;
         //END GAME AND PRESENT DRAW
+        console.log("DRAWWWWWWWWWWWWWWW");
+        this.game.clock.pause = true;
+        this.game.gameOverFlag = true;
+        this.game.board.setGameOverStatus(0);
+        this.game.receivedAnswer = true;
+        
     }
 
     timeUp() {
@@ -238,8 +242,6 @@ class Game {
         if (this.mode == "Player vs Player") {
             this.camera.waitForMove = false;
         }
-
-        console.log(this);
 
         this.clock.reset();
         this.madeMove = false;
@@ -284,9 +286,9 @@ class Game {
 
 
     move(move) {
-        console.log("Piece: ", this.piece)
+/*         console.log("Piece: ", this.piece)
         console.log("Current Player: ", this.currentPlayer)
-        console.log("Flag: ", this.gameOverFlag)
+        console.log("Flag: ", this.gameOverFlag) */
         if (this.piece !== this.currentPlayer || this.gameOverFlag)
             return;
 

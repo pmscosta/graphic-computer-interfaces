@@ -84,12 +84,12 @@ class Counter {
         this.scene.scale(0.4, 0.4, 0.4);
 
 
-        this.mats[1].apply();
-        this.player2Display.display();
-
         this.mats[0].apply();
-        this.scene.translate(-2, 0, 0);
         this.player1Display.display();
+
+        this.mats[1].apply();
+        this.scene.translate(-2, 0, 0);
+        this.player2Display.display();
 
 
 

@@ -25,47 +25,56 @@ class Board extends CGFobject {
         this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];
 
         this.gameOverFlag = false;
+        this.draw = false;
 
-        this.won_graphic = new MyRectangle(this.scene, [-1.5, -1.5, 1.5, 1.5]); 
+        this.won_graphic = new MyRectangle(this.scene, [-1.5, -1.5, 1.5, 1.5]);
 
         this.mat_won = new CGFappearance(this.scene);
         this.mat_won.setShininess(100);
         this.mat_won.setEmission(1, 1, 1, 1);
         this.mat_won.setTexture(this.scene.graph.textures['joao_won']);
 
+        this.mat_draw = new CGFappearance(this.scene);
+        this.mat_draw.setShininess(100);
+        this.mat_draw.setEmission(1, 1, 1, 1);
+        this.mat_draw.setTexture(this.scene.graph.textures['draw_game']);
+
         this.b = this.getBoard();
     };
 
 
     findingNeighbors(myArray, i, j) {
-        var rowLimit = myArray.length-1;
-        var columnLimit = myArray[0].length-1;
+        var rowLimit = myArray.length - 1;
+        var columnLimit = myArray[0].length - 1;
 
         let green_areas = [];
-      
-        for(var x = Math.max(0, i-1); x <= Math.min(i+1, rowLimit); x++) {
-          for(var y = Math.max(0, j-1); y <= Math.min(j+1, columnLimit); y++) {
 
-            if((x !== i || y !== j)  && myArray[x][y] == 0) {
-                green_areas.push({x : x, y: y});
+        for (var x = Math.max(0, i - 1); x <= Math.min(i + 1, rowLimit); x++) {
+            for (var y = Math.max(0, j - 1); y <= Math.min(j + 1, columnLimit); y++) {
+
+                if ((x !== i || y !== j) && myArray[x][y] == 0) {
+                    green_areas.push({
+                        x: x,
+                        y: y
+                    });
+                }
             }
-          }
         }
 
         return green_areas;
 
-      }
+    }
 
-      calculatePossibleMoves(selected){
+    calculatePossibleMoves(selected) {
 
         let i = selected[0] - 1;
         let j = selected[1] - 1;
 
-        this.green_areas =  this.findingNeighbors(this.b, i, j);
+        this.green_areas = this.findingNeighbors(this.b, i, j);
     }
 
-    displayGreenAreas(){
-        this.green_areas.forEach(area => { 
+    displayGreenAreas() {
+        this.green_areas.forEach(area => {
             let j = area.x;
             let i = area.y;
 
@@ -106,20 +115,20 @@ class Board extends CGFobject {
         return res;
     }
 
-    getDif(oldB,newB){
+    getDif(oldB, newB) {
 
-        let state=[]
+        let state = []
 
-        for(let i = 0; i < oldB.length;i++){
-            for(let j = 0; j < oldB[i].length;j++){
-                if(oldB[i][j] != newB[i][j]){
+        for (let i = 0; i < oldB.length; i++) {
+            for (let j = 0; j < oldB[i].length; j++) {
+                if (oldB[i][j] != newB[i][j]) {
                     //if it is different and it is 0 on the old board, it is the new position of the piece
                     if (oldB[i][j] == 0) {
                         state['newCell'] = [j, i];
                     }
                     //else it is the position where that piece was before the movement
                     else {
-                       // console.log("[" + j + "," + i + "]  =  "  + oldB[i][j] , this.getPiece(oldB[i][j], [j, i]))
+                        // console.log("[" + j + "," + i + "]  =  "  + oldB[i][j] , this.getPiece(oldB[i][j], [j, i]))
                         state['piece'] = this.getPiece(oldB[i][j], [j, i]);
                     }
                 }
@@ -129,17 +138,19 @@ class Board extends CGFobject {
     }
 
 
-    playMovie(boards){
-        
-        for(let i = 1; i < boards.length; i++){
+    playMovie(boards) {
+
+        for (let i = 1; i < boards.length; i++) {
 
 
-            (function(i, a){
-                setTimeout(function(){
+            (function (i, a) {
+                setTimeout(function () {
                     let board = boards[i][0];
 
-                    console.log({board});
-        
+                    console.log({
+                        board
+                    });
+
                     a.updateBoard2(board);
                 }, 500 * i);
             })(i, this);
@@ -150,9 +161,9 @@ class Board extends CGFobject {
     updateBoard(newBoard) {
 
         console.log(this.currentPlayer);
-        
+
         newBoard = JSON.parse(newBoard);
-        console.log(this.b,newBoard)
+        console.log(this.b, newBoard)
 
         let state = this.getDif(this.b, newBoard);
 
@@ -168,8 +179,8 @@ class Board extends CGFobject {
     }
 
     updateBoard2(newBoard) {
-        
-       // console.log(this.b,newBoard)
+
+        // console.log(this.b,newBoard)
 
         let state = this.getDif(this.b, newBoard);
         //console.log(state)
@@ -211,15 +222,15 @@ class Board extends CGFobject {
             this.placePickingSquare();
         }
 
-        if(this.green_areas != null){
+        if (this.green_areas != null) {
             this.displayGreenAreas();
         }
 
         this.displayPieces();
 
 
-       if(this.gameOverFlag)
-            this.displayWon();
+        if (this.gameOverFlag || this.draw)
+            this.displayFinal();
     }
     placePickingSquare() {
 
@@ -241,7 +252,7 @@ class Board extends CGFobject {
     displayPieces() {
 
         this.scene.pushMatrix();
-        
+
         this.scene.translate(this.points[0], 0, this.points[2]);
 
         this.whitePieces.forEach(element => {
@@ -256,24 +267,36 @@ class Board extends CGFobject {
         this.scene.popMatrix();
     }
 
-    setGameOverStatus(player){
-        this.gameOverFlag = true;
+    setGameOverStatus(player) {
 
-        console.log('GAME OVER FLAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG', this.gameOverFlag);  
 
-        player--;
-        this.messageAngle = (Math.PI) *player;
+        console.log(player);
 
-        console.log(this.messageAngle);
+        if (player != 0)
+            this.gameOverFlag = true;
+        else
+            this.draw = true;
+
+        //console.log('GAME OVER FLAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG', this.gameOverFlag);  
+
+        this.messageAngle = (player % 2) * Math.PI;
     }
 
-    displayWon(){
+    displayFinal() {
         this.scene.pushMatrix();
-            this.scene.translate(4.3, 2.5, 4);
-            this.scene.scale(1, 0.5, 1);
-            this.scene.rotate(this.messageAngle, 0, 1, 0);
+        this.scene.translate(this.points[0] + 2.7, this.points[1] + 1.3, this.points[2] + 2.5)
+        this.scene.scale(1, 0.5, 1);
+        this.scene.rotate(this.messageAngle, 0, 1, 0);
+        if (this.gameOverFlag) {
             this.mat_won.apply();
             this.won_graphic.display();
+        } else if (this.draw) {
+            //SHOW FOR BOTH PLAYERS
+            this.mat_draw.apply();
+            this.won_graphic.display();
+            this.scene.rotate(Math.PI, 0, 1, 0);
+            this.won_graphic.display();
+        }
         this.scene.popMatrix();
     }
 
@@ -292,9 +315,11 @@ class Board extends CGFobject {
         });
     }
 
-    reset(defaultBoard){
+    reset(defaultBoard) {
 
         this.gameOverFlag = false;
+        this.draw = false;
+        this.green_areas = null;
         this.b = defaultBoard;
         this.whitePieces = [new WhitePiece(this.scene, [2, 3], this.points), new WhitePiece(this.scene, [1, 0], this.points), new WhitePiece(this.scene, [3, 0], this.points)];
         this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];

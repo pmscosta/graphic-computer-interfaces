@@ -78,6 +78,7 @@
         <texture id="guns_tubes" file="scenes/images/guns_tubes.jpeg"/>
         <texture id="fire" file="scenes/images/fire.jpg"/>
         <texture id="joao_won" file="scenes/images/joao_won.jpg"/>
+        <texture id="draw_game" file="scenes/images/draw.png"/>
         <texture id="digit_0" file="scenes/images/numbers/digit0.png"/>
         <texture id="digit_1" file="scenes/images/numbers/digit1.png"/>
         <texture id="digit_2" file="scenes/images/numbers/digit2.png"/>

@@ -303,6 +303,17 @@ move_and_evaluate(Board, Player, BestMove):-
 			===================================
  **/
 
+
+
+undo(Tab):-
+	flatten2(Tab, List),
+	retract(map(List, N)),
+	%write(N),
+	NewN is N - 1, 
+	%write(NewN),
+	assertz( map(List, NewN)).
+
+
 /**
  * checkDraw(+Tab).
  * Checks if a draw occurs
@@ -311,14 +322,19 @@ move_and_evaluate(Board, Player, BestMove):-
 checkDraw(Tab):-
 
 	flatten2(Tab, List),
-
 	(
 		retract( map(List,N) ),
+		number(N), N > 0, 
+		%write('Old N: '), write(N), nl,
 		NewN is N + 1,
-		assertz( map(List, NewN) );
+		%write('New N: '), write(NewN), nl,
+		assertz( map(List, NewN) )
+	;
 		NewN is 1, 
+		%write('New N Bad: '), write(NewN), nl,
 		assertz(map(List, NewN))
-	), 
+	)
+	, !, 
 	NewN > 2.
 	
 

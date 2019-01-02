@@ -294,8 +294,6 @@ class Board extends CGFobject {
 
     reset(defaultBoard){
 
-        console.log('RECKSEEEEEEEEEEET');
-
         this.gameOverFlag = false;
         this.b = defaultBoard;
         this.whitePieces = [new WhitePiece(this.scene, [2, 3], this.points), new WhitePiece(this.scene, [1, 0], this.points), new WhitePiece(this.scene, [3, 0], this.points)];

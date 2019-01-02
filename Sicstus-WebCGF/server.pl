@@ -110,6 +110,7 @@ parse_input(quit, goodbye).
 parse_input(reset, 1):- write('hello'), retractall(map(_, _)).
 parse_input(move(Move, Piece, Board, NewBoard),NewBoard):-move(Move, Piece, Board, NewBoard).
 parse_input(checkDraw(Tab), 1):- checkDraw(Tab).
+parse_input(undo(Tab), 1):- undo(Tab).
 parse_input(game_over(Board, Player, N), 1):- game_over(Board, Player, N).
 
 parse_input(botPlay(Tab,Player,1,OutTab),OutTab):-botPlay(Tab,Player,1,OutTab).

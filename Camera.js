@@ -39,6 +39,12 @@ class RotateCamera {
 
     }
 
+    reset(){
+        let dir = this.camera.position[2] - this.camera.target[2];
+        
+        if (dir < 0)
+            this.camera.orbit(this.axis, this.angle);
+    }
 
 
     orbitCamera(time) {

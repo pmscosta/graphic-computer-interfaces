@@ -140,9 +140,11 @@ class Game {
     }
 
     resetGame() {
+        this.server.send("reset", null, null, this);
         this.board.reset(this.defaultBoard);
         this.gameOverFlag = false;
         this.currentPlayer = 2;
+        this.camera.reset();
         this.botTurn = true
         this.pastBoards = [];
         this.savePlay(this.board.b, this);
@@ -151,6 +153,10 @@ class Game {
     }
 
     undo() {
+
+        let board = this.arrToStr(this.board.b);
+
+        this.server.send("undo(" + board +")", null, null, this);
 
         console.log(this.pastBoards)
 
@@ -171,7 +177,10 @@ class Game {
 
         this.gameOverFlag = false;
 
-        this.currentPlayer = (this.currentPlayer % 2) + 1
+
+        this.nextPlayer();
+
+        //this.currentPlayer = (this.currentPlayer % 2) + 1
 
 
     }
@@ -211,6 +220,9 @@ class Game {
             this.game.nextPlayer();
             return;
         }
+
+        console.log("DRAWWWWWWWWWWWWWWW");
+
         this.game.gameOverFlag = true;
         //END GAME AND PRESENT DRAW
     }
@@ -231,6 +243,8 @@ class Game {
 
         this.clock.reset();
         this.madeMove = false;
+        this.currentPlayer = (this.currentPlayer % 2) + 1
+
 
     }
 
@@ -241,6 +255,10 @@ class Game {
     }
 
     playMovie() {
+
+        if(!this.gameOverFlag)
+            return;
+
         this.board.reset(this.defaultBoard);
         
         this.board.playMovie(this.pastBoards);
@@ -312,7 +330,7 @@ class Game {
     applyMove() {
         this.game.board.updateBoard(this.response);
         this.game.checkGameOver(this.game);
-        this.game.currentPlayer = (this.game.currentPlayer % 2) + 1
+        //this.game.currentPlayer = (this.game.currentPlayer % 2) + 1
         this.game.savePlay(JSON.parse(this.response), this.game)
 
         //console.log(this.response)

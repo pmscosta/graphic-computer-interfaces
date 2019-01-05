@@ -70,7 +70,6 @@ class Game {
 
 
     update(time) {
-        console.log(this.receivedAnswer)
         this.last += time;
         this.camera.orbitCamera(time);
         this.board.update(time);

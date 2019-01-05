@@ -151,7 +151,7 @@ class Board extends CGFobject {
                         board
                     });
 
-                    a.updateBoard2(board);
+                    a.updateBoardUndo(board);
                 }, 500 * i);
             })(i, this);
 
@@ -160,12 +160,12 @@ class Board extends CGFobject {
 
     updateBoard(newBoard) {
 
-        console.log(this.currentPlayer);
-
         newBoard = JSON.parse(newBoard);
-        console.log(this.b, newBoard)
-
+       // console.log(this.b,newBoard)
         let state = this.getDif(this.b, newBoard);
+
+        if(state == null)
+            state = this.getDif(newBoard,this.b)
 
         this.b = newBoard;
 
@@ -178,12 +178,14 @@ class Board extends CGFobject {
 
     }
 
-    updateBoard2(newBoard) {
-
-        // console.log(this.b,newBoard)
+    updateBoardUndo(newBoard) {
+    
 
         let state = this.getDif(this.b, newBoard);
-        //console.log(state)
+
+        if(state == null)
+            state = this.getDif(newBoard,this.b)
+
         this.b = newBoard;
 
         state['piece'].addAnimation({

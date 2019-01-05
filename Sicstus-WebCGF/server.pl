@@ -113,9 +113,7 @@ parse_input(checkDraw(Tab), 1):- checkDraw(Tab).
 parse_input(undo(Tab), 1):- undo(Tab).
 parse_input(game_over(Board, Player, N), 1):- game_over(Board, Player, N).
 
-parse_input(botPlay(Tab,Player,1,OutTab),OutTab):-botPlay(Tab,Player,1,OutTab).
-parse_input(botPlay(Tab,Player,2,OutTab),OutTab):-botPlay(Tab,Player,2,OutTab).
-parse_input(minimax(Tab, Player, 1, 2, _, OutTab),OutTab):-minimax(Tab, Player, 1, 2, _, OutTab).
+parse_input(botPlay(Tab,Player,Level,OutTab),OutTab):-botPlay(Tab,Player,Level,OutTab).
 
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).

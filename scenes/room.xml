@@ -101,7 +101,7 @@
         <texture id="table_glass" file="scenes/images/table_glass.jpg"/>
         <texture id="tv_bad" file="scenes/images/tv_bad.jpg"/>
         <texture id="black" file="scenes/images/black.jpg"/>
-
+     <texture id="wool" file="scenes/images/wool.jpg"/>
         <texture id="brick_wall" file="scenes/images/brick_wall2.jpg"/>
         
 
@@ -609,119 +609,6 @@
             </children>
         </component>
 
-
-
-
-        <component id="chair_top">
-            <transformation>
-                <translate x="0" y="1" z="0"/>
-                <scale x="1" y="1" z="0.1"/>
-                <translate x="0.5" y="0.5" z="0.5"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="leather" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="cube"/>
-            </children>
-        </component>
-
-        <component id="chair_right_bar">
-            <transformation>
-                <translate x="0.925" y="0.9" z="0"/>
-                <scale x="0.1" y="1" z="0.1"/>
-                <translate x="0.5" y="0.5" z="0.3"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="inherit" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="cube"/>
-            </children>
-        </component>
-
-        <component id="chair_left_bar">
-            <transformation>
-                <translate x="-0.025" y="0.9" z="0"/>
-                <scale x="0.1" y="1" z="0.1"/>
-                <translate x="0.5" y="0.5" z="0.3"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="inherit" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="cube"/>
-            </children>
-        </component>
-
-        <component id="chair_bottom">
-            <transformation>
-                <translate x="-0.4" y="0" z="-0.8"/>
-                <scale x="0.3" y="0.5" z="0.4"/>
-                <translate x="3" y="0" z="3"/>
-                <scale x="0.7" y="0.5" z="0.7"/>
-            </transformation>
-
-            <materials>
-                <material id ="m1"/>
-            </materials>
-
-            <texture id="inherit" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="table"/>
-            </children>
-        </component>
-
-        <component id="chair">
-            <transformation>
-                <scale x="1.1" y="1.2" z="1.1"/>
-                <translate x="3.4" y="0" z="2"/>
-            </transformation>
-
-            <materials>
-                <material id ="table_wood"/>
-            </materials>
-
-            <texture id="def_text" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="chair_right_bar"/>
-                <componentref id="chair_left_bar"/>
-                <componentref id="chair_bottom"/>
-                <componentref id="chair_top"/>
-            </children>
-        </component>
-
-        <component id="other_chair">
-            <transformation>
-                <translate x="8.5" y="0" z="8"/>
-                <rotate axis="y" angle="180"/>
-            </transformation>
-
-            <materials>
-                <material id ="table_wood"/>
-            </materials>
-
-            <texture id="none"/>
-
-            <children>
-                <componentref id="chair" />
-            </children>
-        </component>
-
         <component id="second_amp">
             <transformation>
                 <translate x="6.1" y="0" z="0" />
@@ -1044,6 +931,45 @@
 
         </component>
 
+        <component id="puff">
+            <transformation>
+                
+                <translate x="4.2" y="0" z="6.5"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="0.8" y="0.8" z="0.1"/>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="wool" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="cylinder"/>
+            </children>
+        </component>
+
+
+        <component id="puff2">
+            <transformation>
+                
+                <translate x="4.2" y="0" z="1.5"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="0.8" y="0.8" z="0.1"/>
+            </transformation>
+
+            <materials>
+                <material id ="m1"/>
+            </materials>
+
+            <texture id="wool" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="cylinder"/>
+            </children>
+        </component>
+
 
         <component id="living_room">
             <transformation>
@@ -1067,6 +993,8 @@
                 <componentref id="second_amp"/>
                 <componentref id="back_wall"/>
                 <componentref id="fighter_jet"/>
+                <componentref id="puff"/>
+                 <componentref id="puff2"/>
             </children>
         </component>
 

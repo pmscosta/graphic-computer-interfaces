@@ -65,7 +65,7 @@ class MyInterface extends CGFinterface {
       this.scene.graph.game.changeMode(val);
     });;
 
-    this.botDifficulties = ["Random","Greedy","Minimax"]
+    this.botDifficulties = ["Random","Greedy"]
     this.FirstBot = "Random";
     group.add(this, 'FirstBot', this.botDifficulties).onChange((val)=>{
       this.scene.graph.game.changeBot1Dif(val);

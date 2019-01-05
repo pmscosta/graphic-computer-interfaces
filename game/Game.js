@@ -36,9 +36,6 @@ class Game{
             case "Greeedy":
                 this.bot1Dif = 2
                 break;
-            case "Minimax":
-                this.bot1Dif = 3
-                break;
         }
     }
 
@@ -49,9 +46,6 @@ class Game{
                 break;
             case "Greeedy":
                 this.bot2Dif = 2
-                break;
-            case "Minimax":
-                this.bot2Dif = 3
                 break;
         }
     }

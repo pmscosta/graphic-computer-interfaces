@@ -39,6 +39,8 @@ class Clock{
         
         this.pause = false;
 
+        this.timeout = 15
+
     }
 
     update(time){
@@ -46,7 +48,7 @@ class Clock{
         if(this.pause)
             return;
 
-        if(this.timeElapsed > 200){
+        if(this.timeElapsed > this.timeout){
             this.game.timeUp();
             this.reset();
         }

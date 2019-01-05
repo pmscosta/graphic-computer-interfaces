@@ -85,6 +85,12 @@ class MyInterface extends CGFinterface {
       this.scene.graph.changeScene(val);
     });
 
+    this.Maximum_Round_Time = 15
+    group.add(this, 'Maximum_Round_Time', 1, 200).onChange((val)=>{
+      this.scene.graph.game.clock.elapsedTime = 0;
+      this.scene.graph.game.clock.timeout = val;
+    })
+
 
     group.close();
 

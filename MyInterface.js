@@ -66,13 +66,13 @@ class MyInterface extends CGFinterface {
     });;
 
     this.botDifficulties = ["Random","Greedy","Minimax"]
-    this.FirstBot = "Minimax";
+    this.FirstBot = "Random";
     group.add(this, 'FirstBot', this.botDifficulties).onChange((val)=>{
       this.scene.graph.game.changeBot1Dif(val);
     });
-    this.SecondBot_BvB = "Minimax";
+    this.SecondBot_BvB = "Greedy";
     group.add(this, 'SecondBot_BvB', this.botDifficulties).onChange((val)=>{
-      this.scene.graph.game.changeBot1Dif(val);
+      this.scene.graph.game.changeBot2Dif(val);
     });;
 
     this.scenarios = ["office", "room"];

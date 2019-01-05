@@ -9,8 +9,8 @@ class Game{
         this.currentPlayer = 2;
         this.auxLength = this.board.b.length;
         this.mode = "Player vs Player";
-        this.bot1Dif = "Minimax";
-        this.bot2Dif = "Minimax";
+        this.bot1Dif = "1";
+        this.bot2Dif = "2";
         this.pastBoards = [];
         this.savePlay(this.board.b,this);
         this.clock = null;
@@ -23,18 +23,37 @@ class Game{
     }
 
     changeMode(mode){
-        //console.log("Changes to mode ", mode);
+        
         this.mode=mode;
     }
 
     changeBot1Dif(dif){
-        //console.log("Changes to bot1dif ", dif);
-        this.bot1Dif=dif;
+        
+        switch(dif){
+            case "Random":
+                this.bot1Dif = 1
+                break;
+            case "Greeedy":
+                this.bot1Dif = 2
+                break;
+            case "Minimax":
+                this.bot1Dif = 3
+                break;
+        }
     }
 
     changeBot2Dif(dif){
-        //console.log("Changes to bot2dif ", dif);
-        this.bot2Dif=dif;
+        switch(dif){
+            case "Random":
+                this.bot2Dif = 1
+                break;
+            case "Greeedy":
+                this.bot2Dif = 2
+                break;
+            case "Minimax":
+                this.bot2Dif = 3
+                break;
+        }
     }
 
     init(){
@@ -47,7 +66,7 @@ class Game{
 
 
     update(time){
-
+        console.log(this.bot1Dif,this.bot2Dif)
         this.last += time;
         this.camera.orbitCamera(time);
         this.board.update(time);
@@ -56,7 +75,7 @@ class Game{
             return
 
 
-        if(this.last< 50000/(this.botMult +1))
+        if(this.last< 5000/(this.botMult +1))
             return;
 
         if(this.mode == "Bot vs Player" && this.receivedAnswer && !this.botTurn){
@@ -129,7 +148,11 @@ class Game{
         this.board.reset(this.defaultBoard);
         this.gameOverFlag = false;
         this.currentPlayer = 2;
-        this.botTurn = true
+        if(this.mode == "Bot vs Player")
+        {
+            this.botTurn = true
+            this.receivedAnswer = true;
+        }
     }
 
     undo(){
@@ -138,7 +161,7 @@ class Game{
 
         if(this.pastBoards.length<2) return;
 
-        let toSave = this.pastBoards.pop();
+        this.pastBoards.pop();
 
         console.log(this.pastBoards)
 
@@ -147,7 +170,7 @@ class Game{
 
         console.log(this.board.getDif(this.board.b,lastPlay[0]));
 
-        this.board.updateBoard2(lastPlay[0])
+        this.board.updateBoardUndo(lastPlay[0])
  
          this.savePlay(this.board.b,this)
 
@@ -234,9 +257,6 @@ class Game{
 
 
     move(move){
-        console.log("Piece: ",this.piece)
-        console.log("Current Player: ",this.currentPlayer)
-        console.log("Flag: ",this.gameOverFlag)
         if(this.piece !== this.currentPlayer || this.gameOverFlag)
             return;
 
@@ -286,7 +306,6 @@ class Game{
         this.game.currentPlayer =  (this.game.currentPlayer % 2) + 1
         this.game.savePlay(JSON.parse(this.response),this.game)
 
-        console.log(this.response)
 
         if(this.game.mode == "Player vs Bot"){
             this.game.playBot(this.game)
@@ -296,7 +315,13 @@ class Game{
 
     playBot(game){
         let board = game.arrToStr(game.board.b);
-        let message = "botPlay(" + board + "," + (game.currentPlayer -1) + ",2,OutTab)"
+        let dif;
+        if(game.currentPlayer == 2)
+            dif = game.bot2Dif
+        else 
+            dif = game.bot1Dif
+
+        let message = "botPlay(" + board + "," + (game.currentPlayer-1) + "," + dif+",OutTab)"
         game.server.send(message,game.test,null,game);
     }
 

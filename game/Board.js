@@ -122,7 +122,6 @@ class Board extends CGFobject {
     updateBoard(newBoard) {
         
         newBoard = JSON.parse(newBoard);
-        console.log(this.b,newBoard)
 
         let state = this.getDif(this.b, newBoard);
 
@@ -137,12 +136,10 @@ class Board extends CGFobject {
 
     }
 
-    updateBoard2(newBoard) {
-        
-        console.log(this.b,newBoard)
+    updateBoardUndo(newBoard) {
+    
 
         let state = this.getDif(this.b, newBoard);
-        console.log(state)
         this.b = newBoard;
 
         state['piece'].addAnimation({

@@ -39,6 +39,11 @@ class Board extends CGFobject {
         this.mat_draw.setEmission(1, 1, 1, 1);
         this.mat_draw.setTexture(this.scene.graph.textures['draw_game']);
 
+        this.mat_lost = new CGFappearance(this.scene);
+        this.mat_lost.setShininess(100);
+        this.mat_lost.setEmission(1, 1, 1, 1);
+        this.mat_lost.setTexture(this.scene.graph.textures['game_over']);
+
         this.b = this.getBoard();
     };
 
@@ -279,7 +284,6 @@ class Board extends CGFobject {
         else
             this.draw = true;
 
-        //console.log('GAME OVER FLAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG', this.gameOverFlag);  
 
         this.messageAngle = (player % 2) * Math.PI;
     }
@@ -291,6 +295,10 @@ class Board extends CGFobject {
         this.scene.rotate(this.messageAngle, 0, 1, 0);
         if (this.gameOverFlag) {
             this.mat_won.apply();
+            this.won_graphic.display();
+
+            this.scene.rotate(this.messageAngle, 0, 1, 0);
+            this.mat_lost.apply();
             this.won_graphic.display();
         } else if (this.draw) {
             //SHOW FOR BOTH PLAYERS

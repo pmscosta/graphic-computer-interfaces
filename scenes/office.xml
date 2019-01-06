@@ -84,6 +84,7 @@
         <texture id="cara_duarte" file="scenes/images/duarte.jpg"/>
         <texture id="island" file="scenes/images/island.jpg"/>
         <texture id="joao_won" file="scenes/images/joao_won.jpg"/>
+        <texture id="game_over" file="scenes/images/game_over.png"/>
         <texture id="draw_game" file="scenes/images/draw.png"/>
         <texture id="island-height" file="scenes/images/island-height.jpg"/>
         <texture id="water" file="scenes/images/water.jpg"/>

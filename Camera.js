@@ -46,6 +46,10 @@ class RotateCamera {
             this.camera.orbit(this.axis, this.angle);
     }
 
+    changePlayer(){
+        this.camera.orbit(this.axis, this.angle);
+    }
+
 
     orbitCamera(time) {
 

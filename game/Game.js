@@ -32,18 +32,30 @@ class Game {
     changeMode(mode){
         
         this.mode=mode;
+
+      //  this.resetGame();
+
+
+       
+
     }
 
     changeBot1Dif(dif){
+
+        console.log(dif);
         
         switch(dif){
             case "Random":
                 this.bot1Dif = 1
                 break;
-            case "Greeedy":
+            case "Greedy":
                 this.bot1Dif = 2
                 break;
         }
+
+        console.log(this.bot1Dif);
+
+       // this.resetGame();
     }
 
     changeBot2Dif(dif){
@@ -51,17 +63,19 @@ class Game {
             case "Random":
                 this.bot2Dif = 1
                 break;
-            case "Greeedy":
+            case "Greedy":
                 this.bot2Dif = 2
                 break;
         }
+
+       // this.resetGame();
     }
 
     init() {
         this.camera = new RotateCamera(this.scene.getGameCamera(), [0, 1, 0]);
         this.server.send("reset", null, null, this);
         this.clock.pause = true;
-        this.resetGame();
+        //this.resetGame();
     }
 
     changeCamera(camera) {
@@ -152,6 +166,7 @@ class Game {
         
         if(this.mode == "Bot vs Player")
         {
+            this.camera.changePlayer();
             this.botTurn = true
             this.playBot(this)
         }else if(this.mode == "Player vs Bot"){
@@ -315,6 +330,8 @@ class Game {
         console.log("GAME OVER")
         this.game.clock.pause = true;
         this.game.gameOverFlag = true;
+
+        console.log(this.game.botTurn);
         this.game.board.setGameOverStatus(this.game.currentPlayer);
         this.game.receivedAnswer = true;
         this.game.counter.updateScore(this.game.currentPlayer);
@@ -384,6 +401,8 @@ class Game {
             dif = game.bot1Dif
 
         let message = "botPlay(" + board + "," + (game.currentPlayer-1) + "," + dif+",OutTab)"
+
+        console.log(dif);
         game.server.send(message,game.test,null,game);
     }
 

@@ -350,7 +350,7 @@ class Board extends CGFobject {
             this.mat_won.apply();
             this.won_graphic.display();
 
-            this.scene.rotate(this.messageAngle, 0, 1, 0);
+            this.scene.rotate(Math.PI, 0, 1, 0);
             this.mat_lost.apply();
             this.won_graphic.display();
         } else if (this.draw) {

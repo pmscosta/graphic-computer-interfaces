@@ -3,7 +3,7 @@ class RotateCamera {
     constructor(camera, axis) {
 
         this.camera = camera;
-
+        
         this.from = this.camera.position.slice(0);
 
         this.to = this.camera.target.slice(0);
@@ -40,6 +40,9 @@ class RotateCamera {
     }
 
     reset(){
+
+       this.side = 0;
+
         let dir = this.camera.position[2] - this.camera.target[2];
         
         if (dir < 0)

@@ -80,12 +80,14 @@
         <texture id="leather" file="scenes/images/leather.jpeg"/>
         <texture id="def_text" file="scenes/images/default-texture.png"/>
         <texture id="starry_night" file="scenes/images/starry_night.jpg"/>
+        <texture id="dark_wood" file="scenes/images/dark_wood.jpg"/>
         <texture id="wood_grain" file="scenes/images/wood_grain.png"/>
         <texture id="cara_duarte" file="scenes/images/duarte.jpg"/>
         <texture id="island" file="scenes/images/island.jpg"/>
         <texture id="joao_won" file="scenes/images/joao_won.jpg"/>
         <texture id="game_over" file="scenes/images/game_over.png"/>
         <texture id="draw_game" file="scenes/images/draw.png"/>
+        <texture id="black" file="scenes/images/black.jpg"/>
         <texture id="island-height" file="scenes/images/island-height.jpg"/>
         <texture id="water" file="scenes/images/water.jpg"/>
         <texture id="water-height" file="scenes/images/water-height.jpg"/>
@@ -198,15 +200,15 @@
     <primitives>
 
         <primitive id="board1">
-            <board x="1.7" y="1.91" z="1.5"/>
+            <board x="1.6" y="1.91" z="1.5"/>
         </primitive>
 
         <primitive id= "clock">
-            <clock  x="1.7" y="1.91" z="1.5"/>
+            <clock  x="1.6" y="1.91" z="1.5"/>
         </primitive>
 
         <primitive id= "counter">
-            <counter  x="1.7" y="1.91" z="1.5"/>
+            <counter  x="1.6" y="1.91" z="1.5"/>
         </primitive>
 
         <primitive id="square">

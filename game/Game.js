@@ -41,9 +41,6 @@ class Game {
     }
 
     changeBot1Dif(dif){
-
-        console.log(dif);
-        
         switch(dif){
             case "Random":
                 this.bot1Dif = 1
@@ -52,8 +49,6 @@ class Game {
                 this.bot1Dif = 2
                 break;
         }
-
-        console.log(this.bot1Dif);
 
        // this.resetGame();
     }
@@ -184,26 +179,17 @@ class Game {
 
         this.server.send("undo(" + board +")", null, null, this);
 
-        console.log(this.pastBoards)
-
         if (this.pastBoards.length < 2) return;
 
         this.pastBoards.pop();
 
-        console.log(this.pastBoards)
-
         let lastPlay = this.pastBoards.pop();
-        console.log("last play", lastPlay)
-
-        console.log(this.board.getDif(this.board.b, lastPlay[0]));
 
         this.board.updateBoardUndo(lastPlay[0])
  
          this.savePlay(this.board.b,this)
 
         this.gameOverFlag = false;
-
-        console.log("here")
 
         if(this.mode != "Player vs Player")
         {
@@ -257,7 +243,7 @@ class Game {
 
 
         //END GAME AND PRESENT DRAW
-        console.log("DRAWWWWWWWWWWWWWWW");
+        console.log("DRAW");
         this.game.clock.pause = true;
         this.game.gameOverFlag = true;
         this.game.board.setGameOverStatus(0);
@@ -349,7 +335,6 @@ class Game {
 
 
     test() {
-        console.log("Resposta", this.response)
         this.game.board.updateBoard(this.response);
 
         this.game.savePlay(JSON.parse(this.response), this.game)
@@ -400,7 +385,6 @@ class Game {
 
         let message = "botPlay(" + board + "," + (game.currentPlayer-1) + "," + dif+",OutTab)"
 
-        console.log(dif);
         game.server.send(message,game.test,null,game);
     }
 

@@ -8,9 +8,24 @@ class Board extends CGFobject {
         this.plane = new Plane(this.scene, 20, 20);
         this.marker = new MyRectangle(this.scene, [0, 0.3, 0.3, 0], 0, 1, 0, 1);
         this.green_area = new MyRectangle(this.scene, [0, 0.3, 0.3, 0], 0, 1, 0, 1);
+        this.frame = new MyCylinder(this.scene,Math.sqrt(2) / 4,Math.sqrt(2) / 4,1,4,1);
         this.green_areas = null;
         this.currentPlayer = null;
         this.points = points;
+
+        this.whitePieces = [new WhitePiece(this.scene, [2, 3], this.points), new WhitePiece(this.scene, [1, 0], this.points), new WhitePiece(this.scene, [3, 0], this.points)];
+        this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];
+
+        this.gameOverFlag = false;
+        this.draw = false;
+    
+        this.createMaterials();
+
+        this.b = this.getBoard();
+    };
+
+
+    createMaterials(){
 
         this.mat = this.scene.graph.materials['table_wood'];
         this.greenMat = new CGFappearance(this.scene);
@@ -21,11 +36,6 @@ class Board extends CGFobject {
         this.greenMat.setEmission(0, 0, 0, 0);
         this.greenMat.setShininess(0.1);
 
-        this.whitePieces = [new WhitePiece(this.scene, [2, 3], this.points), new WhitePiece(this.scene, [1, 0], this.points), new WhitePiece(this.scene, [3, 0], this.points)];
-        this.blackPieces = [new BlackPiece(this.scene, [2, 1], this.points), new BlackPiece(this.scene, [1, 4], this.points), new BlackPiece(this.scene, [3, 4], this.points)];
-
-        this.gameOverFlag = false;
-        this.draw = false;
 
         this.won_graphic = new MyRectangle(this.scene, [-1.5, -1.5, 1.5, 1.5]);
 
@@ -44,8 +54,19 @@ class Board extends CGFobject {
         this.mat_lost.setEmission(1, 1, 1, 1);
         this.mat_lost.setTexture(this.scene.graph.textures['game_over']);
 
-        this.b = this.getBoard();
-    };
+        this.blackMat = new CGFappearance(this.scene);
+        this.blackMat.setAmbient(1, 1, 1, 1);
+        this.blackMat.setDiffuse(1, 1, 1, 1);
+        this.blackMat.setSpecular(1, 1, 1, 1);
+        this.blackMat.setEmission(0, 0, 0, 0);
+        this.blackMat.setShininess(100);
+        this.blackMat.setTexture(this.scene.graph.textures['dark_wood']);
+
+
+        this.frame.updateTexCoords(1, 1);
+
+
+    }
 
 
     findingNeighbors(myArray, i, j) {
@@ -133,7 +154,6 @@ class Board extends CGFobject {
                     }
                     //else it is the position where that piece was before the movement
                     else {
-                        // console.log("[" + j + "," + i + "]  =  "  + oldB[i][j] , this.getPiece(oldB[i][j], [j, i]))
                         state['piece'] = this.getPiece(oldB[i][j], [j, i]);
                     }
                 }
@@ -152,10 +172,6 @@ class Board extends CGFobject {
                 setTimeout(function () {
                     let board = boards[i][0];
 
-                    console.log({
-                        board
-                    });
-
                     a.updateBoardUndo(board);
                 }, 500 * i);
             })(i, this);
@@ -166,7 +182,7 @@ class Board extends CGFobject {
     updateBoard(newBoard) {
 
         newBoard = JSON.parse(newBoard);
-       // console.log(this.b,newBoard)
+
         let state = this.getDif(this.b, newBoard);
 
         if(state == null)
@@ -217,24 +233,64 @@ class Board extends CGFobject {
         return b;
     }
 
+
+    displayFrame(){
+
+        this.blackMat.apply();
+        
+        this.scene.pushMatrix();
+            this.scene.scale(0.3, 0.2, 2.296);
+            this.scene.translate(this.points[0] * 6 + 0.8, this.points[1] * 5, this.points[2] - 0.259 );
+            this.scene.rotate(Math.PI / 4, 0, 0, 1);
+            this.frame.display();
+        this.scene.popMatrix();
+
+         this.scene.pushMatrix();
+            this.scene.scale(0.3, 0.2, 2.296);
+            this.scene.translate(this.points[0] * 6 + 8, this.points[1] * 5, this.points[2] - 0.259);
+            this.scene.rotate(Math.PI / 4, 0, 0, 1);
+            this.frame.display();
+        this.scene.popMatrix();
+
+
+        this.scene.pushMatrix();
+            this.scene.scale(2.05, 0.2, 0.3);
+            this.scene.translate(this.points[0] - 0.05, this.points[1] * 5, this.points[2] * 6 + 0.75);
+            this.scene.rotate(Math.PI / 2, 0, 1, 0);
+            this.scene.rotate(Math.PI / 4, 0, 0, 1);
+            this.frame.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+            this.scene.scale(2.05, 0.2, 0.3);
+            this.scene.translate(this.points[0] - 0.05, this.points[1] * 5, this.points[2] * 6 + 7.9);
+            this.scene.rotate(Math.PI / 2, 0, 1, 0);
+            this.scene.rotate(Math.PI / 4, 0, 0, 1);
+            this.frame.display();
+        this.scene.popMatrix();
+    }
+
     display() {
+
+        
         this.scene.pushMatrix();
         this.scene.scale(2, 1, 2);
         this.scene.translate(0.5, 0, 0.5);
         this.scene.translate(this.points[0], this.points[1], this.points[2]);
         this.plane.display();
         this.scene.popMatrix();
-
+        
         if (this.scene.pickMode) {
             this.placePickingSquare();
         }
-
+        
         if (this.green_areas != null) {
             this.displayGreenAreas();
         }
-
+        
         this.displayPieces();
-
+        
+        this.displayFrame();
 
         if (this.gameOverFlag || this.draw)
             this.displayFinal();
@@ -275,9 +331,6 @@ class Board extends CGFobject {
     }
 
     setGameOverStatus(player) {
-
-
-        console.log(player);
 
         if (player != 0)
             this.gameOverFlag = true;

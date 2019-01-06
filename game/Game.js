@@ -330,8 +330,6 @@ class Game {
         console.log("GAME OVER")
         this.game.clock.pause = true;
         this.game.gameOverFlag = true;
-
-        console.log(this.game.botTurn);
         this.game.board.setGameOverStatus(this.game.currentPlayer);
         this.game.receivedAnswer = true;
         this.game.counter.updateScore(this.game.currentPlayer);
